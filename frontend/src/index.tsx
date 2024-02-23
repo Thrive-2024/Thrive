@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import { Home } from './pages/Home';
+import { Dashboard } from './pages/Home';
 import { Leaderboard } from './pages/Leaderboard';
 import { Wall } from './pages/Wall';
 
@@ -12,8 +12,8 @@ const root = createRoot(container);
 root.render(
 	<BrowserRouter>
 		<Routes>
-			<Route path="/" element={<Navigate to="/Home" />} />
-			<Route path="/Home" element={<Home />} />
+			<Route path="/" element={<Navigate to="/Dashboard" />} />
+			<Route path="/Dashboard" element={<Dashboard />} />
 			<Route path="/Leaderboard" element={<Leaderboard />} />
 			<Route path="/Wall" element={<Wall />} />
 		</Routes>

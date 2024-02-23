@@ -1,17 +1,16 @@
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box,Divider, Typography } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
 import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import logo from '../images/ThriveLogo.png';
+import { useNavigate } from 'react-router-dom';
 
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
-  // const { collapseSidebar } = useProSidebar();
-
+  const navigate = useNavigate();
   return (
     <Box id="navbar" sx={{ width: '20%', height: '100%' }}>
       <Sidebar style={{ height: "100vh" }}>
@@ -25,21 +24,10 @@ export const Navbar = () => {
         </Box>
         <Divider/>
         <Menu>
-          {/* <MenuItem
-            icon={<MenuOutlinedIcon />}
-            onClick={() => {
-              // collapseSidebar();
-            }}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <h2>Thrive</h2>
-            <img src={logo} alt="Logo" width={50} height={50} />
-          </MenuItem> */}
-
-          <MenuItem icon={<GridViewOutlinedIcon />}>Dashboard</MenuItem>
+          <MenuItem  onClick={() => navigate('/Dashboard')}  icon={<GridViewOutlinedIcon />}>Dashboard</MenuItem>
           <MenuItem icon={<ListAltOutlinedIcon />}>Tasks</MenuItem>
-          <MenuItem icon={<SpaceDashboardOutlinedIcon />}>Your Wall</MenuItem>
-          <MenuItem icon={<LeaderboardOutlinedIcon />}>Leaderboard</MenuItem>
+          <MenuItem onClick={() => navigate('/Wall')} icon={<SpaceDashboardOutlinedIcon />}>Your Wall</MenuItem>
+          <MenuItem onClick={() => navigate('/Leaderboard')} icon={<LeaderboardOutlinedIcon />}>Leaderboard</MenuItem>
           <MenuItem icon={<SettingsOutlinedIcon />}>Settings</MenuItem>
         </Menu>
         <Divider/>

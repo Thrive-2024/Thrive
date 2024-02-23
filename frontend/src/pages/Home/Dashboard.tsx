@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './Home.css';
 import { Navbar } from '../../Navbar';
 
-export const Home = () => {
+export const Dashboard = () => {
 
     useEffect(() => {
     }, []);
@@ -10,7 +9,7 @@ export const Home = () => {
     return (
         <div>
             <Navbar />
-            <h1>Home page</h1>
+            <h1>Dashboard page</h1>
         </div>
     )
 }

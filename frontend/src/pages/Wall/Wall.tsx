@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Navbar } from '../../Navbar';
 
 export const Wall = () => {
 
@@ -7,6 +8,7 @@ export const Wall = () => {
 
     return (
         <div>
+            <Navbar />
             <h1>Wall page</h1>
         </div>
     )
