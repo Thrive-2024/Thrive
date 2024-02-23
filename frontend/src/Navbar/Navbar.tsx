@@ -10,6 +10,8 @@ import logo from '../images/ThriveLogo.png';
 import { useNavigate } from 'react-router-dom';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
+import { useLocation } from 'react-router-dom';
+
 // Icon for MidTopSection
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
@@ -22,6 +24,7 @@ import Carrie from '../images/Carrie.jpg';
 
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
@@ -34,6 +37,10 @@ export const Navbar = () => {
   const handleClose = () => {
     setOpenDialog(false);
   };
+
+  // Function to determine if the path matches the current location
+  const isActive = (path: any) => location.pathname === path;
+  console.log(location.pathname)
   return (
     <Sidebar style={{ width: "100%", height: "100vh" }} >
       <Dialog
@@ -56,15 +63,34 @@ export const Navbar = () => {
         <Divider />
 
         <Box style={{ display: 'flex', alignItems: 'center' }} sx={{ mt: 3, mb: 2, ml: 2 }}>
-          <Avatar src={James} sx={{width: 50, height: 50, mr: 2 }} />
+          <Avatar src={James} sx={{ width: 50, height: 50, mr: 2 }} />
           <Typography>Welcome, James</Typography>
         </Box>
         <Divider />
         <Menu>
-          <MenuItem onClick={() => navigate('/Dashboard')} icon={<GridViewOutlinedIcon />}>Dashboard</MenuItem>
+          <MenuItem
+            onClick={() => navigate('/Dashboard')}
+            icon={<GridViewOutlinedIcon />}
+            style={{ backgroundColor: isActive('/Dashboard') ? '#E3ECF6' : 'primary.main' }}
+          >
+            Dashboard
+          </MenuItem>
+
           <MenuItem onClick={() => showDialog('Where get time for this')} icon={<ListAltOutlinedIcon />}>Tasks</MenuItem>
-          <MenuItem onClick={() => navigate('/Wall')} icon={<SpaceDashboardOutlinedIcon />}>Your Wall</MenuItem>
-          <MenuItem onClick={() => navigate('/Leaderboard')} icon={<LeaderboardOutlinedIcon />}>Leaderboard</MenuItem>
+          <MenuItem
+            onClick={() => navigate('/Wall')}
+            icon={<SpaceDashboardOutlinedIcon />}
+            style={{ backgroundColor: isActive('/Wall') ? '#E3ECF6' : 'primary.main' }}
+          >
+            Your Wall
+          </MenuItem>
+          <MenuItem
+            onClick={() => navigate('/Leaderboard')}
+            icon={<LeaderboardOutlinedIcon />}
+            style={{ backgroundColor: isActive('/Leaderboard') ? '#E3ECF6' : 'primary.main' }}
+          >
+            Leaderboard
+          </MenuItem>
           <MenuItem onClick={() => showDialog('Where get time for this')} icon={<SettingsOutlinedIcon />}>Settings</MenuItem>
         </Menu>
         <Divider />
