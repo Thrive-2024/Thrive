@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, RightNavbar, TopSection } from '../../Navbar';
+import { Navbar, RightNavbar } from '../../Navbar';
 import { Box, Divider } from '@mui/material';
 
 export const Dashboard = () => {
@@ -8,15 +8,17 @@ export const Dashboard = () => {
     }, []);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh',overflow: 'hidden'  }}>
-            <Box sx={{ height: '10%' }}>
-                <TopSection />
-            </Box>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <Box id="navbar" sx={{ width: '20%' }}>
                     <Navbar />
                 </Box>
-                <Box sx={{ width: '60%', padding: '20px' }}>
+                <Box sx={{ width: '60%' }}>
+                    <Box sx={{height: '60px'}}>
+                        {/* Top Space */}
+                    </Box>
+                    <Divider />
                     <h1>Dashboard page</h1>
                     {/* Dashboard content here */}
                 </Box>
