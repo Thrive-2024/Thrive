@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Divider, Typography, Grid, DialogActions, Button, DialogTitle, Dialog } from '@mui/material';
+import { Box, Divider, Typography, Grid, DialogActions, Button, DialogTitle, Dialog, IconButton } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -9,6 +9,10 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import logo from '../images/ThriveLogo.png';
 import { useNavigate } from 'react-router-dom';
 import mascot from '../images/mascot.png';
+// Icon for MidTopSection
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
@@ -64,14 +68,29 @@ export const Navbar = () => {
     </Sidebar>
   );
 }
+export const MidTopSection = () => {
 
+  return (
+    <Box sx={{ height: '60px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: '16px' }}>
+      <IconButton aria-label="icon1" size="large">
+        <CalendarMonthOutlinedIcon />
+      </IconButton>
+      <IconButton aria-label="icon2" size="large">
+        <LiveHelpOutlinedIcon />
+      </IconButton>
+      <IconButton aria-label="icon3" size="large">
+        <NotificationsOutlinedIcon />
+      </IconButton>
+    </Box>
+  );
+}
 export const RightNavbar = () => {
   return (
     <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Right top empty Space */}
       <Box sx={{ height: '60px' }} />
       <Divider />
-       {/* Other section */}
+      {/* Other section */}
       <Box id="other section" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ mt: 1, mb: 1, ml: 2, height: '10%', display: 'flex' }}>
           <Typography> Friends</Typography>

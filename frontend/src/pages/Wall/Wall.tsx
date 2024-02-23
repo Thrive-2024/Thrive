@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, RightNavbar } from '../../Navbar';
+import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
 import { Box, Divider } from '@mui/material';
 
 export const Wall = () => {
@@ -15,9 +15,7 @@ export const Wall = () => {
                     <Navbar />
                 </Box>
                 <Box sx={{ width: '60%' }}>
-                    <Box sx={{ height: '60px' }}>
-                        {/* Top Space */}
-                    </Box>
+                    <MidTopSection />
                     <Divider />
                     <h1>Wall page</h1>
 
