@@ -14,7 +14,7 @@ A collaborative goal management application
     - `npm start` => to run frontend (localhost:3000)
 ### Backend - Express
 - Create `.env.local` file as follow:
-    - MONGODB_URI=<DB URL>
+    - MONGODB_URI=[DB URL]
 - `npm install` => To install dependencies
 - `npm start` => To run
 
