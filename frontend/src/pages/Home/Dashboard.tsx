@@ -11,7 +11,7 @@ export const Dashboard = () => {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
             <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box id="navbar" sx={{ width: '20%' }}>
+                <Box id="navbar" sx={{ width: '20%' ,position:'relative'}}>
                     <Navbar />
                 </Box>
                 <Box sx={{ width: '60%' }}>

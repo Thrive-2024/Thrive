@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Divider, Typography, Avatar, DialogActions, Button, DialogTitle, Dialog, IconButton } from '@mui/material';
+import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -21,7 +21,37 @@ import mascot from '../images/mascot.png';
 import James from '../images/James.jpg';
 import Tim from '../images/Tim.jpg';
 import Carrie from '../images/Carrie.jpg';
+const OnlineBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
 
+  }
+}));
+const OfflineBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#D9D9D9',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+  }
+}));
+const Item = styled(Card)(({ theme }) => ({
+  backgroundColor: '#F7F7F7',
+  font: '#787486',
+  padding: 10,
+  textAlign: 'left',
+  color: theme.palette.text.secondary,
+  lineHeight: 1.5,
+  height: 44,
+  borderRadius: 10,
+  boxShadow:'0 0 0 0',
+  display: '-webkit-box',
+  WebkitLineClamp: 2, // Limit to 2 lines
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden'
+
+}));
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
   const location = useLocation();
@@ -76,7 +106,7 @@ export const Navbar = () => {
             Dashboard
           </MenuItem>
 
-          <MenuItem onClick={() => showDialog('Where get time for this')} icon={<ListAltOutlinedIcon />}>Tasks</MenuItem>
+          <MenuItem onClick={() => showDialog('Where got time for this')} icon={<ListAltOutlinedIcon />}>Tasks</MenuItem>
           <MenuItem
             onClick={() => navigate('/Wall')}
             icon={<SpaceDashboardOutlinedIcon />}
@@ -91,7 +121,7 @@ export const Navbar = () => {
           >
             Leaderboard
           </MenuItem>
-          <MenuItem onClick={() => showDialog('Where get time for this')} icon={<SettingsOutlinedIcon />}>Settings</MenuItem>
+          <MenuItem onClick={() => showDialog('Where got time for this')} icon={<SettingsOutlinedIcon />}>Settings</MenuItem>
         </Menu>
         <Divider />
         <Box>
@@ -153,13 +183,53 @@ export const RightNavbar = () => {
       <Divider />
       {/* Other section */}
       <Box id="other section" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ mt: 1, mb: 1, ml: 2, height: '10%', display: 'flex' }}>
+        <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Friends</Typography>
         </Box>
+        <Box sx={{ mt: 0, mb: 1, ml: 2, height: '10%', display: 'flex' }}>
+
+          <Box sx={{ marginRight: 1 }}>
+            <OnlineBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              variant="dot"
+            >
+              <Avatar src={Carrie} sx={{ width: 50, height: 50 }} />
+            </OnlineBadge></Box>
+          <Box sx={{ marginRight: 1 }}>
+            <OnlineBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              variant="dot"
+            >
+              <Avatar src={Carrie} sx={{ width: 50, height: 50 }} />
+            </OnlineBadge></Box>
+          <Box sx={{ marginRight: 1 }}>
+            <OfflineBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              variant="dot"
+            >
+              <Avatar src={Carrie} sx={{ width: 50, height: 50 }} />
+            </OfflineBadge></Box>
+        </Box>
+
         <Divider />
-        <Box sx={{ mt: 1, mb: 1, ml: 2, height: '25%', display: 'flex' }}>
+        <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Activities</Typography>
         </Box>
+        <Box sx={{ mt: 1, mb: 2, ml: 2, mr: 2, height: '25%', display: 'flex' }}>
+          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx = {{pb:2}}>
+            <Stack spacing={1}>
+              <Item>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Item>
+              <Item>Hayward achieved a new personal record of 25hrs this week.</Item>
+              <Item>Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position.  </Item>  
+              <Item>Lily nailed her painting project, spending an impressive 7 hours bringing her canvas to life.</Item>
+            </Stack></Box>
+        </Box>
+
+
+
         <Divider />
         <Box sx={{ mt: 1, mb: 1, ml: 2, height: '35%', display: 'flex' }}>
           <Typography> Motivation Wall</Typography>
