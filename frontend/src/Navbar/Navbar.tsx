@@ -55,7 +55,7 @@ const Activity = styled(Card)(({ theme }) => ({
   display: '-webkit-box',
   WebkitLineClamp: 2, // Limit to 2 lines
   WebkitBoxOrient: 'vertical',
-  overflow: 'hidden'
+  overflow: 'hidden',
 
 }));
 
@@ -201,7 +201,7 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Friends</Typography>
         </Box>
-        <Box sx={{ mt: 0, mb: 1, ml: 2, height: '10%', display: 'flex' }}>
+        <Box sx={{ mt: 0, mb: 2, ml: 2, display: 'flex' }}>
 
           <Box sx={{ marginRight: 1 }}>
             <OnlineBadge
@@ -233,8 +233,8 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Activities</Typography>
         </Box>
-        <Box sx={{ mt: 1, mb: 2, ml: 2, mr: 2, display: 'flex' }}>
-          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{ pb: 2 }}>
+        <Box sx={{  mb: 2, ml: 2, mr: 2, display: 'flex' }}>
+          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{ }}>
             <Stack spacing={1}>
               <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
               <Activity>Hayward achieved a new personal record of 25hrs this week.</Activity>
@@ -254,7 +254,7 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Motivation Wall</Typography>
         </Box>
-        <Box sx={{ mb: 2, ml: 2, mr: 2, height:100}}>
+        <Box sx={{ mb: 2, ml: 2, mr: 2,  display: 'flex', height:'10%' }}>
           <Carousel
             autoPlay={true}
             showArrows={false}
@@ -268,7 +268,7 @@ export const RightNavbar = () => {
           >
             {motivationArray.map((word, index) => (
               <Typography sx={{ textAlign:'left',display: '-webkit-box',
-              WebkitLineClamp: 4, // Limit to 4 lines
+              WebkitLineClamp: 3, // Limit to 3 lines
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden', height:100}}>
                 <b>{word.sender}</b>: {word.message}
