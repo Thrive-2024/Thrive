@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
-import { Box, Divider, Grid, Typography, Card, Chip } from '@mui/material';
+import { Box, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText, colors } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import { green, grey, red } from '@mui/material/colors';
+
+import StatsPlaceholder from '../../images/stats.jpg';
 
 //creating theme
 const theme = createTheme({
@@ -12,10 +16,12 @@ const theme = createTheme({
         },
         secondary: {
             main: "#0D062D",
-  
+
         },
     }
 });
+<style>
+</style>
 
 export const Dashboard = () => {
 
@@ -24,12 +30,31 @@ export const Dashboard = () => {
 
     // list of draggable tasks
     const tasks = [
-        { id: "1", content: "First task" },
-        { id: "2", content: "Second task" },
-        { id: "3", content: "Third task" },
-        { id: "4", content: "Fourth task" },
-        { id: "5", content: "Fifth task" }
+        { id: "1", content: "First task", daysLeft: 3, subject: 'Linear Algebra' },
+        { id: "2", content: "Second task", daysLeft: 4, subject: 'AWS Tutorial' },
+        { id: "3", content: "Third task", daysLeft: 3, subject: 'Algorithms' },
+        { id: "4", content: "Fourth task", daysLeft: 2, subject: 'Leetcode' },
+        { id: "5", content: "Fifth task", daysLeft: 6, subject: 'Ethics' },
+        { id: "6", content: "Sixth task", daysLeft: 2, subject: 'Algorithms' }
+
     ];
+
+    const subjectColor = (task: String) => {
+        switch (task) {
+            case 'Linear Algebra':
+                return '#CCFFCC';
+            case 'AWS Tutorial':
+                return '#FFC4C4';
+            case 'Algorithms':
+                return '#CCCCFF';
+            case 'Ethics':
+                return '#FFCC99';
+            case 'Leetcode':
+                return '#FFFFCC';
+            default:
+                return '#D7D7D7';
+        }
+    }
 
     //type of lists and array to store them
     const taskStatus = {
@@ -101,7 +126,7 @@ export const Dashboard = () => {
                             {/* Dashboard content here */}
                         </Box>  <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
                             <Grid item xs={12} >
-                                <Typography variant='h5'>This Week</Typography>
+                                <Typography variant='h5' sx={{ ml: 1 }}>This Week</Typography>
                             </Grid>
                             {/* <Grid item xs={4} >
                             <Card sx={{ border: '1px black', height: '30vh', padding: 3 }}>
@@ -130,7 +155,7 @@ export const Dashboard = () => {
                                                 return (
 
                                                     <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
-                                                        <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor:'white' }} >
+                                                        <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white'}} >
                                                             <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1 }} /></Typography>
 
                                                             <Divider sx={{ mb: 2 }} />
@@ -148,7 +173,7 @@ export const Dashboard = () => {
                                                                                     padding: 4,
                                                                                     height: '28vh',
                                                                                     overflow: 'auto',
-
+                                                                                    minWidth:200
                                                                                 }}
                                                                             >
                                                                                 {column.items.map((item, index) => {
@@ -176,19 +201,19 @@ export const Dashboard = () => {
                                                                                                             ...provided.draggableProps.style,
                                                                                                             borderRadius: 4,
                                                                                                             // boxShadow:'2px 2px 5px -4px rgba(0,0,0,0.75)',
-                                                                                                            border: '1px #d9d9d9 solid'
-                                                                                                            
+                                                                                                            border: '1px #d9d9d9 solid',
 
                                                                                                         }}
                                                                                                     >
-                                                                                                        {item.content}
+                                                                                                        <Typography >{item.content}</Typography>
+                                                                                                        <Chip size="small" label={item.subject} sx={{ mt: 1, fontSize: 12, backgroundColor: `${subjectColor(item.subject)}` }} />
+                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt:'3px' }}>{item.daysLeft} days left</Typography>
                                                                                                     </div>
                                                                                                 );
                                                                                             }}
                                                                                         </Draggable>
                                                                                     );
                                                                                 })}
-                                                                                {provided.placeholder}
                                                                             </div>
                                                                         );
                                                                     }}
@@ -202,20 +227,64 @@ export const Dashboard = () => {
                                         </DragDropContext>
                                     </div>
                                 </div></Grid>
-                            <Grid item xs={6}>
-                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
-                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
+                            {/* <Grid item xs={6}>
+                                <Typography variant={'h5'} sx={{ mb: 1, ml: 1, color: 'secondary.main' }}>Statistics</Typography>
 
-                                    <Divider />
+                                <Card sx={{ border: '1px black', height: '25vh', padding: 3, ml: 1,mt:2 }}>
 
                                 </Card>
 
                             </Grid>
                             <Grid item xs={6}>
-                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
-                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
+                                <Typography variant={'h5'} sx={{ mb: 1, color: 'secondary.main' }}>Today's Agenda</Typography>
+
+                                <Card sx={{ border: '1px black', height: '25vh', padding: 3, mr: 1,mt:2 }}>
+
+                                </Card>
+
+                            </Grid> */}
+                            <Grid item xs={6}>
+                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
+                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
 
                                     <Divider />
+                                    <img src={StatsPlaceholder} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+
+                                </Card>
+
+                            </Grid>
+                            <Grid item xs={6}>
+
+                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
+                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
+                                    <Divider />
+                                    <List dense={false}>
+
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <ScheduleIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary="Assignment 2"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <ScheduleIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary="Lab 3"
+                                            />
+                                        </ListItem>     <ListItem>
+                                            <ListItemIcon>
+                                                <ScheduleIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary="Project Outline"
+                                            />
+                                        </ListItem>
+
+                                    </List>
                                 </Card>
 
                             </Grid>

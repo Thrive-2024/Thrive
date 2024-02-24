@@ -190,6 +190,8 @@ export const RightNavbar = () => {
   // useEffect(() => {
   //   fetchData();
   // }, []);
+
+  // const [motivationArray,setMotivationArray] = useState(data)
   // const motivationWall = ["Hayward achieved a new personal record of 25hrs this week.", "Desarrollador web", "Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position."]
   return (
     <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' , width:300 }}>
