@@ -80,7 +80,7 @@ export const Navbar = () => {
   const isActive = (path: any) => location.pathname === path;
   console.log(location.pathname)
   return (
-    <Sidebar style={{ width: "100%", height: "100vh" }} >
+    <Sidebar style={{ width: "300", height: "100vh" }} >
       <Dialog
         open={openDialog}
         onClose={handleClose}
@@ -192,7 +192,7 @@ export const RightNavbar = () => {
   // }, []);
   // const motivationWall = ["Hayward achieved a new personal record of 25hrs this week.", "Desarrollador web", "Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position."]
   return (
-    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' , width:300 }}>
       {/* Right top empty Space */}
       <Box sx={{ height: '60px' }} />
       <Divider />
