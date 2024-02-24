@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack } from '@mui/material';
+import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack, List, ListItem } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -11,6 +11,12 @@ import { useNavigate } from 'react-router-dom';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { useLocation } from 'react-router-dom';
+
+//carousel for motivation wall right panel
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+
+
 
 // Icon for MidTopSection
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -36,7 +42,7 @@ const OfflineBadge = styled(Badge)(({ theme }) => ({
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
   }
 }));
-const Item = styled(Card)(({ theme }) => ({
+const Activity = styled(Card)(({ theme }) => ({
   backgroundColor: '#F7F7F7',
   font: '#787486',
   padding: 10,
@@ -45,13 +51,15 @@ const Item = styled(Card)(({ theme }) => ({
   lineHeight: 1.5,
   height: 44,
   borderRadius: 10,
-  boxShadow:'0 0 0 0',
+  boxShadow: '0 0 0 0',
   display: '-webkit-box',
   WebkitLineClamp: 2, // Limit to 2 lines
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden'
 
 }));
+
+
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
   const location = useLocation();
@@ -176,6 +184,13 @@ export const MidTopSection = () => {
   );
 }
 export const RightNavbar = () => {
+  const motivationArray = [{ sender:'Tim',message: "Hey James! Remember why you started. You've got this!" }, {sender:'Bran', message: "We can do it!! I know it’s hard but together we can achieve anything!!" }]
+  //   console.log("Fetching data")
+  // };  
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+  // const motivationWall = ["Hayward achieved a new personal record of 25hrs this week.", "Desarrollador web", "Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position."]
   return (
     <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Right top empty Space */}
@@ -219,20 +234,48 @@ export const RightNavbar = () => {
           <Typography> Activities</Typography>
         </Box>
         <Box sx={{ mt: 1, mb: 2, ml: 2, mr: 2, height: '25%', display: 'flex' }}>
-          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx = {{pb:2}}>
+          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{ pb: 2 }}>
             <Stack spacing={1}>
-              <Item>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Item>
-              <Item>Hayward achieved a new personal record of 25hrs this week.</Item>
-              <Item>Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position.  </Item>  
-              <Item>Lily nailed her painting project, spending an impressive 7 hours bringing her canvas to life.</Item>
-            </Stack></Box>
+              <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
+              <Activity>Hayward achieved a new personal record of 25hrs this week.</Activity>
+              <Activity>Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position.  </Activity>
+              <Activity>Lily nailed her painting project, spending an impressive 7 hours bringing her canvas to life.</Activity>
+            </Stack>
+            {/* <List>
+              <ListItem sx={{height:2}}><Avatar src = {Carrie}/> Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</ListItem>
+            </List> */}
+          </Box>
         </Box>
 
 
 
         <Divider />
-        <Box sx={{ mt: 1, mb: 1, ml: 2, height: '35%', display: 'flex' }}>
+
+        <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Motivation Wall</Typography>
+        </Box>
+        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex', }}>
+          <Carousel
+            autoPlay={true}
+            showArrows={false}
+            showIndicators={false}
+            showStatus={false}
+            showThumbs={false}
+            infiniteLoop={true}
+            stopOnHover={false}
+            interval={3000}
+            axis='vertical'
+          >
+            {motivationArray.map((word, index) => (
+              <Typography lineHeight={'1.3rem'} sx={{ textAlign:'left',display: '-webkit-box',
+              WebkitLineClamp: 3, // Limit to 2 lines
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'}}>
+                <b>{word.sender}</b>: {word.message}
+              </Typography>
+            )) }
+
+          </Carousel>
         </Box>
         <Divider />
         <Box sx={{ mt: 1, mb: 1, ml: 2, height: '30%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
