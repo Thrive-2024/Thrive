@@ -255,6 +255,7 @@ export const RightNavbar = () => {
           <Typography> Motivation Wall</Typography>
         </Box>
         <Box sx={{ mb: 2, ml: 2, mr: 2,  display: 'flex', height:'10%' }}>
+          {/* https://www.npmjs.com/package/react-responsive-carousel */}
           <Carousel
             autoPlay={true}
             showArrows={false}
