@@ -11,16 +11,17 @@ export const Dashboard = () => {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
             <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box id="navbar" sx={{ width: '20%' ,position:'relative'}}>
+                <Box id="navbar" sx={{ width: 300}}>
                     <Navbar />
                 </Box>
-                <Box sx={{ width: '60%' }}>
+                <Box sx={{ width: '80%'}}>
+                <Box>
                     <MidTopSection/>
                     <Divider />
                     <h1>Dashboard page</h1>
                     {/* Dashboard content here */}
-                </Box>
-                <Box id="rightNavbar" sx={{ width: '20%', boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
+                </Box></Box>
+                <Box id="rightNavbar" sx={{ width: 300, boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
                     <RightNavbar />
                 </Box>
             </Box>
