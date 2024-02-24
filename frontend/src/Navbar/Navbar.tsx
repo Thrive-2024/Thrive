@@ -233,7 +233,7 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Activities</Typography>
         </Box>
-        <Box sx={{ mt: 1, mb: 2, ml: 2, mr: 2, height: '25%', display: 'flex' }}>
+        <Box sx={{ mt: 1, mb: 2, ml: 2, mr: 2, display: 'flex' }}>
           <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{ pb: 2 }}>
             <Stack spacing={1}>
               <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
@@ -254,7 +254,7 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Motivation Wall</Typography>
         </Box>
-        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex', }}>
+        <Box sx={{ mb: 2, ml: 2, mr: 2, height:100}}>
           <Carousel
             autoPlay={true}
             showArrows={false}
@@ -267,10 +267,10 @@ export const RightNavbar = () => {
             axis='vertical'
           >
             {motivationArray.map((word, index) => (
-              <Typography lineHeight={'1.3rem'} sx={{ textAlign:'left',display: '-webkit-box',
-              WebkitLineClamp: 3, // Limit to 2 lines
+              <Typography sx={{ textAlign:'left',display: '-webkit-box',
+              WebkitLineClamp: 4, // Limit to 4 lines
               WebkitBoxOrient: 'vertical',
-              overflow: 'hidden'}}>
+              overflow: 'hidden', height:100}}>
                 <b>{word.sender}</b>: {word.message}
               </Typography>
             )) }
@@ -278,7 +278,7 @@ export const RightNavbar = () => {
           </Carousel>
         </Box>
         <Divider />
-        <Box sx={{ mt: 1, mb: 1, ml: 2, height: '30%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ mt: 1, mb: 1, ml: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img src={mascot} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
         </Box>
       </Box>
