@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
-import { Box, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText, colors } from '@mui/material';
+import { Box, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import ScheduleIcon from '@mui/icons-material/Schedule';
@@ -155,7 +155,7 @@ export const Dashboard = () => {
                                                 return (
 
                                                     <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
-                                                        <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white'}} >
+                                                        <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white' }} >
                                                             <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1 }} /></Typography>
 
                                                             <Divider sx={{ mb: 2 }} />
@@ -173,7 +173,7 @@ export const Dashboard = () => {
                                                                                     padding: 4,
                                                                                     height: '28vh',
                                                                                     overflow: 'auto',
-                                                                                    minWidth:200
+                                                                                    minWidth: 200
                                                                                 }}
                                                                             >
                                                                                 {column.items.map((item, index) => {
@@ -207,7 +207,7 @@ export const Dashboard = () => {
                                                                                                     >
                                                                                                         <Typography >{item.content}</Typography>
                                                                                                         <Chip size="small" label={item.subject} sx={{ mt: 1, fontSize: 12, backgroundColor: `${subjectColor(item.subject)}` }} />
-                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt:'3px' }}>{item.daysLeft} days left</Typography>
+                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt: '3px' }}>{item.daysLeft} days left</Typography>
                                                                                                     </div>
                                                                                                 );
                                                                                             }}

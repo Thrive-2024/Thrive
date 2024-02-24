@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
-import { Box, Divider } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 
 export const Wall = () => {
 
@@ -11,17 +11,20 @@ export const Wall = () => {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
             <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box id="navbar" sx={{ width: 300}}>
-                    <Navbar />
+                <Box id="navbar">                    <Navbar />
                 </Box>
-                <Box sx={{ width: '80%'}}>
-                <Box>
-                    <MidTopSection/>
-                    <Divider />
-                    <h1>Wall page</h1>
-                    {/* Wall content here */}
-                </Box></Box>
-                <Box id="rightNavbar" sx={{ width: 300, boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
+                <Box sx={{ width: '80%' }}>
+                    <Box>
+                        <MidTopSection />
+                        <Divider />
+                    </Box>
+                    <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
+                        <Grid item xs={12} >
+                            <Typography variant='h5' sx={{ ml: 1 }}>Your Wall</Typography>
+
+                        </Grid>                                {/* Wall content here */}
+                    </Grid></Box>
+                <Box id="rightNavbar" sx={{ boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
                     <RightNavbar />
                 </Box>
             </Box>
