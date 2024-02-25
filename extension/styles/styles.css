@@ -1,0 +1,39 @@
+:root {
+  --color-gray: #1d3557;
+  --color-background: #ffffffaa;
+
+  /* session Colors */
+  /* NOTE: these colors (not replicated) also used in /scripts/background/values.js.
+  When updating these, update there too */
+  --color-session-work: #0197f6;
+  --color-session-break: #70b77e;
+  --color-session-long-break: #eb5e28;
+
+  --color-current-session: var(--color-session-work);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-gray);
+  padding: 1rem;
+
+  width: 250px;
+  height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+USED GLOBALLY -------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+#settingsPageButton {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  z-index: 1;
+}
