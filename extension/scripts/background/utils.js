@@ -1,4 +1,3 @@
-// TODO
 // Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
 chrome.offscreen.createDocument({
   url: chrome.runtime.getURL("../../html/offscreen.html"),
@@ -10,15 +9,7 @@ chrome.offscreen.createDocument({
 // ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 let oldAngle = 0;
-/**
- * Updates the browser extension's icon if the change in time angle since the last update
- * exceeds `ANGLE_DIFF_GENERATE_ICON`. The icon is updated to a "pie" representation of the
- * session's progress with a specific color depending on the session type.
- *
- * @param {number} timeLeft - The amount of time remaining in the current session
- * @param {number} sessionLength - The total length of the current session
- * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
- */
+
 async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   if (!timeLeft) {
     const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
@@ -61,13 +52,6 @@ async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
 // SEND MESSAGE TO popup / offscreen -----------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-/**
- * Sends a message to popup
- *
- * @param {string} action - Action, such as `update_state`
- * @param {*} content - The payload of the message, if any.
- * @param {"popup" | "offscreen"} target
- */
 async function sendMessage(action, content, target = "popup") {
   const message = { action, content, target };
   console.log("[background] sending message to", target, "with action", action);
@@ -91,15 +75,6 @@ async function sendMessage(action, content, target = "popup") {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------------------
-// PUSH NOTIFICAtION ---------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------------------------
-/**
- * Pushes a notification to the user.
- * @param {Object} options Some paremeters
- * @param {string} options.title The title of the notification.
- * @param {string} options.message The message body of the notification.
- */
 async function pushNotification(options) {
   if (STATE.dontShowNextPopup) {
     STATE.dontShowNextPopup = false;
@@ -158,15 +133,6 @@ function getStorage(key) {
 // ---------------------------------------------------------------------------------------------------------------------------------
 // GENERAL -------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-/**
- * NOTE: if `isVerbose = false`, `minutes` and `seconds` are always shown, but `hours` is conditionally shown
- *
- * The one in /background defaults `isVerbose = true`, while /popup defaults to `isVerbose = false`
- * @param {Date | number} duration
- * @param {Object} options
- * @param {boolean} options.isVerbose
- * @returns {string}
- */
 function durationToString(duration, options = { isVerbose: true }) {
   const hours = Math.floor(duration / 1000 / 60 / 60);
   const minutes = Math.floor(duration / 1000 / 60) % 60;

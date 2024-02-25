@@ -27,8 +27,3 @@ timerHardResetButton.addEventListener("click", async () => {
   const state = await sendMessage("get_state");
   Object.assign(STATE, state);
 });
-
-// const settingsPageButton = document.getElementById("settingsPageButton");
-// settingsPageButton.addEventListener("click", () => {
-//   settingsPage.classList.toggle("active");
-// });

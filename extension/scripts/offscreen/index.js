@@ -32,14 +32,6 @@ function receiveMessageFromBackground(message, sender, sendResponse) {
         const image = await generateExtensionPieIcon(iconAngle, color, pieSize);
         sendResponse(image);
         break;
-      // case "generate_extension_default_icon":
-      //   const { color: stateColor, size } = message.content;
-      //   const defaultImage = await generateExtensionDefaultIcon(
-      //     stateColor,
-      //     size
-      //   );
-      //   sendResponse(defaultImage);
-      //   break;
       case "generate_extension_default_icon":
           // Fetch the image icon from the local assets
           const response = await fetch('../assets/icons/128.png');

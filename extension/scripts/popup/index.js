@@ -10,7 +10,6 @@
   Object.assign(STATE, state);
 
   // Using `SETTINGS`, adjusts the settings ui and adds event listeners to each input
-  // initializeSettingsPage();
 
   adjustUiToState();
   function updateTimerUi() {
@@ -70,44 +69,3 @@ function receiveMessageFromBackground(message, sender, sendResponse) {
 
   return true;
 }
-
-// function downloadImage(base64Data, filename) {
-//   try {
-//     const element = document.createElement("a");
-//     element.setAttribute("href", base64Data);
-//     element.setAttribute("download", filename);
-//     document.body.appendChild(element);
-//     element.click();
-//     document.body.removeChild(element);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
-// (async () => {
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-//   const images = await Promise.all([
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#0197f6", size: 128 },
-//       "offscreen"
-//     ),
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#70b77e", size: 128 },
-//       "offscreen"
-//     ),
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#eb5e28", size: 128 },
-//       "offscreen"
-//     ),
-//   ]);
-
-//   let index = 0;
-//   for (const image of images) {
-//     console.log(image);
-//     downloadImage(image, `icon-${index}.png`);
-//     index++;
-//   }
-// })();
