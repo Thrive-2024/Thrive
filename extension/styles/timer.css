@@ -1,0 +1,114 @@
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+CIRCLE DRAWING ------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.circle-container-outer {
+  top: 25px; /* Adjust the position as needed */
+  position: relative;
+}
+
+.circle-container-inner {
+  width: 166px;
+  height: 166px;
+}
+
+#partialCircle {
+  transform-origin: center;
+  position: relative;
+  stroke: var(--color-session-work);
+  stroke-width: 3px;
+  fill: transparent;
+  stroke-linecap: round;
+}
+
+#partialCircleBackground {
+  position: relative;
+  opacity: 0.3;
+  stroke: var(--color-gray);
+  stroke-width: 3px;
+  fill: transparent;
+  stroke-linecap: round;
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+TEXT WITHIN THE CIRCLE --------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.text-container {
+  position: relative;
+  top: calc(50% - 80px); /* Adjust the position as needed */
+  left: 25%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px; /* Adjust the margin as needed */
+}
+
+.text-session-container {
+  display: flex;
+  flex-direction: rows;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+#sessionLabel {
+  font-size: 1rem;
+  margin-bottom: -5px;
+  margin-top: 5px;
+}
+
+#sessionTimeLeft {
+  font-size: 2.5rem;
+  color: var(--color-current-session);
+}
+
+#sessionCurrentRound {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+BUTTONS -------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.timer-controls-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+/* Control Buttons */
+#timerSoftResetButton {
+  width: 40px;
+  /* height: 40px; */
+  /* border: solid; */
+  text-align: right;
+}
+
+#timerSkipButton {
+  width: 40px;
+  /* height: 40px; */
+  /* border: solid; */
+  margin-left: -2px;
+  text-align: left;
+}
+
+/* Bottom left && right */
+#timerHardResetButton {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+}
