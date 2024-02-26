@@ -31,10 +31,7 @@ const port = 8000;
 
 //connect to mongoDB
 mongoose.connect(
-	process.env.MONGODB_URI,
-	{
-		useNewUrlParser: true
-	}
+	process.env.MONGODB_URI
 ).then(() => {
 	app.listen(port, () => {
 		console.log(`Express app listening on localhost:${port}`)

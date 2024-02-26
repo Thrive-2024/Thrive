@@ -32,7 +32,7 @@ export const create = async (req: any, res: any, next: NextFunction) => {
                 });
             })
             .catch((error: any) => {
-                return next(error);
+                res.status(400).json({ error: String(error) });
             });
     } catch (error) {
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
@@ -113,7 +113,7 @@ export const randomMessageFromSystem = async (req: any, res: any, next: NextFunc
                 return res.status(200).json({ message: randomMessage.message , systemMessage : `Motivation message created successfully for ${receiver}! Database Record ID : ${response._id}` });
             })
             .catch((error: any) => {
-                return next(error);
+                res.status(400).json({ error: String(error) });
             });
 
     } catch (error) {

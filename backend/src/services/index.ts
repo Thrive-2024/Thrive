@@ -1,8 +1,10 @@
 import express from 'express';
-import { testRouter } from './test';
+import { miscellaneousRouter } from './miscellaneous';
 import { motivationRouter } from './motivation';
+import { taskRouter } from './task';
 
 export const services = express.Router();
 
-services.use('/testing', testRouter);
+services.use('/miscellaneous', miscellaneousRouter);
 services.use('/motivation', motivationRouter);
+services.use('/task', taskRouter);
