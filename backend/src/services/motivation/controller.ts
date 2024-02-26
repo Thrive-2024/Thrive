@@ -47,14 +47,17 @@ export const getAllByReceiver = async (req: any, res: any, next: NextFunction) =
         if (!receiver) {
             return res.status(400).json({ message: "Receiver is required" });
         }
-        
+
         const records = await MotivationModel.find({ receiver: receiver });
-        
+
         if (records.length === 0) {
-            return res.status(404).json({ message: "No records found for the given receiver" });
+            return res.status(404).json({ message: "No records found for the given receiver" }).sort({ createdDateTime: -1 }); // sorted by createdDateTime descending;
         }
 
-        return res.status(200).json(records);
+        return res.status(200).json({
+            message: "Motivation message records by receiver",
+            data: records
+        });
     } catch (error) {
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
     }
@@ -68,14 +71,17 @@ export const getAllBySender = async (req: any, res: any, next: NextFunction) => 
         if (!sender) {
             return res.status(400).json({ message: "sender is required" });
         }
-        
-        const records = await MotivationModel.find({ sender: sender });
-        
+
+        const records = await MotivationModel.find({ sender: sender }).sort({ createdDateTime: -1 }); // sorted by createdDateTime descending
+
         if (records.length === 0) {
             return res.status(404).json({ message: "No records found for the given sender" });
         }
 
-        return res.status(200).json(records);
+        return res.status(200).json({
+            message: "Motivation message records by sender",
+            data: records
+        });
     } catch (error) {
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
     }
@@ -89,28 +95,28 @@ export const randomMessageFromSystem = async (req: any, res: any, next: NextFunc
         if (!receiver) {
             return res.status(400).json({ message: "Receiver is required" });
         }
-        
+
         const messages = await SampleMessageModel.find();
-        
+
         if (messages.length === 0) {
             return res.status(404).json({ message: "No records found for the given sender" });
         }
-         // Randomly select one message
-         const randomIndex = Math.floor(Math.random() * messages.length);
-         const randomMessage = messages[randomIndex];
+        // Randomly select one message
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        const randomMessage = messages[randomIndex];
 
-         // create the message for the receiver from system
-         const newRecord = new MotivationModel({
+        // create the message for the receiver from system
+        const newRecord = new MotivationModel({
             "receiver": receiver,
             "sender": "SYSTEM",
-            "message": randomMessage.message ,
+            "message": randomMessage.message,
             "createdDateTime": getDateTime.now()
         });
         // add a new record to mongodb
         newRecord
             .save()
             .then((response: any) => {
-                return res.status(200).json({ message: randomMessage.message , systemMessage : `Motivation message created successfully for ${receiver}! Database Record ID : ${response._id}` });
+                return res.status(200).json({ message: randomMessage.message, systemMessage: `Motivation message created successfully for ${receiver}! Database Record ID : ${response._id}` });
             })
             .catch((error: any) => {
                 res.status(400).json({ error: String(error) });

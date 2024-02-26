@@ -19,3 +19,4 @@ miscellaneousRouter.put("/userAddFriend",controller.userAddFriend);
 //method for time tracked
 miscellaneousRouter.put("/updateTimeTracked",controller.updateTimeTracked);
 miscellaneousRouter.get("/getMonthlyLeaderboard",controller.getMonthlyLeaderboard);
+miscellaneousRouter.get("/getMonthStatsByEmail",controller.getMonthStatsByEmail);

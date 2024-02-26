@@ -218,3 +218,27 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
         return res.status(400).json({ message: "Please make sure the input parameters are correct", error: String(error) });
     }
 };
+
+export const getMonthStatsByEmail = async (req: any, res: any, next: NextFunction) => {
+    try {
+        const { email, year, month } = req.query;
+        const user = await userModel.findOne({ 'email': email }); // Find the user by their ID
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // Check if the record is created for today
+        const timeTrackedRecord = await timeTrackedModel.find({ 'email': email, 'year': year, 'month': month }).sort({ day: 1 }); // Sort by day in ascending order
+
+        if (timeTrackedRecord == null) {
+            return res.status(404).json({ message: 'User does not have any records for the month!' });
+        }
+        return res.status(200).json({
+            message: "Monthly stats",
+            data: timeTrackedRecord
+        });
+
+    } catch (error) {
+        return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
+    }
+};

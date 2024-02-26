@@ -45,13 +45,16 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
             return res.status(400).json({ message: "Owner email is required" });
         }
         
-        const records = await taskModel.find({ ownerEmail: ownerEmail });
+        const records = await taskModel.find({ ownerEmail: ownerEmail }).sort({ dueDate: 1 }); // sorted by dueDate ascending;;
         
         if (records.length === 0) {
             return res.status(404).json({ message: "No records found for the given owner email" });
         }
 
-        return res.status(200).json(records);
+        return res.status(200).json({
+            message: "Tasks based on owner email",
+            data: records
+        });
     } catch (error) {
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
     }
