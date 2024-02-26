@@ -17,6 +17,12 @@ A collaborative goal management application
     - MONGODB_URI=[DB URL]
 - `npm install` => To install dependencies
 - `npm start` => To run
+### Chrome Extension - React
+- cd to 'Thrive/extension'
+- `npm install` => to install required packages
+- `npm run build` => to run and build the build folder
+- go to 'chrome://extensions' on the browser and enter developer mode
+- load the build folder into 'chrome://extensions'
 
 ## Team Member : 
 - [GEORGIA NG](https://github.com/georgiaxng)
