@@ -9,3 +9,4 @@ testRouter.post("/test",controller.test);
 testRouter.delete("/test",controller.test);
 
 testRouter.post("/create",controller.create);
+testRouter.post("/insertSampleMessage",controller.insertSampleMessage);
