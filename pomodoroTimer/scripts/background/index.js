@@ -11,7 +11,7 @@ let INITIALIZED = false;
     pauseStartTime: Date.now(),
     totalPausedTime: 0,
     currentPausedTime: 0,
-    sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
+    sessionType: "WORK", // 'WORK', 'BREAK',
     sessionRound: 1,
   });
 
@@ -48,10 +48,12 @@ setInterval(() => {
     switch (STATE.sessionType) {
       case "WORK":
         if (STATE.sessionRound >= SETTINGS.sessionRounds) {
-          STATE.sessionType = "LONG_BREAK";
+          STATE.isPaused = true;
+          STATE.isFinished = true;
+          adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
           pushNotification({
-            title: `Focus time finished`,
-            message: `Completed work round ${STATE.sessionRound} / ${SETTINGS.sessionRounds}. Take a long break`,
+            title: `All session rounds completed`,
+            message: `Finished a total of ${SETTINGS.sessionRounds} rounds`,
           });
         } else {
           STATE.sessionType = "BREAK";
@@ -69,18 +71,14 @@ setInterval(() => {
           message: `Starting work session ${STATE.sessionRound} / ${SETTINGS.sessionRounds}`,
         });
         break;
-      case "LONG_BREAK":
-        STATE.isPaused = true;
-        STATE.isFinished = true;
-        adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
-        pushNotification({
-          title: `All session rounds completed`,
-          message: `Finished a total of ${SETTINGS.sessionRounds} rounds`,
-        });
-        break;
     }
 
-    if (!STATE.isFinished) STATE.softReset();
+    if (!STATE.isFinished) {
+      STATE.softReset();
+    }
+    else {
+      STATE.hardReset();
+    }
     sendMessage("update_state", STATE, "popup");
   }
 }, 50);
@@ -144,7 +142,7 @@ function receiveMessage(message, sender, sendResponse) {
         STATE.softReset();
         STATE.startTime = Date.now() - STATE.sessionLength - 1000;
         STATE.dontShowNextPopup = true;
-        if (STATE.sessionType !== "LONG_BREAK") STATE.isPaused = false;
+        STATE.isPaused = false;
 
         sendResponse();
         break;

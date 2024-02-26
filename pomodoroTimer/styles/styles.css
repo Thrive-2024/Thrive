@@ -7,7 +7,6 @@
   When updating these, update there too */
   --color-session-work: #0197f6;
   --color-session-break: #70b77e;
-  --color-session-long-break: #eb5e28;
 
   --color-current-session: var(--color-session-work);
 }

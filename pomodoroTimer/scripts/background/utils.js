@@ -34,10 +34,10 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   chrome.action.setIcon({ path: image });
 }
 
-/**
- * Changes to the current default icon (shown when session is paused or finished).
- * Does nothing if it is already that icon (with matching colors)
- */
+
+// Changes to the current default icon (shown when session is paused or finished).
+// Does nothing if it is already that icon (with matching colors)
+
 async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
   STATE.currentExtensionIcon = "DEFAULT";
   const image = await sendMessage(

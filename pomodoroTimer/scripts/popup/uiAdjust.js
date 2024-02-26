@@ -33,12 +33,6 @@ function adjustCurrentSessionColor(sessionType) {
         "var(--color-session-break)"
       );
       break;
-    case "LONG_BREAK":
-      document.documentElement.style.setProperty(
-        "--color-current-session",
-        "var(--color-session-long-break)"
-      );
-      break;
   }
 }
 
@@ -47,13 +41,10 @@ function adjustTimerSessionType(sessionType) {
   let sessionTypeText = "";
   switch (sessionType) {
     case "WORK":
-      sessionTypeText = "Focus Time";
+      sessionTypeText = "Study Time";
       break;
     case "BREAK":
       sessionTypeText = "Short Break";
-      break;
-    case "LONG_BREAK":
-      sessionTypeText = "Long Break";
       break;
   }
 
