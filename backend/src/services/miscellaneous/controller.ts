@@ -43,7 +43,6 @@ export const create = async (req: any, res: any, next: NextFunction) => {
     }
 };
 
-
 export const insertSampleMessage = async (req: any, res: any, next: NextFunction) => {
     try {
         const data = req.body;
@@ -66,7 +65,6 @@ export const insertSampleMessage = async (req: any, res: any, next: NextFunction
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
     }
 };
-
 
 export const insertUser = async (req: any, res: any, next: NextFunction) => {
     try {
@@ -136,7 +134,6 @@ export const createTask = async (req: any, res: any, next: NextFunction) => {
     }
 };
 
-
 export const updateTimeTracked = async (req: any, res: any, next: NextFunction) => {
     try {
         const { email, year, month, day, durationDay } = req.body;
@@ -180,22 +177,6 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
     }
 };
-
-// export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFunction) => {
-//     try {
-//         const year = req.query.year;
-//         const month = req.query.month;
-//         console.log(year, month);
-//         // Check if the record is created for today
-//         const timeTrackedRecord = await timeTrackedModel.find({ 'year': year, 'month': month });
-//         console.log(timeTrackedRecord);
-//         return res.status(200).json({
-//             message: timeTrackedRecord
-//         });
-//     } catch (error) {
-//         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
-//     }
-// };
 
 export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFunction) => {
     try {
