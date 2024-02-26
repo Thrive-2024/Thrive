@@ -12,11 +12,10 @@ import StatsPlaceholder from '../../images/stats.jpg';
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#000000"
+            main: "#99C2F0"
         },
         secondary: {
             main: "#0D062D",
-
         },
     }
 });
