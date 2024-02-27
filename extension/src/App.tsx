@@ -1,10 +1,14 @@
 import './App.css';
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab, { tabClasses } from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
+import Typography from '@mui/joy/Typography';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 
 function App() {
 
@@ -16,34 +20,66 @@ function App() {
 
 
   return (
-    <html lang="en">
-    <head>
-      <meta charSet="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Thrive Chrome Extension</title>
-      <link rel="stylesheet" href="App.css"/>
-    </head>
-    <body>
-      <h1>Thrive Chrome Extension</h1>
+    <Tabs
+      variant="outlined"
+      aria-label="Pricing plan"
+      defaultValue={0}
+      orientation="vertical"
+      sx={{
+        width: 343,
+        borderRadius: 'lg',
+        boxShadow: 'sm',
+        overflow: 'auto',
+        flexDirection: 'row-reverse'
+      }}
+    >
+      <TabList
+        disableUnderline
+        tabFlex={1}
+        sx={{
+          [`& .${tabClasses.root}`]: {
+            fontSize: 'sm',
+            fontWeight: 'lg',
+            [`&[aria-selected="true"]`]: {
+              color: 'primary.500',
+              bgcolor: 'background.surface',
+            },
+            [`&.${tabClasses.focusVisible}`]: {
+              outlineOffset: '-4px',
+            },
+          },
+        }}
+      >
+        <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
+          <AssignmentOutlinedIcon />
+        </Tab>
+        <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
+          <AccessTimeOutlinedIcon />
+        </Tab>
+        <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
+          <ReportProblemOutlinedIcon />
+        </Tab>
+      </TabList>
 
-      <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Item One" value="1" />
-            <Tab label="Item Two" value="2" />
-            <Tab label="Item Three" value="3" />
-          </TabList>
-        </Box>
-        <TabPanel value="1">Item One</TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
-      </TabContext>
-    </Box>
+      <TabPanel value={0}>
+        <Typography level="inherit">
+          Assignment
+        </Typography>
+      </TabPanel>
 
-    </body>
-    </html>
+      <TabPanel value={1}>
+        <Typography level="inherit">
+          Pomodoro Timer
+        </Typography>
+      </TabPanel>
+
+      <TabPanel value={2}>
+        <Typography level="inherit">
+          Restricted Sites
+        </Typography>
+      </TabPanel>
+
+    </Tabs>
   );
 }
 
