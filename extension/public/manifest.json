@@ -5,18 +5,31 @@
   "action": {
     "default_popup": "index.html"
   },
+  "background": {
+    "service_worker": "background/bgLoader.js"
+},
   "permissions": [
-    "scripting"
+    "scripting",
+    "storage",
+    "notifications",
+    "offscreen",
+    "tabs",
+    "identity"
   ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "icons": {
-    "16": "./assets/icons/16.png",
-    "32": "./assets/icons/32.png",
-    "48": "./assets/icons/48.png",
-    "96": "./assets/icons/96.png",
-    "128": "./assets/icons/128.png"
-  }
+      "16": "./assets/icons/16.png",
+      "32": "./assets/icons/32.png",
+      "48": "./assets/icons/48.png",
+      "96": "./assets/icons/96.png",
+      "128": "./assets/icons/128.png"
+  },
+  "web_accessible_resources": [
+      {
+          "resources": [],
+          "matches": [
+              "<all_urls>"
+          ]
+      }
+  ]
 }
