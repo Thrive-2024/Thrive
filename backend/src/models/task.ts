@@ -25,7 +25,7 @@ const TaskSchema = new Schema({
     status : {
         type : String,
         required : true,
-        default : "pending" //Type : pending, progress, done
+        default : "toDo" //Type : toDo, inProgress, done
     },
     notes : {
         type : String,
