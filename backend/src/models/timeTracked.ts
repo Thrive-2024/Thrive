@@ -27,6 +27,10 @@ const TimeTrackedSchema = new Schema({
         type: String,
         required: true
     },
+    lastTimeTracked: {
+        type: Number,
+        required: true
+    },
     lastUpdated: {
         type: String,
         required: true

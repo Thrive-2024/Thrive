@@ -154,7 +154,8 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
                 "day": day,
                 "durationDay": durationDay,
                 "lastUpdated": getDateTime.now(),
-                "lastTask": lastTask
+                "lastTask": lastTask,
+                "lastTimeTracked" : durationDay
             });
             // add a new record to mongodb
             newRecord
@@ -171,6 +172,7 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
             timeTrackedRecord.durationDay = parseFloat(timeTrackedRecord.durationDay) + parseFloat(durationDay);
             timeTrackedRecord.lastTask = lastTask;
             timeTrackedRecord.lastUpdated = getDateTime.now();
+            timeTrackedRecord.lastTimeTracked = durationDay;
             timeTrackedRecord.save();
             return res.status(200).json({ message: 'Time tracked updated successfully' });
         }
@@ -201,6 +203,7 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
                         $push: {
                             lastTask: "$lastTask",
                             lastUpdated: "$lastUpdated",
+                            lastTimeTracked: "$lastTimeTracked",
                         },
                     },
                 }
@@ -243,6 +246,7 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
                     name: "$userInfo.name",
                     year: 1,
                     month: 1,
+                    lastTimeTracked:"$lastTask.lastTimeTracked",
                     totalDuration: 1,
                     lastTask: "$lastTask.lastTask",
                 }
