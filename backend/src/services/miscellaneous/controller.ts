@@ -247,6 +247,7 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
                     year: 1,
                     month: 1,
                     lastTimeTracked:"$lastTask.lastTimeTracked",
+                    lastUpdated: "$lastTask.lastUpdated",
                     totalDuration: 1,
                     lastTask: "$lastTask.lastTask",
                 }
