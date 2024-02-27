@@ -73,7 +73,7 @@ export const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
     const [currentUser, setCurrentUser] = useState('')
 
-    const leaderboardFetcher = async () => {
+    const fetchLeaderboard = async () => {
         console.log("leaderboard fetcher called");
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         console.log(timezone);
@@ -108,7 +108,7 @@ export const Leaderboard = () => {
 
 
     useEffect(() => {
-        leaderboardFetcher();
+        fetchLeaderboard();
         setCurrentUser('tim@gmail.com');
     }, []);
 

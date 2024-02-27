@@ -56,8 +56,18 @@ const processingStyle = {
 
 export const Dashboard = () => {
 
-    useEffect(() => {
-    }, []);
+    interface Task {
+        id: string;
+        ownerEmail: string;
+        taskName: string;
+        subjectName: string;
+        colour: string;
+        dueDate: Date; // Assuming dueDate is a Date object
+        status: string;
+        notes: string;
+    }
+
+
 
     // list of draggable tasks
     const tasks = [
@@ -69,6 +79,34 @@ export const Dashboard = () => {
         { id: "6", content: "Sixth task", daysLeft: 2, subject: 'Algorithms' }
 
     ];
+    const calculateTimeLeft = (dateString: string) => {
+        const targetDate = new Date(dateString.split('T')[0]); // Extracting and parsing the date from the input string
+        const currentDate = new Date(); // Current date
+
+        // Calculate the difference in milliseconds
+        const difference = targetDate.getTime() - currentDate.getTime();
+
+        // Calculate days and weeks
+        const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+        const weeksLeft = Math.ceil(daysLeft / 7); // Convert days to weeks
+
+        if (daysLeft < 0) {
+            return "Overdue";
+        } else if (daysLeft === 0) {
+            return "Due today";
+        } else if (daysLeft === 1) {
+            return "1 day left";
+        } else if (daysLeft <= 7) {
+            return `${daysLeft} days left`;
+        } else if (weeksLeft === 1) {
+            return "1 week left";
+        } else {
+            return `${weeksLeft} weeks left`;
+        }
+    };
+
+    //task list
+    const [taskList, setTaskList] = useState<TaskStatus[]>([]);
 
     // task creation
     const [taskName, setTaskName] = useState('');
@@ -81,21 +119,32 @@ export const Dashboard = () => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [render, setRender] = React.useState(false);
 
-    //type of lists and array to store them
-    const taskStatus = {
-        toDo: {
-            name: "Tasks",
-            items: tasks
-        },
-        inProgress: {
-            name: "In Progress",
-            items: []
-        },
-        done: {
-            name: "Done",
-            items: []
-        }
+    interface TaskStatus {
+        toDo: { name: string; items: Task[] };
+        inProgress: { name: string; items: Task[] };
+        done: { name: string; items: Task[] };
+    }
+
+    const taskStatus: TaskStatus = {
+        toDo: { name: 'To Do', items: [] },
+        inProgress: { name: 'In Progress', items: [] },
+        done: { name: 'Done', items: [] }
+    };
+
+
+    const setTaskBoard = (taskList: Task[]) => {
+        taskList.forEach((task) => {
+            const status = task.status;
+            if (status === 'toDo') {
+                taskStatus.toDo.items.push(task);
+            } else if (status === 'inProgress') {
+                taskStatus.inProgress.items.push(task);
+            } else if (status === 'done') {
+                taskStatus.done.items.push(task);
+            }
+        });
     };
     //for drag and drop boards
     const [columns, setColumns] = useState(taskStatus);
@@ -134,11 +183,6 @@ export const Dashboard = () => {
         // console.log(event.target.value);
     };
 
-    // const handleDueDateChange = (event:any) => {
-    //     setDueDate(event.target.value);
-    //     console.log(event.target.value);
-    // };
-
     const handleSubjectChange = (event: any) => {
         setSubject(event.target.value);
         // console.log(event.target.value);
@@ -150,22 +194,6 @@ export const Dashboard = () => {
     };
 
 
-    const subjectColor = (task: String) => {
-        switch (task) {
-            case 'Linear Algebra':
-                return '#CCFFCC';
-            case 'AWS Tutorial':
-                return '#FFC4C4';
-            case 'Algorithms':
-                return '#CCCCFF';
-            case 'Ethics':
-                return '#FFCC99';
-            case 'Leetcode':
-                return '#FFFFCC';
-            default:
-                return '#D7D7D7';
-        }
-    }
 
     //task dragging function
     const onDragEnd = (result: any, columns: any, setColumns: any) => {
@@ -255,11 +283,11 @@ export const Dashboard = () => {
                     setAlertType('success');
                     setAlertMsg(`Task: ${taskName} created successfully`);
 
-                    //reset the input fields except switch buttons
+                    setRender(true)
+
                     setSelectedColor('');
                     setTaskName('');
                     setSubject('');
-                    // setDateOfBirth(dayjs('1980-01-01'));
                     setNotes('');
                     setDueDate('');
 
@@ -273,6 +301,48 @@ export const Dashboard = () => {
 
 
     }
+
+    const fetchTask = async () => {
+        console.log("task fetcher called");
+        // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // console.log(timezone);
+        // // Get current year and month
+        // const currentDate = new Date();
+        // const year = currentDate.getFullYear();
+        // // Note: January is 0, February is 1, and so on...
+        // const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=james@gmail.com`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'GET'
+            });
+
+            if (response.status != 200) {
+                console.log("ERROR FETCHING LEADERBOARD");
+
+            } else {
+                const apiResponse = await response.json();
+                console.log(apiResponse);
+                setTaskList(apiResponse.data)
+                setTaskBoard(apiResponse.data)
+            }
+
+        } catch (err) {
+            window.alert(err);
+            return null;
+        }
+
+    }
+
+    useEffect(() => {
+        fetchTask().then( ()=>setRender(false))
+    }, [render]);
+
+
+
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -291,7 +361,7 @@ export const Dashboard = () => {
                             </Grid>
                             <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
 
-                                <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
+                                <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
                             </Grid>
                             {/* <Grid item xs={4} >
                             <Card sx={{ border: '1px black', height: '30vh', padding: 3 }}>
@@ -341,11 +411,11 @@ export const Dashboard = () => {
                                                                                     minWidth: 200
                                                                                 }}
                                                                             >
-                                                                                {column.items.map((item, index) => {
+                                                                                {column.items.map((item: any, index: number) => {
                                                                                     return (
                                                                                         <Draggable
-                                                                                            key={item.id}
-                                                                                            draggableId={item.id}
+                                                                                            key={item._id}
+                                                                                            draggableId={item._id}
                                                                                             index={index}
                                                                                         >
                                                                                             {(provided, snapshot) => {
@@ -370,9 +440,10 @@ export const Dashboard = () => {
 
                                                                                                         }}
                                                                                                     >
-                                                                                                        <Typography >{item.content}</Typography>
-                                                                                                        <Chip size="small" label={item.subject} sx={{ mt: 1, fontSize: 12, backgroundColor: `${subjectColor(item.subject)}` }} />
-                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt: '3px' }}>{item.daysLeft} days left</Typography>
+                                                                                                        <Typography >{item.taskName}</Typography>
+                                                                                                        <Chip size="small" label={item.subjectName} sx={{ mt: 1, fontSize: 12, backgroundColor: item.colour }} />
+                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt: '3px' }}>{calculateTimeLeft(item.dueDate)}</Typography>
+
                                                                                                     </div>
                                                                                                 );
                                                                                             }}
