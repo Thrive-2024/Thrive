@@ -23,6 +23,10 @@ const TimeTrackedSchema = new Schema({
         required: true,
         default: 0
     },
+    lastTask: {
+        type: String,
+        required: true
+    },
     lastUpdated: {
         type: String,
         required: true

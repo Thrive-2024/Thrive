@@ -136,7 +136,7 @@ export const createTask = async (req: any, res: any, next: NextFunction) => {
 
 export const updateTimeTracked = async (req: any, res: any, next: NextFunction) => {
     try {
-        const { email, year, month, day, durationDay } = req.body;
+        const { email, year, month, day, durationDay, lastTask } = req.body;
         const user = await userModel.findOne({ 'email': email }); // Find the user by their ID
 
         if (!user) {
@@ -154,6 +154,7 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
                 "day": day,
                 "durationDay": durationDay,
                 "lastUpdated": getDateTime.now(),
+                "lastTask": lastTask
             });
             // add a new record to mongodb
             newRecord
@@ -168,6 +169,7 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
                 });
         } else {
             timeTrackedRecord.durationDay = parseFloat(timeTrackedRecord.durationDay) + parseFloat(durationDay);
+            timeTrackedRecord.lastTask = lastTask;
             timeTrackedRecord.lastUpdated = getDateTime.now();
             timeTrackedRecord.save();
             return res.status(200).json({ message: 'Time tracked updated successfully' });
@@ -195,18 +197,57 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
                 $group: {
                     _id: { email: "$email", year: "$year", month: "$month" },
                     totalDuration: { $sum: "$durationDay" },
+                    tasks: {
+                        $push: {
+                            lastTask: "$lastTask",
+                            lastUpdated: "$lastUpdated",
+                        },
+                    },
                 }
             },
             {
                 $project: {
-                    _id: 0,
                     email: "$_id.email",
                     year: "$_id.year",
                     month: "$_id.month",
                     totalDuration: 1,
+                    lastTask: {
+                        $arrayElemAt: [
+                            {
+                                $filter: {
+                                    input: "$tasks",
+                                    as: "task",
+                                    cond: { $eq: ["$$task.lastUpdated", { $max: "$tasks.lastUpdated" }] },
+                                },
+                            },
+                            0,
+                        ],
+                    },
                 }
             },
-            { $sort: { totalDuration: -1 } } // Optional: Sort by totalDuration in descending order
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "email",
+                    foreignField: "email",
+                    as: "userInfo"
+                }
+            },
+            {
+                $unwind: "$userInfo"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    email: 1,
+                    name: "$userInfo.name",
+                    year: 1,
+                    month: 1,
+                    totalDuration: 1,
+                    lastTask: "$lastTask.lastTask",
+                }
+            },
+            { $sort: { totalDuration: -1 } }
         ]);
 
         return res.status(200).json({
