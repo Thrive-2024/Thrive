@@ -9,6 +9,8 @@ import Typography from '@mui/joy/Typography';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Container } from '@mui/joy';
 
 function App() {
 
@@ -51,28 +53,45 @@ function App() {
         }}
       >
         <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
-          <AssignmentOutlinedIcon />
+          <AssignmentOutlinedIcon sx={{ color:'#99C2F0' }} />
         </Tab>
         <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
-          <AccessTimeOutlinedIcon />
+          <AccessTimeOutlinedIcon sx={{ color:'#99C2F0' }} />
         </Tab>
         <Tab disableIndicator variant="soft" sx={{ flexGrow: 1 }}>
-          <ReportProblemOutlinedIcon />
+          <ReportProblemOutlinedIcon sx={{ color:'#99C2F0' }} />
         </Tab>
       </TabList>
 
+      {/* Assignment Tab */}
       <TabPanel value={0}>
+        <Container sx={{ display:'flex' }}>
+          <Typography sx={{ color:"#A3A3A3", marginRight:'10%', fontSize:'14px' }} >
+              Currently working on
+          </Typography>
+          <MoreVertIcon sx={{ fontSize:'20px', marginLeft:'10%' }} />
+        </Container>
         <Typography level="inherit">
-          Assignment
+          Assignment 2
         </Typography>
+        <Container sx={{ display:'flex' }} >
+          <Typography sx={{ background:'#CCCCFF', borderRadius:'20px', p:0.5 }} >
+            Linear Algebra
+          </Typography>
+          <Typography>
+            2 days left
+          </Typography>
+        </Container>
       </TabPanel>
 
+      {/* Pomodoro Timer Tab */}
       <TabPanel value={1}>
         <Typography level="inherit">
           Pomodoro Timer
         </Typography>
       </TabPanel>
 
+      {/* Site Restriction Tab */}
       <TabPanel value={2}>
         <Typography level="inherit">
           Restricted Sites
