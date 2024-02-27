@@ -186,44 +186,6 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
         const month = parseInt(req.query.month, 10);
 
         // Aggregation pipeline to group records and sum durationDay
-        // const leaderboard = await timeTrackedModel.aggregate([
-        //     {
-        //         $match: {
-        //             year: year,
-        //             month: month,
-        //         }
-        //     },
-        //     {
-        //         $group: {
-        //             _id: { email: "$email", year: "$year", month: "$month" },
-        //             totalDuration: { $sum: "$durationDay" },
-        //             lastUpdated: { $max: "$lastUpdated" }, // Assuming lastUpdated is a sortable field
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: "User", // Adjust this to match the user collection name
-        //             localField: "_id.email",
-        //             foreignField: "email",
-        //             as: "userInfo"
-        //         }
-        //     },
-        //     {
-        //         $unwind: "$userInfo" // Assuming email will match one user
-        //     },
-        //     {
-        //         $project: {
-        //             _id: 0,
-        //             email: "$_id.email",
-        //             name: "$userInfo.name", // Adjust this to your user model's name field
-        //             year: "$_id.year",
-        //             month: "$_id.month",
-        //             totalDuration: 1,
-        //             lastUpdated: 1,
-        //         }
-        //     },
-        //     { $sort: { totalDuration: -1 } } // Optional: Sort by totalDuration in descending order
-        // ]);
         const leaderboard = await timeTrackedModel.aggregate([
             {
                 $match: {
