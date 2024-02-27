@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
-import { Box, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText, Modal, Tooltip, TextField, Snackbar, Alert, MenuItem, Select, LinearProgress, FormControl } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { green, grey, red } from '@mui/material/colors';
 
 import StatsPlaceholder from '../../images/stats.jpg';
+import dayjs from 'dayjs';
 
 //creating theme
 const theme = createTheme({
@@ -19,6 +23,34 @@ const theme = createTheme({
         },
     }
 });
+
+//styles for add task modal
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    height: 500,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 5,
+};
+
+//styles for processing modal
+const processingStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 <style>
 </style>
 
@@ -38,22 +70,17 @@ export const Dashboard = () => {
 
     ];
 
-    const subjectColor = (task: String) => {
-        switch (task) {
-            case 'Linear Algebra':
-                return '#CCFFCC';
-            case 'AWS Tutorial':
-                return '#FFC4C4';
-            case 'Algorithms':
-                return '#CCCCFF';
-            case 'Ethics':
-                return '#FFCC99';
-            case 'Leetcode':
-                return '#FFFFCC';
-            default:
-                return '#D7D7D7';
-        }
-    }
+    // task creation
+    const [taskName, setTaskName] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    const [subject, setSubject] = useState('');
+    const [notes, setNotes] = useState('');
+
+    // task creation modal
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     //type of lists and array to store them
     const taskStatus = {
@@ -70,6 +97,75 @@ export const Dashboard = () => {
             items: []
         }
     };
+    //for drag and drop boards
+    const [columns, setColumns] = useState(taskStatus);
+
+    //color selections
+    const colorOptions = [
+        { label: 'Red', value: '#FFC4C4' },
+        { label: 'Green', value: '#CCFFCC' },
+        { label: 'Yellow', value: '#FFFFCC' },
+        { label: 'Orange', value: '#FFCC99' },
+        { label: 'Purple', value: '#CCCCFF' },
+        { label: 'Default', value: '#D7D7D7' }
+    ];
+
+    //processing modal and snackbar
+    const [openProcessingModal, setOpenProcessingModal] = React.useState(false);
+
+    //error , warning , info , success
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [alertType, setAlertType]: any = useState('info');
+    const [alertMsg, setAlertMsg] = useState('');
+
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false);
+    };
+
+
+    //handle form inputs
+    const handleColorChange = (event: any) => {
+        setSelectedColor(event.target.value);
+        // console.log(event.target.value);
+    };
+
+    const handleTaskNameChange = (event: any) => {
+        setTaskName(event.target.value);
+        // console.log(event.target.value);
+    };
+
+    // const handleDueDateChange = (event:any) => {
+    //     setDueDate(event.target.value);
+    //     console.log(event.target.value);
+    // };
+
+    const handleSubjectChange = (event: any) => {
+        setSubject(event.target.value);
+        // console.log(event.target.value);
+    };
+
+    const handleNotesChange = (event: any) => {
+        setNotes(event.target.value);
+        // console.log(event.target.value);
+    };
+
+
+    const subjectColor = (task: String) => {
+        switch (task) {
+            case 'Linear Algebra':
+                return '#CCFFCC';
+            case 'AWS Tutorial':
+                return '#FFC4C4';
+            case 'Algorithms':
+                return '#CCCCFF';
+            case 'Ethics':
+                return '#FFCC99';
+            case 'Leetcode':
+                return '#FFFFCC';
+            default:
+                return '#D7D7D7';
+        }
+    }
 
     //task dragging function
     const onDragEnd = (result: any, columns: any, setColumns: any) => {
@@ -109,7 +205,74 @@ export const Dashboard = () => {
         }
     };
 
-    const [columns, setColumns] = useState(taskStatus);
+    const handleCreateTask = (event: any) => {
+        event.preventDefault()
+        console.log("handleCreateTask called")
+        setOpenProcessingModal(true)
+
+        console.log(dueDate.toString())
+
+        // Check if any of the required variables are empty or empty strings
+        if (!taskName.trim() || !subject.trim() || !selectedColor.trim() || !dueDate.trim()) {
+
+            setAlertType('error');
+            setAlertMsg("Task creation failed. Please check your inputs and try again.");
+            setOpenSnackbar(true);
+
+            setOpenProcessingModal(false)
+
+            return; // Exit the function if any of the required fields are empty
+        }
+
+        const formData = new FormData();
+        formData.append('ownerEmail', 'james@gmail.com');
+        formData.append('taskName', taskName);
+        formData.append('subjectName', subject);
+        formData.append('colour', selectedColor);
+        formData.append('dueDate', dueDate);
+        formData.append('notes', notes);
+
+        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/create`, {
+            headers: {
+            },
+            method: 'POST',
+            body: formData
+        })
+            .then(async (response) => {
+                if (response.status != 200) {
+                    const apiResponse = await response.json();
+                    setOpenProcessingModal(false);
+                    //show alert msg
+                    setAlertType('error');
+                    setAlertMsg("Task creation failed. Please check your inputs and try again.");
+                    setOpenSnackbar(true);
+
+                    // setAlertMsg(apiResponse['message']);
+                } else {
+                    const apiResponse = await response.json();
+                    //show alert msg
+                    setOpenSnackbar(true);
+                    setAlertType('success');
+                    setAlertMsg(`Task: ${taskName} created successfully`);
+
+                    //reset the input fields except switch buttons
+                    setSelectedColor('');
+                    setTaskName('');
+                    setSubject('');
+                    // setDateOfBirth(dayjs('1980-01-01'));
+                    setNotes('');
+                    setDueDate('');
+
+                    setOpenProcessingModal(false);
+                    setOpen(false);
+
+                }
+            }
+            )
+
+
+
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -122,10 +285,13 @@ export const Dashboard = () => {
                         <Box>
                             <MidTopSection />
                             <Divider />
-                            {/* Dashboard content here */}
                         </Box>  <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
-                            <Grid item xs={12} >
+                            <Grid item xs={6} >
                                 <Typography variant='h5' sx={{ ml: 1 }}>This Week</Typography>
+                            </Grid>
+                            <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
+
+                                <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
                             </Grid>
                             {/* <Grid item xs={4} >
                             <Card sx={{ border: '1px black', height: '30vh', padding: 3 }}>
@@ -146,7 +312,7 @@ export const Dashboard = () => {
                                     <div
                                         style={{ display: "flex", justifyContent: "center" }}
                                     >
-                                        {/* https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
+                                        {/* Drag and drop list: https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
                                         <DragDropContext
                                             onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
                                         >
@@ -243,6 +409,7 @@ export const Dashboard = () => {
 
                             </Grid> */}
                             <Grid item xs={6}>
+                                {/* Statistics */}
                                 <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
                                     <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
 
@@ -253,7 +420,7 @@ export const Dashboard = () => {
 
                             </Grid>
                             <Grid item xs={6}>
-
+                                {/* Today's Agenda */}
                                 <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
                                     <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
                                     <Divider />
@@ -288,6 +455,7 @@ export const Dashboard = () => {
 
                             </Grid>
 
+
                             {/* <Grid item xs={12}>
                                 <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod tortor augue, eu commodo dui aliquam sit amet. Donec semper lacus vel est aliquet, sed vestibulum quam hendrerit. Nunc scelerisque rutrum lacus. Mauris maximus vulputate cursus. Morbi sodales consequat sapien et imperdiet. Integer semper sit amet est sit amet porttitor. Sed vel turpis ultricies nunc commodo tempor eget vulputate sem. Fusce turpis enim, placerat ut consectetur in, bibendum non nisi. Sed vitae nisl nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas at mauris dolor. Sed sed nulla porta, scelerisque neque sit amet, rhoncus enim. Nullam varius pretium erat in laoreet. Nunc sit amet fermentum tortor, id sollicitudin libero. Integer mattis odio ac malesuada semper. Proin viverra, sem id elementum maximus, nulla magna eleifend nisi, a venenatis leo velit at ex.
 
@@ -306,6 +474,116 @@ export const Dashboard = () => {
                         <RightNavbar />
                     </Box>
                 </Box>
+                {/* add task modal */}
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <FormControl>
+                            <Grid container spacing={2} sx={{ padding: 5, pt: 4 }} >
+                                <Grid item xs={6} sx={{ mb: 2 }}>
+                                    {/* Task Name */}
+                                    <TextField
+                                        id="outlined-basic1"
+                                        label="Task"
+                                        variant="outlined"
+                                        size='small'
+                                        onChange={handleTaskNameChange}
+                                        fullWidth  // Explicitly set to take full width
+                                    />
+                                </Grid>
+                                <Grid item xs={4} sx={{ mb: 2 }}>
+                                    {/* Subject */}
+                                    <TextField
+                                        id="outlined-basic2"
+                                        label="Subject"
+                                        variant="outlined"
+                                        size='small'
+                                        onChange={handleSubjectChange}
+                                        fullWidth  // Explicitly set to take full width
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    {/* Color */}
+                                    <Select
+                                        size='small'
+                                        value={selectedColor}
+                                        onChange={handleColorChange}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Select color' }}
+                                        renderValue={(selected) => (
+                                            <Box style={{ backgroundColor: selected, width: 20, height: 20, borderRadius: '50%' }} />
+                                        )}
+                                    >
+                                        <MenuItem value="" disabled>
+                                            Select Color
+                                        </MenuItem>
+                                        {colorOptions.map((option, index) => (
+                                            <MenuItem key={index} value={option.value}>
+                                                <Box style={{ backgroundColor: option.value, width: 16, height: 16, borderRadius: '50%' }} />
+                                                <Tooltip title={option.label}>
+                                                    <span style={{ marginLeft: 8 }}>{option.label}</span>
+                                                </Tooltip>
+                                            </MenuItem>
+                                        ))}
+                                    </Select></Grid>
+                                <Grid item xs={6}>
+                                    {/* Notes */}
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Notes"
+                                        multiline
+                                        rows={12}
+                                        placeholder="..."
+                                        onChange={handleNotesChange}
+                                        sx={{ width: '100%' }}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {/* Date */}
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                        <DateCalendar
+                                            onChange={(newValue) => {
+                                                // Convert the date to the desired format
+                                                const formattedDate = dayjs(newValue).format('YYYY-MM-DDThh:mm:ss');
+                                                setDueDate(formattedDate);
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                                    <Button sx={{ marginRight: 5, width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleCreateTask}>Add Task</Button>
+                                </Grid>
+
+                            </Grid></FormControl>
+                    </Box>
+                </Modal>
+                {/* snackbar */}
+                <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleSnackbarClose}>
+                    <Alert onClose={handleSnackbarClose} severity={alertType} sx={{ width: '100%' }}>
+                        {alertMsg}
+                    </Alert>
+                </Snackbar>
+
+                {/* processing modal */}
+                <Modal
+                    keepMounted
+                    open={openProcessingModal}
+                    aria-labelledby="loading"
+                    aria-describedby="loading elderly data"
+                >
+                    <Box sx={processingStyle}>
+                        <Typography id="processing" variant="h6" component="h2">
+                            Processing data, please wait.
+                        </Typography>
+                        <LinearProgress />
+                    </Box>
+                </Modal>
+
+
             </div></ThemeProvider>
     )
 }
