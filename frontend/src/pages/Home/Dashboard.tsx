@@ -88,7 +88,7 @@ export const Dashboard = () => {
     const [taskName, setTaskName] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [dueDate, setDueDate] = useState('');
-    const [subject, setSubject] = useState('');
+    const [subjectName, setSubjectName] = useState('');
     const [notes, setNotes] = useState('');
 
     // const [tasksToUpdate, setTasksToUpdate] = useState<any[]>([]);
@@ -145,7 +145,7 @@ export const Dashboard = () => {
     };
 
     const handleSubjectChange = (event: any) => {
-        setSubject(event.target.value);
+        setSubjectName(event.target.value);
         // console.log(event.target.value);
     };
 
@@ -202,7 +202,7 @@ export const Dashboard = () => {
         console.log(dueDate.toString())
 
         // Check if any of the required variables are empty or empty strings
-        if (!taskName.trim() || !subject.trim() || !selectedColor.trim() || !dueDate.trim()) {
+        if (!taskName.trim() || !subjectName.trim() || !selectedColor.trim() || !dueDate.trim()) {
 
             setAlertType('error');
             setAlertMsg("Task creation failed. Please check your inputs and try again.");
@@ -216,7 +216,7 @@ export const Dashboard = () => {
         const formData = new FormData();
         formData.append('ownerEmail', currentUser);
         formData.append('taskName', taskName);
-        formData.append('subjectName', subject);
+        formData.append('subjectName', subjectName);
         formData.append('colour', selectedColor);
         formData.append('dueDate', dueDate);
         formData.append('notes', notes);
@@ -244,7 +244,6 @@ export const Dashboard = () => {
                     setAlertType('success');
                     setAlertMsg(`Task: ${taskName} created successfully`);
 
-                    // console.log(apiResponse.id);
                     // fetchTask();
                     // Add the newly created task to the task board
                     setTaskBoard((prevState: any) => ({
@@ -253,14 +252,14 @@ export const Dashboard = () => {
                             ...prevState.toDo,
                             items: [
                                 ...prevState.toDo.items,
-                                { id: apiResponse.id, ownerEmail: currentUser, taskName, subject, colour: selectedColor, dueDate, status: 'toDo', notes }
+                                { _id: apiResponse.id, ownerEmail: currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
                             ]
                         }
                     }));
 
                     setSelectedColor('');
                     setTaskName('');
-                    setSubject('');
+                    setSubjectName('');
                     setNotes('');
                     setDueDate('');
 
