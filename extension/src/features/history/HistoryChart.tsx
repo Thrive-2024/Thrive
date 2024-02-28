@@ -47,30 +47,28 @@ const HistoryChart: React.FC<IProps> = ({ historyData }) => {
   if (!historyData) return <LoadingSpinner />;
 
   return (
-    <div className="my-5">
-      <ResponsiveContainer width={400} height={200}>
-        <BarChart
-          data={historyData}
-          margin={{ top: 0, left: 0, bottom: 0, right: 40 }}
-        >
-          <CartesianGrid stroke={chartStrokeColor.light} vertical={false} />
-          <XAxis dataKey="name" />
-          <YAxis width={30} axisLine={false} tickLine={false} />
-          <Bar
-            type="monotone"
-            dataKey="count"
-            stroke={COLOR.primary}
-            fill={COLOR.primary}
-            isAnimationActive={false}
-          />
-          <Tooltip
-            cursor={{ fill: "transparent" }}
-            contentStyle={tooltipContentStyle.light}
-            labelStyle={tooltipLabelStyle.light}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width={270} height={150}>
+      <BarChart
+        data={historyData}
+        margin={{ top: 0, left: 0, bottom: 0, right: 0 }}
+      >
+        <CartesianGrid stroke={chartStrokeColor.light} vertical={false} />
+        <XAxis dataKey="name" />
+        <YAxis width={35} axisLine={false} tickLine={false} />
+        <Bar
+          type="monotone"
+          dataKey="count"
+          stroke={COLOR.primary}
+          fill={COLOR.primary}
+          isAnimationActive={false}
+        />
+        <Tooltip
+          cursor={{ fill: "transparent" }}
+          contentStyle={tooltipContentStyle.light}
+          labelStyle={tooltipLabelStyle.light}
+        />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

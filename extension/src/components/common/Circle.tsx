@@ -15,7 +15,7 @@ const Circle: React.FC<IProps> = ({ isArchived = false, className = '' }) => {
   const [strokeColor, setStrokeColor] = useState<string>('')
 
   useEffect(() => {
-      setStrokeColor(white)
+      setStrokeColor(black)
       if (isArchived) {
         setFillColor(white)
       } else {

@@ -1,3 +1,5 @@
+import { COLOR } from "@/consts/color"
+
 const Pause: React.FC = () => {
   return (
     <svg
@@ -7,6 +9,7 @@ const Pause: React.FC = () => {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
+      color= {COLOR.gray[950]}
       className="w-8 h-8 icon-color"
     >
       <path

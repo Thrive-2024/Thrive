@@ -81,7 +81,7 @@ const Settings: React.FC = () => {
       <div id="settings" className={twMerge('text-base')}>
         <div
           id="timerSetting"
-          className="border-b-2 border-gray-300 pb-8 dark:border-gray-700"
+          className="border-b-2 border-gray-300 pb-2 dark:border-gray-700"
         >
           <p className={twMerge(headingStyle)}>{translation.settings.timer.title}</p>
           <div className="mt-3 text-sm">

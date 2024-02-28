@@ -1,3 +1,5 @@
+import { COLOR } from "@/consts/color"
+
 const Chart: React.FC = () => {
   return (
     <svg
@@ -5,7 +7,7 @@ const Chart: React.FC = () => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke="currentColor"
+      stroke= {COLOR.gray[950]}
       className="icon-color icon-color-hovered h-8 w-8"
     >
       <path

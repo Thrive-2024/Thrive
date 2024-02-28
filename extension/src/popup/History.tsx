@@ -59,9 +59,9 @@ const History: React.FC = () => {
     <div id="history">
       <ArrowBackward
         handleClick={() => setDisplayPageType(DEFAULT_POPUP_PAGE_TYPE)}
-        className="ml-3 h-3 w-3"
+        className="h-3 w-3"
       />
-      <div className="mx-auto w-5/6">
+      <div className="mx-auto">
         <div className="flex h-8 justify-center">
           <div className="flex w-4/5 rounded-lg border bg-gray-200 p-[2px] dark:border-gray-700 dark:bg-gray-900">
             {termTypes.map((term) => (
