@@ -11,6 +11,8 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Container } from '@mui/joy';
+import './styles/globals.css'
+import Pomodoro from './popup/Pomodoro'
 
 function App() {
 
@@ -89,6 +91,7 @@ function App() {
         <Typography level="inherit">
           Pomodoro Timer
         </Typography>
+        <Pomodoro />
       </TabPanel>
 
       {/* Site Restriction Tab */}

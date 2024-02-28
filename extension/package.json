@@ -1,8 +1,12 @@
 {
-  "name": "chrome-test",
-  "version": "0.1.0",
+  "name": "chrome-extension-thrive",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "dayjs": "^1.11.6",
+    "dotenv": "^16.0.3",
+    "recharts": "^2.1.16",
+    "tailwind-merge": "^1.14.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.11",
@@ -22,31 +26,42 @@
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
+    "@types/chrome": "^0.0.200",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.11",
+    "lint-staged": "^13.0.4",
+    "mockdate": "^3.0.5",
+    "postcss": "^8.4.18",
+    "prettier": "^2.8.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "react-countdown-circle-timer": "^3.1.0",
+    "tailwindcss": "^3.3.3",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "vite": "^4.4.7",
+    "vite-tsconfig-paths": "^4.2.1"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint --fix './src/'"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "globals": {
-      "chrome": true
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --ext .ts,.tsx ./src/"
     ]
+  },
+  "volta": {
+    "node": "18.17.0"
   }
 }
