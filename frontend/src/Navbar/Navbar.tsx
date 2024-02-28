@@ -185,12 +185,6 @@ export const MidTopSection = () => {
   );
 }
 export const RightNavbar = () => {
-  // const motivationArray = [{ sender:'Tim',message: "Hey James! Remember why you started. You've got this!" }, {sender:'Bran', message: "We can do it!! I know it’s hard but together we can achieve anything!!" }]
-  //   console.log("Fetching data")
-  // };  
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   const [motivationArray, setMotivationArray] = useState<any[]>([])
 
@@ -198,7 +192,7 @@ export const RightNavbar = () => {
   const fetchMotivation = async () => {
     console.log("motivation fetcher called");
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=${currentUser}`, {
         headers: {
           'Content-Type': 'application/json'
         },

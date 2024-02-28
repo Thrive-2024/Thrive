@@ -368,20 +368,7 @@ export const Dashboard = () => {
 
                                 <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
                             </Grid>
-                            {/* <Grid item xs={4} >
-                            <Card sx={{ border: '1px black', height: '30vh', padding: 3 }}>
-                                <Typography sx={{ mb: 1, }}><b>Tasks</b><Chip size="small" label="4" sx={{ ml: 1 }} /></Typography>
-
-                                <Divider />
-
-                            </Card>
-                        </Grid>
-                        <Grid item xs={4} >
-                            <Card sx={{ border: '1px black', height: '30vh', padding: 2 }}><b>In Progress</b></Card>
-                        </Grid>
-                        <Grid item xs={4} >
-                            <Card sx={{ border: '1px black', height: '30vh', padding: 2 }}><b>Completed</b></Card>
-                        </Grid> */}
+                  
                             <Grid item xs={12}>
                                 <div>
                                     <div
