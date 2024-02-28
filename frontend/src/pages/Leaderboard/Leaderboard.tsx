@@ -71,7 +71,7 @@ const getTimeElapsed = (dateTime: string): string => {
 
 export const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
-    const [currentUser, setCurrentUser] = useState('')
+    const currentUser = 'james@gmail.com';
 
     const fetchLeaderboard = async () => {
         console.log("leaderboard fetcher called");
@@ -109,7 +109,6 @@ export const Leaderboard = () => {
 
     useEffect(() => {
         fetchLeaderboard();
-        setCurrentUser('tim@gmail.com');
     }, []);
 
     return (

@@ -25,7 +25,8 @@ export const create = async (req: any, res: any, next: NextFunction) => {
             .save()
             .then((response: any) => {
                 return res.status(200).send({
-                    message: `Task created successfully! Database Record ID : ${response._id}`
+                    message: `Task created successfully! Database Record ID : ${response._id}`,
+                    id: response._id
                 });
             })
             .catch((error: any) => {

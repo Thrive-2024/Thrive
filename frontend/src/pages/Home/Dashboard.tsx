@@ -6,11 +6,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import dayjs from 'dayjs';
 
 import ScheduleIcon from '@mui/icons-material/Schedule';
 
 import StatsPlaceholder from '../../images/stats.jpg';
-import dayjs from 'dayjs';
 
 //creating theme
 const theme = createTheme({
@@ -55,7 +55,10 @@ const processingStyle = {
 </style>
 
 export const Dashboard = () => {
+    //active user
+    const currentUser = 'james@gmail.com';
 
+    //task
     interface Task {
         id: string;
         ownerEmail: string;
@@ -67,46 +70,19 @@ export const Dashboard = () => {
         notes: string;
     }
 
+    //task board interface
+    interface TaskStatus {
+        toDo: { name: string; items: Task[] };
+        inProgress: { name: string; items: Task[] };
+        done: { name: string; items: Task[] };
+    }
 
-
-    // list of draggable tasks
-    const tasks = [
-        { id: "1", content: "First task", daysLeft: 3, subject: 'Linear Algebra' },
-        { id: "2", content: "Second task", daysLeft: 4, subject: 'AWS Tutorial' },
-        { id: "3", content: "Third task", daysLeft: 3, subject: 'Algorithms' },
-        { id: "4", content: "Fourth task", daysLeft: 2, subject: 'Leetcode' },
-        { id: "5", content: "Fifth task", daysLeft: 6, subject: 'Ethics' },
-        { id: "6", content: "Sixth task", daysLeft: 2, subject: 'Algorithms' }
-
-    ];
-    const calculateTimeLeft = (dateString: string) => {
-        const targetDate = new Date(dateString.split('T')[0]); // Extracting and parsing the date from the input string
-        const currentDate = new Date(); // Current date
-
-        // Calculate the difference in milliseconds
-        const difference = targetDate.getTime() - currentDate.getTime();
-
-        // Calculate days and weeks
-        const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-        const weeksLeft = Math.ceil(daysLeft / 7); // Convert days to weeks
-
-        if (daysLeft < 0) {
-            return "Overdue";
-        } else if (daysLeft === 0) {
-            return "Due today";
-        } else if (daysLeft === 1) {
-            return "1 day left";
-        } else if (daysLeft <= 7) {
-            return `${daysLeft} days left`;
-        } else if (weeksLeft === 1) {
-            return "1 week left";
-        } else {
-            return `${weeksLeft} weeks left`;
-        }
-    };
-
-    //task list
-    const [taskList, setTaskList] = useState<TaskStatus[]>([]);
+    //task for drag and drop boards
+    const [taskboard, setTaskBoard] = useState<TaskStatus>({
+        toDo: { name: "toDo", items: [] },
+        inProgress: { name: "inProgress", items: [] },
+        done: { name: "done", items: [] }
+    });
 
     // task creation
     const [taskName, setTaskName] = useState('');
@@ -121,34 +97,6 @@ export const Dashboard = () => {
     const handleClose = () => setOpen(false);
     const [render, setRender] = React.useState(false);
 
-    interface TaskStatus {
-        toDo: { name: string; items: Task[] };
-        inProgress: { name: string; items: Task[] };
-        done: { name: string; items: Task[] };
-    }
-
-    const taskStatus: TaskStatus = {
-        toDo: { name: 'To Do', items: [] },
-        inProgress: { name: 'In Progress', items: [] },
-        done: { name: 'Done', items: [] }
-    };
-
-
-    const setTaskBoard = (taskList: Task[]) => {
-        taskList.forEach((task) => {
-            const status = task.status;
-            if (status === 'toDo') {
-                taskStatus.toDo.items.push(task);
-            } else if (status === 'inProgress') {
-                taskStatus.inProgress.items.push(task);
-            } else if (status === 'done') {
-                taskStatus.done.items.push(task);
-            }
-        });
-    };
-    //for drag and drop boards
-    const [columns, setColumns] = useState(taskStatus);
-
     //color selections
     const colorOptions = [
         { label: 'Red', value: '#FFC4C4' },
@@ -159,18 +107,28 @@ export const Dashboard = () => {
         { label: 'Default', value: '#D7D7D7' }
     ];
 
-    //processing modal and snackbar
-    const [openProcessingModal, setOpenProcessingModal] = React.useState(false);
+    //allocate tasks to respective boards (todo, in progress,done)
+    const setTaskList = (fetchedTasks: Task[]) => {
+        const updatedTaskList: TaskStatus = {
+            toDo: { name: "To Do", items: [] },
+            inProgress: { name: "In Progress", items: [] },
+            done: { name: "Done", items: [] }
+        };
 
-    //error , warning , info , success
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [alertType, setAlertType]: any = useState('info');
-    const [alertMsg, setAlertMsg] = useState('');
+        fetchedTasks.forEach((task: Task) => { // Explicitly type task as Task
+            const status = task.status;
+            if (status === 'toDo') {
+                updatedTaskList.toDo.items.push(task); // No error here
+            } else if (status === 'inProgress') {
+                updatedTaskList.inProgress.items.push(task); // No error here
+            } else if (status === 'done') {
+                updatedTaskList.done.items.push(task); // No error here
+            }
+        });
 
-    const handleSnackbarClose = () => {
-        setOpenSnackbar(false);
+        // setTaskList(updatedTaskList);
+        setTaskBoard(updatedTaskList);
     };
-
 
     //handle form inputs
     const handleColorChange = (event: any) => {
@@ -193,22 +151,20 @@ export const Dashboard = () => {
         // console.log(event.target.value);
     };
 
-
-
     //task dragging function
-    const onDragEnd = (result: any, columns: any, setColumns: any) => {
+    const onDragEnd = (result: any, taskboard: any, setTaskBoard: any) => {
         if (!result.destination) return;
         const { source, destination } = result;
 
         if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
+            const sourceColumn = taskboard[source.droppableId];
+            const destColumn = taskboard[destination.droppableId];
             const sourceItems = [...sourceColumn.items];
             const destItems = [...destColumn.items];
             const [removed] = sourceItems.splice(source.index, 1);
             destItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
+            setTaskBoard({
+                ...taskboard,
                 [source.droppableId]: {
                     ...sourceColumn,
                     items: sourceItems
@@ -219,12 +175,12 @@ export const Dashboard = () => {
                 }
             });
         } else {
-            const column = columns[source.droppableId];
+            const column = taskboard[source.droppableId];
             const copiedItems = [...column.items];
             const [removed] = copiedItems.splice(source.index, 1);
             copiedItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
+            setTaskBoard({
+                ...taskboard,
                 [source.droppableId]: {
                     ...column,
                     items: copiedItems
@@ -233,6 +189,7 @@ export const Dashboard = () => {
         }
     };
 
+    //create tasks
     const handleCreateTask = (event: any) => {
         event.preventDefault()
         console.log("handleCreateTask called")
@@ -253,7 +210,7 @@ export const Dashboard = () => {
         }
 
         const formData = new FormData();
-        formData.append('ownerEmail', 'james@gmail.com');
+        formData.append('ownerEmail', currentUser);
         formData.append('taskName', taskName);
         formData.append('subjectName', subject);
         formData.append('colour', selectedColor);
@@ -283,7 +240,19 @@ export const Dashboard = () => {
                     setAlertType('success');
                     setAlertMsg(`Task: ${taskName} created successfully`);
 
-                    setRender(true)
+                    // console.log(apiResponse.id);
+                    // fetchTask();
+                    // Add the newly created task to the task board
+                    setTaskBoard((prevState:any) => ({
+                        ...prevState,
+                        toDo: {
+                            ...prevState.toDo,
+                            items: [
+                                ...prevState.toDo.items,
+                                { id: apiResponse.id, ownerEmail: currentUser, taskName, subject, colour: selectedColor, dueDate, status: 'toDo', notes }
+                            ]
+                        }
+                    }));
 
                     setSelectedColor('');
                     setTaskName('');
@@ -298,10 +267,9 @@ export const Dashboard = () => {
             }
             )
 
-
-
     }
 
+    //GET method to fetch all tasks and update 
     const fetchTask = async () => {
         console.log("task fetcher called");
         // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -320,13 +288,12 @@ export const Dashboard = () => {
             });
 
             if (response.status != 200) {
-                console.log("ERROR FETCHING LEADERBOARD");
+                console.log("ERROR FETCHING TASKS");
 
             } else {
                 const apiResponse = await response.json();
                 console.log(apiResponse);
                 setTaskList(apiResponse.data)
-                setTaskBoard(apiResponse.data)
             }
 
         } catch (err) {
@@ -336,13 +303,51 @@ export const Dashboard = () => {
 
     }
 
+    //for remaining time left shown in draggable tasks
+    const calculateTimeLeft = (dateString: string) => {
+        const targetDate = new Date(dateString.split('T')[0]); // Extracting and parsing the date from the input string
+        const currentDate = new Date(); // Current date
+
+        // Calculate the difference in milliseconds
+        const difference = targetDate.getTime() - currentDate.getTime();
+
+        // Calculate days and weeks
+        const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+        const weeksLeft = Math.ceil(daysLeft / 7); // Convert days to weeks
+
+        if (daysLeft < 0) {
+            return "Overdue";
+        } else if (daysLeft === 0) {
+            return "Due today";
+        } else if (daysLeft === 1) {
+            return "1 day left";
+        } else if (daysLeft <= 7) {
+            return `${daysLeft} days left`;
+        } else if (weeksLeft === 1) {
+            return "1 week left";
+        } else {
+            return `${weeksLeft} weeks left`;
+        }
+    };
+
+
+    //execute once
     useEffect(() => {
-        fetchTask().then( ()=>setRender(false))
-    }, [render]);
+        fetchTask()
+    }, []);
 
 
+    //processing modal and snackbar
+    const [openProcessingModal, setOpenProcessingModal] = React.useState(false);
 
+    //error , warning , info , success
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [alertType, setAlertType]: any = useState('info');
+    const [alertMsg, setAlertMsg] = useState('');
 
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false);
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -384,9 +389,9 @@ export const Dashboard = () => {
                                     >
                                         {/* Drag and drop list: https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
                                         <DragDropContext
-                                            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+                                            onDragEnd={(result) => onDragEnd(result, taskboard, setTaskBoard)}
                                         >
-                                            {Object.entries(columns).map(([columnId, column], index) => {
+                                            {Object.entries(taskboard).map(([columnId, column], index) => {
                                                 return (
 
                                                     <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
