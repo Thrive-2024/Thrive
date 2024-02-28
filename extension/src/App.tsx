@@ -25,12 +25,14 @@ function App() {
 
   return (
     <Tabs
+      className="h-screen w-screen flex justify-center items-center"
       variant="outlined"
       aria-label="Pricing plan"
       defaultValue={0}
       orientation="vertical"
       sx={{
-        width: 343,
+        height: '100%',
+        width: 400,
         borderRadius: 'lg',
         boxShadow: 'sm',
         overflow: 'auto',

@@ -127,7 +127,7 @@ const Timer: React.FC = (props) => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="mt-5 flex justify-center ">
+        <div className="mt-12 flex justify-center ">
           {duration !== 0 && remainingSeconds !== 0 && (
             <CountdownCircleTimer
               isPlaying={isRunning}
@@ -153,7 +153,7 @@ const Timer: React.FC = (props) => {
         </div>
       )}
 
-      <div className="mt-5 flex items-center justify-between text-sm">
+      <div className="mt-12 mb-2 flex items-center justify-between text-sm">
         <span>{totalPomodoroCountMessage}</span>
         <div className="flex justify-center gap-1">
           <PomodoroCircles

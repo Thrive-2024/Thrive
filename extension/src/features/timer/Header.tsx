@@ -7,7 +7,7 @@ import { DisplayPageContext } from '../../providers/DisplayPageContextProvider'
 const HeaderMenu = () => {
   const { setDisplayPageType } = useContext(DisplayPageContext)
   return (
-    <div className="flex justify-between">
+    <div className="mt-2 flex justify-between">
       <div className="flex gap-3">
         <button
           onClick={() => {
