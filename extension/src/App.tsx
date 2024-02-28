@@ -88,9 +88,6 @@ function App() {
 
       {/* Pomodoro Timer Tab */}
       <TabPanel value={1}>
-        <Typography level="inherit">
-          Pomodoro Timer
-        </Typography>
         <Pomodoro />
       </TabPanel>
 

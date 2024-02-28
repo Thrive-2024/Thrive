@@ -7,7 +7,7 @@ const manifest = defineManifest({
   manifest_version: 3,
   name: "Thrive",
   version: "1.0.0",
-  description: "",
+  description: "Thrive Google Extension",
   icons: {
     "16": "public/assets/img/16.png",
     "32": "public/assets/img/32.png",
@@ -16,7 +16,7 @@ const manifest = defineManifest({
     "128": "public/assets/img/128.png",
   },
   action: {
-    default_popup: "./public/index.html",
+    default_popup: "./public/pomodoro/index.html",
   },
   background: {
     service_worker: "src/background/main.ts",
@@ -29,10 +29,10 @@ const manifest = defineManifest({
         default: "Ctrl+Shift+T",
         mac: "Command+Shift+T",
       },
-      description: "Toggle Pause/Resume a timer",
+      description: "pomodoro timer",
     },
   },
-  options_page: "./public/expire.html",
+  options_page: "./public/pomodoro/expire.html",
 });
 
 export default defineConfig({
