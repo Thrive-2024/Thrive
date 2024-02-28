@@ -19,7 +19,6 @@ type IProps = {
 }
 
 const ExpireMenu: React.FC<IProps> = (props) => {
-  const [phase] = useState<Phase>(props.phase)
   const [formatedDisplayTime, setFormatedDisplayTime] = useState<string>('')
   const [todayTotalPomodoroCount] = useState<number>(
     props.todayTotalPomodoroCount

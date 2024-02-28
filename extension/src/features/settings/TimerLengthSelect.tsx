@@ -2,8 +2,11 @@ import React from 'react'
 import { getStorage, setStorage } from '../../utils/chrome'
 import SelectBox from '../../components/common/SelectBox'
 import { translation } from '../../_locales/en'
+import { updateSecondsOfBadge } from '../../background/Action'
+import { Phase } from '@/types'
 
 type IProps = {
+  phase: Phase
   type:
     | 'pomodoroSeconds'
     | 'breakSeconds'
@@ -14,6 +17,7 @@ type IProps = {
   options: number[] | string[]
 }
 const TimerLengthSelect: React.FC<IProps> = ({
+  phase,
   type,
   className = '',
   currentValue,
@@ -33,8 +37,10 @@ const TimerLengthSelect: React.FC<IProps> = ({
         await getStorage(['isTimerStarted'])
       ).isTimerStarted
       const formattedValue = Number(e.target.value) * 60
+      await updateSecondsOfBadge(formattedValue)
       switch (type) {
         case 'pomodoroSeconds':
+          // if (phase == 'focus') await updateSecondsOfBadge(formattedValue)
           if (isTimerStarted) {
             setStorage({ updatingPomodoroSeconds: formattedValue })
           } else {
@@ -45,6 +51,7 @@ const TimerLengthSelect: React.FC<IProps> = ({
           }
           break
         case 'breakSeconds':
+          // if (phase == 'break') await updateSecondsOfBadge(formattedValue)
           if (isTimerStarted) {
             setStorage({ updatingBreakSeconds: formattedValue })
           } else {
@@ -55,6 +62,7 @@ const TimerLengthSelect: React.FC<IProps> = ({
           }
           break
         case 'longBreakSeconds':
+          // if (phase == 'longBreak') await updateSecondsOfBadge(formattedValue)
           if (isTimerStarted) {
             setStorage({ updatingLongBreakSeconds: formattedValue })
           } else {

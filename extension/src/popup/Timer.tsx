@@ -81,7 +81,7 @@ const Timer: React.FC = (props) => {
 
   const expire = (): void => {
     setRemainingSeconds(0)
-    closeTabs()
+    // closeTabs()
     chrome.runtime.sendMessage<Message>({ type: FromPopupMessageType.EXPIRE })
   }
   const pause = (): void => {
