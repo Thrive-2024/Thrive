@@ -59,6 +59,7 @@ const Activity = styled(Card)(({ theme }) => ({
 
 }));
 
+const currentUser = 'james@gmail.com';
 
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = () => {
@@ -184,17 +185,48 @@ export const MidTopSection = () => {
   );
 }
 export const RightNavbar = () => {
-  const motivationArray = [{ sender:'Tim',message: "Hey James! Remember why you started. You've got this!" }, {sender:'Bran', message: "We can do it!! I know it’s hard but together we can achieve anything!!" }]
+  // const motivationArray = [{ sender:'Tim',message: "Hey James! Remember why you started. You've got this!" }, {sender:'Bran', message: "We can do it!! I know it’s hard but together we can achieve anything!!" }]
   //   console.log("Fetching data")
   // };  
   // useEffect(() => {
   //   fetchData();
   // }, []);
 
-  // const [motivationArray,setMotivationArray] = useState(data)
-  // const motivationWall = ["Hayward achieved a new personal record of 25hrs this week.", "Desarrollador web", "Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position."]
+  const [motivationArray, setMotivationArray] = useState<any[]>([])
+
+  //GET method to fetch all tasks and update 
+  const fetchMotivation = async () => {
+    console.log("motivation fetcher called");
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'GET'
+      });
+
+      if (response.status != 200) {
+        console.log("ERROR FETCHING MOTIVATION");
+
+      } else {
+        const apiResponse = await response.json();
+        // console.log(apiResponse);
+        console.log("success fetching motivation")
+        setMotivationArray(apiResponse.data)
+      }
+
+    } catch (err) {
+      window.alert(err);
+      return null;
+    }
+
+  }
+
+  useEffect(() => {
+    fetchMotivation();
+  }, []);
   return (
-    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%' , width:300 }}>
+    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: 300 }}>
       {/* Right top empty Space */}
       <Box sx={{ height: '60px' }} />
       <Divider />
@@ -235,8 +267,8 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Activities</Typography>
         </Box>
-        <Box sx={{  mb: 2, ml: 2, mr: 2, display: 'flex' }}>
-          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{ }}>
+        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex' }}>
+          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{}}>
             <Stack spacing={1}>
               <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
               <Activity>Hayward achieved a new personal record of 25hrs this week.</Activity>
@@ -256,29 +288,34 @@ export const RightNavbar = () => {
         <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
           <Typography> Motivation Wall</Typography>
         </Box>
-        <Box sx={{ mb: 2, ml: 2, mr: 2,  display: 'flex', height:'10%' }}>
+        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex', height: '10%' }}>
           {/* https://www.npmjs.com/package/react-responsive-carousel */}
-          <Carousel
-            autoPlay={true}
-            showArrows={false}
-            showIndicators={false}
-            showStatus={false}
-            showThumbs={false}
-            infiniteLoop={true}
-            stopOnHover={false}
-            interval={3000}
-            axis='vertical'
-          >
-            {motivationArray.map((word, index) => (
-              <Typography sx={{ textAlign:'left',display: '-webkit-box',
-              WebkitLineClamp: 3, // Limit to 3 lines
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden', height:100}}>
-                <b>{word.sender}</b>: {word.message}
-              </Typography>
-            )) }
-
-          </Carousel>
+          {motivationArray.length > 0 ? (
+            <Carousel
+                autoPlay={true}
+                showArrows={false}
+                showIndicators={false}
+                showStatus={false}
+                showThumbs={false}
+                infiniteLoop={true}
+                stopOnHover={true}
+                interval={3000}
+                axis='vertical'
+            >
+                {motivationArray.map((word, index) => (
+                    <Typography key={index} sx={{
+                        textAlign: 'left', display: '-webkit-box',
+                        WebkitLineClamp: 3, // Limit to 3 lines
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden', height: 100
+                    }}>
+                        <b>{word.sender}</b>: {word.message}
+                    </Typography>
+                ))}
+            </Carousel>
+        ) : (
+            <div>Loading...</div> // Or any loading indicator
+        )}
         </Box>
         <Divider />
         <Box sx={{ mt: 1, mb: 1, ml: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
