@@ -60,7 +60,7 @@ export const Dashboard = () => {
 
     //task
     interface Task {
-        id: string;
+        _id: string;
         ownerEmail: string;
         taskName: string;
         subjectName: string;
@@ -79,9 +79,9 @@ export const Dashboard = () => {
 
     //task for drag and drop boards
     const [taskboard, setTaskBoard] = useState<TaskStatus>({
-        toDo: { name: "toDo", items: [] },
-        inProgress: { name: "inProgress", items: [] },
-        done: { name: "done", items: [] }
+        toDo: { name: "To Do", items: [] },
+        inProgress: { name: "In Progress", items: [] },
+        done: { name: "Done", items: [] }
     });
 
     // task creation
@@ -90,6 +90,9 @@ export const Dashboard = () => {
     const [dueDate, setDueDate] = useState('');
     const [subject, setSubject] = useState('');
     const [notes, setNotes] = useState('');
+
+    // const [tasksToUpdate, setTasksToUpdate] = useState<any[]>([]);
+    const [tasksModified, setTasksModified] = useState(false);
 
     // task creation modal
     const [open, setOpen] = React.useState(false);
@@ -155,6 +158,7 @@ export const Dashboard = () => {
     const onDragEnd = (result: any, taskboard: any, setTaskBoard: any) => {
         if (!result.destination) return;
         const { source, destination } = result;
+        setTasksModified(true);
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = taskboard[source.droppableId];
@@ -243,7 +247,7 @@ export const Dashboard = () => {
                     // console.log(apiResponse.id);
                     // fetchTask();
                     // Add the newly created task to the task board
-                    setTaskBoard((prevState:any) => ({
+                    setTaskBoard((prevState: any) => ({
                         ...prevState,
                         toDo: {
                             ...prevState.toDo,
@@ -330,11 +334,71 @@ export const Dashboard = () => {
         }
     };
 
+    const returnTasksForUpdate = () => {
+        const tasksToUpdate = [] as { taskId: string; newStatus: string }[];
+
+        // Iterate over each status and its items
+        Object.entries(taskboard).forEach(([key, status]) => {
+            status.items.forEach((task: { _id: string, status: string; }) => {
+                tasksToUpdate.push({ taskId: task._id, newStatus: key });
+            });
+        });
+        console.log(tasksToUpdate)
+        return tasksToUpdate;
+
+    }
+    const updateTasks = () => {
+        // console.log("updateTasks called")
+        const tasksToUpdate = returnTasksForUpdate();
+
+        console.log(tasksToUpdate);
+
+        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/updateTaskStatusBulk`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'PUT',
+            body: JSON.stringify(tasksToUpdate)
+        })
+            .then(async (response) => {
+                if (response.status != 200) {
+                    const apiResponse = await response.json();
+                    console.log(apiResponse)
+                    console.log(tasksToUpdate);
+
+                    console.log("Error updating task status");
+                } else {
+                    const apiResponse = await response.json();
+                    console.log("Task status updated");
+                    console.log(tasksToUpdate);
+
+                    setTasksModified(false);
+
+                }
+            })
+            .catch((error) => {
+                // Handle any error that occurred during the update process
+                window.alert(`Error during update tasks:${error}`);
+            });
+
+        console.log('Function called every 10 seconds');
+    };
 
     //execute once
     useEffect(() => {
         fetchTask()
     }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            console.log('Got tasks to update')
+            updateTasks();
+        }, 10000); // 10 seconds in milliseconds
+    
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [taskboard]); // Run whenever taskboard changes
+
 
 
     //processing modal and snackbar
@@ -349,104 +413,106 @@ export const Dashboard = () => {
         setOpenSnackbar(false);
     };
 
+
+
     return (
         <ThemeProvider theme={theme}>
             <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
-               <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
-                            <Grid item xs={6} >
-                                <Typography variant='h5' sx={{ ml: 1 }}>This Week</Typography>
-                            </Grid>
-                            <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
+                <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
+                    <Grid item xs={6} >
+                        <Typography variant='h5' sx={{ ml: 1 }}>This Week</Typography>
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
 
-                                <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
-                            </Grid>
-                  
-                            <Grid item xs={12}>
-                                <div>
-                                    <div style={{ display: "flex", justifyContent: "center" }}>
-                                        {/* Drag and drop list: https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
-                                        <DragDropContext
-                                            onDragEnd={(result) => onDragEnd(result, taskboard, setTaskBoard)} 
-                                        >
-                                            {Object.entries(taskboard).map(([columnId, column], index) => {
-                                                return (
+                        <Button sx={{ margin: '0', mr: 1, height: 32, width: '20%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}>Add Task</Button>
+                    </Grid>
 
-                                                    <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
-                                                        <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white' }} >
-                                                            <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1 }} /></Typography>
+                    <Grid item xs={12}>
+                        <div>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                                {/* Drag and drop list: https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
+                                <DragDropContext
+                                    onDragEnd={(result) => onDragEnd(result, taskboard, setTaskBoard)}
+                                >
+                                    {Object.entries(taskboard).map(([columnId, column], index) => {
+                                        return (
 
-                                                            <Divider sx={{ mb: 2 }} />
-                                                            <div >
-                                                                <Droppable droppableId={columnId} key={columnId}>
-                                                                    {(provided, snapshot) => {
-                                                                        return (
-                                                                            <div
-                                                                                {...provided.droppableProps}
-                                                                                ref={provided.innerRef}
-                                                                                style={{
-                                                                                    background: snapshot.isDraggingOver
-                                                                                        ? "white"
-                                                                                        : "white",
-                                                                                    padding: 4,
-                                                                                    height: '28vh',
-                                                                                    overflow: 'auto',
-                                                                                    minWidth: 200
-                                                                                }}
-                                                                            >
-                                                                                {column.items.map((item: any, index: number) => {
-                                                                                    return (
-                                                                                        <Draggable
-                                                                                            key={item._id}
-                                                                                            draggableId={item._id}
-                                                                                            index={index}
-                                                                                        >
-                                                                                            {(provided, snapshot) => {
-                                                                                                return (
-                                                                                                    <div
-                                                                                                        ref={provided.innerRef}
-                                                                                                        {...provided.draggableProps}
-                                                                                                        {...provided.dragHandleProps}
-                                                                                                        style={{
-                                                                                                            userSelect: "none",
-                                                                                                            padding: 13,
-                                                                                                            margin: "0 0 8px 0",
-                                                                                                            minHeight: "50px",
-                                                                                                            backgroundColor: snapshot.isDragging
-                                                                                                                ? "#FFFFFF"
-                                                                                                                : "#FFFFFF",
-                                                                                                            color: "black",
-                                                                                                            ...provided.draggableProps.style,
-                                                                                                            borderRadius: 4,
-                                                                                                            // boxShadow:'2px 2px 5px -4px rgba(0,0,0,0.75)',
-                                                                                                            border: '1px #d9d9d9 solid',
+                                            <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
+                                                <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white' }} >
+                                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1 }} /></Typography>
 
-                                                                                                        }}
-                                                                                                    >
-                                                                                                        <Typography >{item.taskName}</Typography>
-                                                                                                        <Chip size="small" label={item.subjectName} sx={{ mt: 1, fontSize: 12, backgroundColor: item.colour }} />
-                                                                                                        <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt: '3px' }}>{calculateTimeLeft(item.dueDate)}</Typography>
+                                                    <Divider sx={{ mb: 2 }} />
+                                                    <div >
+                                                        <Droppable droppableId={columnId} key={columnId}>
+                                                            {(provided, snapshot) => {
+                                                                return (
+                                                                    <div
+                                                                        {...provided.droppableProps}
+                                                                        ref={provided.innerRef}
+                                                                        style={{
+                                                                            background: snapshot.isDraggingOver
+                                                                                ? "white"
+                                                                                : "white",
+                                                                            padding: 4,
+                                                                            height: '28vh',
+                                                                            overflow: 'auto',
+                                                                            minWidth: 200
+                                                                        }}
+                                                                    >
+                                                                        {column.items.map((item: any, index: number) => {
+                                                                            return (
+                                                                                <Draggable
+                                                                                    key={item._id}
+                                                                                    draggableId={item._id}
+                                                                                    index={index}
+                                                                                >
+                                                                                    {(provided, snapshot) => {
+                                                                                        return (
+                                                                                            <div
+                                                                                                ref={provided.innerRef}
+                                                                                                {...provided.draggableProps}
+                                                                                                {...provided.dragHandleProps}
+                                                                                                style={{
+                                                                                                    userSelect: "none",
+                                                                                                    padding: 13,
+                                                                                                    margin: "0 0 8px 0",
+                                                                                                    minHeight: "50px",
+                                                                                                    backgroundColor: snapshot.isDragging
+                                                                                                        ? "#FFFFFF"
+                                                                                                        : "#FFFFFF",
+                                                                                                    color: "black",
+                                                                                                    ...provided.draggableProps.style,
+                                                                                                    borderRadius: 4,
+                                                                                                    // boxShadow:'2px 2px 5px -4px rgba(0,0,0,0.75)',
+                                                                                                    border: '1px #d9d9d9 solid',
 
-                                                                                                    </div>
-                                                                                                );
-                                                                                            }}
-                                                                                        </Draggable>
-                                                                                    );
-                                                                                })}
-                                                                            </div>
-                                                                        );
-                                                                    }}
-                                                                </Droppable>
-                                                            </div>
-                                                        </Card></Grid>
+                                                                                                }}
+                                                                                            >
+                                                                                                <Typography >{item.taskName}</Typography>
+                                                                                                <Chip size="small" label={item.subjectName} sx={{ mt: 1, fontSize: 12, backgroundColor: item.colour }} />
+                                                                                                <Typography textAlign={'right'} sx={{ float: 'right', padding: 1, fontSize: 12, mt: '3px' }}>{calculateTimeLeft(item.dueDate)}</Typography>
+
+                                                                                            </div>
+                                                                                        );
+                                                                                    }}
+                                                                                </Draggable>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                );
+                                                            }}
+                                                        </Droppable>
+                                                    </div>
+                                                </Card></Grid>
 
 
-                                                );
-                                            })}
-                                        </DragDropContext>
-                                    </div>
-                                </div></Grid>
-                            {/* <Grid item xs={6}>
+                                        );
+                                    })}
+                                </DragDropContext>
+                            </div>
+                        </div></Grid>
+                    {/* <Grid item xs={6}>
                                 <Typography variant={'h5'} sx={{ mb: 1, ml: 1, color: 'secondary.main' }}>Statistics</Typography>
 
                                 <Card sx={{ border: '1px black', height: '25vh', padding: 3, ml: 1,mt:2 }}>
@@ -462,55 +528,55 @@ export const Dashboard = () => {
                                 </Card>
 
                             </Grid> */}
-                            <Grid item xs={6}>
-                                {/* Statistics */}
-                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
-                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
+                    <Grid item xs={6}>
+                        {/* Statistics */}
+                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
+                            <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
 
-                                    <Divider />
-                                    <img src={StatsPlaceholder} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                            <Divider />
+                            <img src={StatsPlaceholder} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
 
-                                </Card>
+                        </Card>
 
-                            </Grid>
-                            <Grid item xs={6}>
-                                {/* Today's Agenda */}
-                                <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
-                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
-                                    <Divider />
-                                    <List dense={false}>
+                    </Grid>
+                    <Grid item xs={6}>
+                        {/* Today's Agenda */}
+                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
+                            <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
+                            <Divider />
+                            <List dense={false}>
 
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <ScheduleIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Assignment 2"
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <ScheduleIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Lab 3"
-                                            />
-                                        </ListItem>     <ListItem>
-                                            <ListItemIcon>
-                                                <ScheduleIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary="Project Outline"
-                                            />
-                                        </ListItem>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <ScheduleIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary="Assignment 2"
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <ScheduleIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary="Lab 3"
+                                    />
+                                </ListItem>     <ListItem>
+                                    <ListItemIcon>
+                                        <ScheduleIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary="Project Outline"
+                                    />
+                                </ListItem>
 
-                                    </List>
-                                </Card>
+                            </List>
+                        </Card>
 
-                            </Grid>
+                    </Grid>
 
 
-                            {/* <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                                 <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod tortor augue, eu commodo dui aliquam sit amet. Donec semper lacus vel est aliquet, sed vestibulum quam hendrerit. Nunc scelerisque rutrum lacus. Mauris maximus vulputate cursus. Morbi sodales consequat sapien et imperdiet. Integer semper sit amet est sit amet porttitor. Sed vel turpis ultricies nunc commodo tempor eget vulputate sem. Fusce turpis enim, placerat ut consectetur in, bibendum non nisi. Sed vitae nisl nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas at mauris dolor. Sed sed nulla porta, scelerisque neque sit amet, rhoncus enim. Nullam varius pretium erat in laoreet. Nunc sit amet fermentum tortor, id sollicitudin libero. Integer mattis odio ac malesuada semper. Proin viverra, sem id elementum maximus, nulla magna eleifend nisi, a venenatis leo velit at ex.
 
                                     Integer scelerisque odio non condimentum sodales. Integer facilisis tortor tellus, non volutpat dui tristique quis. Nam in pharetra lorem. Cras consequat diam arcu, ut malesuada turpis fringilla id. Maecenas sed nisi suscipit, luctus mauris ac, fermentum elit. Pellentesque in accumsan elit, ut accumsan nisl. Vestibulum nunc nisl, aliquet ac scelerisque non, maximus ut augue. Donec semper metus quis ipsum ultricies, ac vulputate tortor lacinia. Nam vel suscipit dolor, non tincidunt ante. Proin tincidunt metus a ligula posuere pharetra. In iaculis eget tellus vulputate posuere. Morbi aliquam metus vitae justo ultrices, vehicula consequat enim faucibus. Cras feugiat turpis lacus. Sed sollicitudin ante enim, ut egestas ipsum faucibus nec. Vestibulum pharetra ligula et vehicula finibus.
@@ -521,8 +587,8 @@ export const Dashboard = () => {
 
                                     Praesent eu mi ac sapien egestas vestibulum sed vitae arcu. Ut eget mollis sapien. Quisque pellentesque augue id quam venenatis, eget convallis augue viverra. Quisque mi neque, interdum quis fermentum porttitor, condimentum lacinia justo. Sed tincidunt ipsum velit. Donec nec dui commodo, finibus neque vel, rutrum magna. Nulla sit amet bibendum metus. Fusce auctor nunc mi, eget sagittis nunc efficitur sit amet. Mauris faucibus aliquam sem at commodo. Nunc ipsum odio, vulputate eu molestie cursus, finibus sit amet nulla. Phasellus justo nisi, placerat at purus ac, egestas sagittis magna. Nam justo dui, dignissim eget rutrum eget, dignissim in leo.</Typography>
                             </Grid> */}
-                        </Grid>
-      
+                </Grid>
+
                 {/* add task modal */}
                 <Modal
                     open={open}
