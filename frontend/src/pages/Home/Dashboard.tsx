@@ -353,14 +353,7 @@ export const Dashboard = () => {
         <ThemeProvider theme={theme}>
             <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
-                <Box sx={{ display: 'flex', width: '100%' }}>
-                    <Box id="navbar">                    <Navbar />
-                    </Box>
-                    <Box sx={{ width: '80%' }}>
-                        <Box>
-                            <MidTopSection />
-                            <Divider />
-                        </Box>  <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
+               <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
                             <Grid item xs={6} >
                                 <Typography variant='h5' sx={{ ml: 1 }}>This Week</Typography>
                             </Grid>
@@ -371,12 +364,10 @@ export const Dashboard = () => {
                   
                             <Grid item xs={12}>
                                 <div>
-                                    <div
-                                        style={{ display: "flex", justifyContent: "center" }}
-                                    >
+                                    <div style={{ display: "flex", justifyContent: "center" }}>
                                         {/* Drag and drop list: https://codesandbox.io/p/sandbox/react-8b6r1?file=%2Fsrc%2FApp.js%3A92%2C32 */}
                                         <DragDropContext
-                                            onDragEnd={(result) => onDragEnd(result, taskboard, setTaskBoard)}
+                                            onDragEnd={(result) => onDragEnd(result, taskboard, setTaskBoard)} 
                                         >
                                             {Object.entries(taskboard).map(([columnId, column], index) => {
                                                 return (
@@ -531,12 +522,7 @@ export const Dashboard = () => {
                                     Praesent eu mi ac sapien egestas vestibulum sed vitae arcu. Ut eget mollis sapien. Quisque pellentesque augue id quam venenatis, eget convallis augue viverra. Quisque mi neque, interdum quis fermentum porttitor, condimentum lacinia justo. Sed tincidunt ipsum velit. Donec nec dui commodo, finibus neque vel, rutrum magna. Nulla sit amet bibendum metus. Fusce auctor nunc mi, eget sagittis nunc efficitur sit amet. Mauris faucibus aliquam sem at commodo. Nunc ipsum odio, vulputate eu molestie cursus, finibus sit amet nulla. Phasellus justo nisi, placerat at purus ac, egestas sagittis magna. Nam justo dui, dignissim eget rutrum eget, dignissim in leo.</Typography>
                             </Grid> */}
                         </Grid>
-                    </Box>
-
-                    <Box id="rightNavbar" sx={{ boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
-                        <RightNavbar />
-                    </Box>
-                </Box>
+      
                 {/* add task modal */}
                 <Modal
                     open={open}

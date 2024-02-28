@@ -4,6 +4,7 @@ import './index.css';
 import { Dashboard } from './pages/Home';
 import { Leaderboard } from './pages/Leaderboard';
 import { Wall } from './pages/Wall';
+import { App } from './pages/App';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -12,10 +13,7 @@ const root = createRoot(container);
 root.render(
 	<BrowserRouter>
 		<Routes>
-			<Route path="/" element={<Navigate to="/Dashboard" />} />
-			<Route path="/Dashboard" element={<Dashboard />} />
-			<Route path="/Leaderboard" element={<Leaderboard />} />
-			<Route path="/Wall" element={<Wall />} />
+			<Route path="" element={<App />} />
 		</Routes>
 	</BrowserRouter>);
 

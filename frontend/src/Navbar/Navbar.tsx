@@ -62,11 +62,13 @@ const Activity = styled(Card)(({ theme }) => ({
 const currentUser = 'james@gmail.com';
 
 // https://www.npmjs.com/package/react-pro-sidebar
-export const Navbar = () => {
+export const Navbar = (props: any) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
+
+  const [navValue, setNavValue] = useState('Dashboard');
 
   const showDialog = (message: any) => {
     setDialogMessage(message);
@@ -76,10 +78,15 @@ export const Navbar = () => {
   const handleClose = () => {
     setOpenDialog(false);
   };
-
   // Function to determine if the path matches the current location
-  const isActive = (path: any) => location.pathname === path;
-  console.log(location.pathname)
+  // const isActive = (path: any) => location.pathname === path;
+  const isActive = (path: string) => navValue === path;
+  // console.log(location.pathname)
+  const handleChange = (value: string) => {
+    setNavValue(value)
+    props.onNavValueChange(value); // Call the function passed from the parent with the new value
+  };
+
   return (
     <Sidebar style={{ width: "300", height: "100vh" }} >
       <Dialog
@@ -108,25 +115,32 @@ export const Navbar = () => {
         <Divider />
         <Menu>
           <MenuItem
-            onClick={() => navigate('/Dashboard')}
+            data-value="Dashboard"
+            onClick={() => handleChange('Dashboard')}
             icon={<GridViewOutlinedIcon />}
-            style={{ backgroundColor: isActive('/Dashboard') ? '#E3ECF6' : 'primary.main' }}
+            style={{ backgroundColor: isActive('Dashboard') ? '#E3ECF6' : 'inherit' }}
+            id="menu-item1"
           >
             Dashboard
           </MenuItem>
 
           <MenuItem onClick={() => showDialog('Where got time for this')} icon={<ListAltOutlinedIcon />}>Tasks</MenuItem>
           <MenuItem
-            onClick={() => navigate('/Wall')}
+            data-value="Wall"
+            onClick={() => handleChange('Wall')}
             icon={<SpaceDashboardOutlinedIcon />}
-            style={{ backgroundColor: isActive('/Wall') ? '#E3ECF6' : 'primary.main' }}
+            style={{ backgroundColor: isActive('Wall') ? '#E3ECF6' : 'inherit' }}
+            id="menu-item2"
+
           >
             Your Wall
           </MenuItem>
           <MenuItem
-            onClick={() => navigate('/Leaderboard')}
+            data-value="Leaderboard"
+            onClick={() => handleChange('Leaderboard')}
             icon={<LeaderboardOutlinedIcon />}
-            style={{ backgroundColor: isActive('/Leaderboard') ? '#E3ECF6' : 'primary.main' }}
+            style={{ backgroundColor: isActive('Leaderboard') ? '#E3ECF6' : 'inherit' }}
+            id="menu-item3"
           >
             Leaderboard
           </MenuItem>
@@ -286,30 +300,30 @@ export const RightNavbar = () => {
           {/* https://www.npmjs.com/package/react-responsive-carousel */}
           {motivationArray.length > 0 ? (
             <Carousel
-                autoPlay={true}
-                showArrows={false}
-                showIndicators={false}
-                showStatus={false}
-                showThumbs={false}
-                infiniteLoop={true}
-                stopOnHover={true}
-                interval={3000}
-                axis='vertical'
+              autoPlay={true}
+              showArrows={false}
+              showIndicators={false}
+              showStatus={false}
+              showThumbs={false}
+              infiniteLoop={true}
+              stopOnHover={true}
+              interval={3000}
+              axis='vertical'
             >
-                {motivationArray.map((word, index) => (
-                    <Typography key={index} sx={{
-                        textAlign: 'left', display: '-webkit-box',
-                        WebkitLineClamp: 3, // Limit to 3 lines
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden', height: 100
-                    }}>
-                        <b>{word.sender}</b>: {word.message}
-                    </Typography>
-                ))}
+              {motivationArray.map((word, index) => (
+                <Typography key={index} sx={{
+                  textAlign: 'left', display: '-webkit-box',
+                  WebkitLineClamp: 3, // Limit to 3 lines
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden', height: 100
+                }}>
+                  <b>{word.sender}</b>: {word.message}
+                </Typography>
+              ))}
             </Carousel>
-        ) : (
+          ) : (
             <div>Loading...</div> // Or any loading indicator
-        )}
+          )}
         </Box>
         <Divider />
         <Box sx={{ mt: 1, mb: 1, ml: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

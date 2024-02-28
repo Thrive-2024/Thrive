@@ -76,7 +76,6 @@ export const Leaderboard = () => {
     const fetchLeaderboard = async () => {
         console.log("leaderboard fetcher called");
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log(timezone);
         // Get current year and month
         const currentDate = new Date();
         const year = currentDate.getFullYear();
@@ -117,14 +116,7 @@ export const Leaderboard = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
 
-                <Box sx={{ display: 'flex', width: '100%' }}>
-                    <Box id="navbar">                    <Navbar />
-                    </Box>
-                    <Box sx={{ width: '80%' }}>
-                        <Box>
-                            <MidTopSection />
-                            <Divider />
-                        </Box>
+             
                         <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
                             <Grid item xs={12} >
                                 <Typography variant='h5' sx={{ ml: 1 }}>Leaderboard Page</Typography>
@@ -254,11 +246,7 @@ export const Leaderboard = () => {
                                     </Table>
                                 </TableContainer>
                             </Grid>
-                        </Grid></Box>
-                    <Box id="rightNavbar" sx={{ boxShadow: '0px 0px 1px rgba(0,0,0,0.5)' }}>
-                        <RightNavbar />
-                    </Box>
-                </Box>
+                        </Grid>
             </div></ThemeProvider>
     )
 
