@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 const MotivationModel = require("../../models/motivation");
 const SampleMessageModel = require("../../models/sampleMessage");
 const getDateTime = require("../../utils/getDateTime");
-
+const userModel = require("../../models/user");
 
 //Http Post Request : To create a new record
 // Parameter needed(pass in as form-data)
@@ -48,10 +48,52 @@ export const getAllByReceiver = async (req: any, res: any, next: NextFunction) =
             return res.status(400).json({ message: "Receiver is required" });
         }
 
-        const records = await MotivationModel.find({ receiver: receiver });
+        // Using aggregation to include name from userModel
+        const records = await MotivationModel.aggregate([
+            { $match: { receiver: receiver } },
+            // Lookup for receiver's name
+            {
+                $lookup: {
+                    from: "User", // Assuming your userModel is tied to a MongoDB collection named 'User'
+                    localField: "receiver", // The field in MotivationModel to match
+                    foreignField: "email", // Assuming the receiver is identified by email in userModel
+                    as: "userInfo" // The array to put the matched document(s) from userModel
+                }
+            },
+            {
+                $unwind: "$userInfo" // Convert userInfo array to an object (assuming one-to-one relationship)
+            },
+             // Lookup for sender's name
+             {
+                $lookup: {
+                    from: "User", // Adjust this if your collection name is different
+                    localField: "sender", // Adjust if your field for matching sender in MotivationModel is different
+                    foreignField: "email", // Adjust if your userModel identifier field is different
+                    as: "senderInfo"
+                }
+            },
+            {
+                $unwind: "$senderInfo"
+            },
+            {
+                $addFields: {
+                    "senderName": "$senderInfo.name", 
+                    "receiverName": "$userInfo.name", // Assuming 'name' is the field you want from userModel
+                }
+            },
+            {
+                $sort: { createdDateTime: -1 } // Sorting by createdDateTime descending
+            },
+            {
+                $project: {
+                    userInfo: 0, // Optionally exclude userInfo from final output if you don't want to include all user details
+                    senderInfo: 0,
+                }
+            }
+        ]);
 
         if (records.length === 0) {
-            return res.status(404).json({ message: "No records found for the given receiver" }).sort({ createdDateTime: -1 }); // sorted by createdDateTime descending;
+            return res.status(404).json({ message: "No records found for the given receiver" });
         }
 
         return res.status(200).json({
@@ -59,7 +101,8 @@ export const getAllByReceiver = async (req: any, res: any, next: NextFunction) =
             data: records
         });
     } catch (error) {
-        return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
+        console.error("Error:", error);
+        return res.status(400).json({ message: "Please make sure the input parameters are correct", error: String(error) });
     }
 };
 
@@ -108,7 +151,7 @@ export const randomMessageFromSystem = async (req: any, res: any, next: NextFunc
         // create the message for the receiver from system
         const newRecord = new MotivationModel({
             "receiver": receiver,
-            "sender": "SYSTEM",
+            "sender": "thrive@gmail.com",
             "message": randomMessage.message,
             "createdDateTime": getDateTime.now()
         });
