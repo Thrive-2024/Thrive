@@ -60,4 +60,31 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
     }
 };
 
+export const updateTaskStatusBulk = async (req: any, res: any, next: NextFunction) => {
+    try {
+        const updates = req.body; // Expecting an array of objects, each with taskId and newStatus
 
+        // Validate input to ensure it's an array and each item has taskId and newStatus
+        if (!Array.isArray(updates) || !updates.every(u => u.taskId && u.newStatus)) {
+            return res.status(400).json({ message: "Invalid input format. Expect an array of objects with taskId and newStatus." });
+        }
+
+        // Perform updates in bulk
+        const bulkOps = updates.map(update => ({
+            updateOne: {
+                filter: { _id: update.taskId },
+                update: { $set: { status: update.newStatus } }
+            }
+        }));
+
+        const result = await taskModel.bulkWrite(bulkOps);
+
+        return res.status(200).json({
+            message: "Tasks status updated successfully",
+            details: result
+        });
+    } catch (error) {
+        console.error("Error updating task statuses:", error);
+        return res.status(400).json({ message: "An error occurred while updating task statuses", error: String(error) });
+    }
+};
