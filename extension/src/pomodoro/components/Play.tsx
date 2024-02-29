@@ -13,9 +13,9 @@ const Play: React.FC<IProps> = ({ className = '' }) => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke="currentColor"
-      color= {COLOR.gray[950]}
-      className={twMerge('w-8 h-8 icon-color icon-color-hovered', className)}
+      // stroke="currentColor"
+      stroke= {COLOR.gray[500]}
+      className={twMerge('w-8 h-8 icon-color', className)}
     >
       <path
         strokeLinecap="round"

@@ -7,22 +7,22 @@ body {
 }
 
 .base-bg-color {
-  @apply bg-gray-50 dark:bg-gray-950;
+  @apply bg-gray-50;
 }
 
 .border-color {
-  @apply border-gray-300 dark:border-gray-600;
+  @apply border-gray-300;
 }
+
 .text-color {
-  @apply text-gray-900 dark:text-gray-100;
+  @apply text-gray-500;
 }
+
 .icon-color {
-  @apply text-gray-500 dark:text-gray-300;
+  @apply border-gray-500;
 }
-.icon-color-hovered {
-  @apply hover:text-gray-400 hover:dark:text-gray-400;
-}
+
 .icon-border-color {
-  @apply border-gray-800 hover:border-gray-500 dark:border-gray-100 hover:dark:border-gray-300;
+  @apply border-gray-500;
 }
 

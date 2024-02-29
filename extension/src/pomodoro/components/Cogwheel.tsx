@@ -8,8 +8,8 @@ const Cogwheel: React.FC = () => {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       // stroke="currentColor"
-      stroke= {COLOR.gray[950]}
-      className="icon-color icon-color-hovered h-8 w-8"
+      stroke= {COLOR.gray[500]}
+      className="icon-color h-8 w-8"
     >
       <path
         strokeLinecap="round"

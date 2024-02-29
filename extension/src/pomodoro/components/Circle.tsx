@@ -8,7 +8,7 @@ type IProps = {
   className?: string
 }
 const white = COLOR.gray[50]
-const black = COLOR.gray[950]
+const black = COLOR.gray[500]
 
 const Circle: React.FC<IProps> = ({ isArchived = false, className = '' }) => {
   const [fillColor, setFillColor] = useState<string>('')
