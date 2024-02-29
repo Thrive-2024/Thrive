@@ -16,7 +16,7 @@ const manifest = defineManifest({
     "128": "public/assets/img/128.png",
   },
   action: {
-    default_popup: "./public/pomodoro/index.html",
+    default_popup: "src/pomodoro/index.html",
   },
   background: {
     service_worker: "src/pomodoro/background/main.ts",
@@ -32,7 +32,7 @@ const manifest = defineManifest({
       description: "pomodoro timer",
     },
   },
-  options_page: "./public/pomodoro/expire.html",
+  options_page: "src/pomodoro/expire.html",
 });
 
 export default defineConfig({

@@ -81,7 +81,7 @@ const Settings: React.FC = () => {
       <div id="settings" className={twMerge('text-base')}>
         <div
           id="timerSetting"
-          className="border-b-2 border-gray-300 pb-2 dark:border-gray-700"
+          className="border-b-2 border-gray-300 pb-2"
         >
           <p className={twMerge(headingStyle)}>{translation.settings.timer.title}</p>
           <div className="mt-3 text-sm">
@@ -119,32 +119,16 @@ const Settings: React.FC = () => {
             </SettingRow>
           </div>
         </div>
-        <div id="notificationSetting" className="mt-4">
+        <div id="notificationSetting" className="mt-3">
           <p className={twMerge(headingStyle)}>
             {translation.settings.notification.title}
           </p>
           <div className="mt-3 text-sm">
-            <SettingRow label={translation.settings.notification.showNewTab.pomodoro}>
-              {showNewTabNotificationWhenPomodoro !== null && (
-                <SettingToggle
-                  id="showNewTabNotificationWhenPomodoro"
-                  currentValue={showNewTabNotificationWhenPomodoro}
-                />
-              )}
-            </SettingRow>
             <SettingRow label={translation.settings.notification.desktop.pomodoro}>
               {showDesktopNotificationWhenPomodoro !== null && (
                 <SettingToggle
                   id="showDesktopNotificationWhenPomodoro"
                   currentValue={showDesktopNotificationWhenPomodoro}
-                />
-              )}
-            </SettingRow>
-            <SettingRow label={translation.settings.notification.showNewTab.break}>
-              {showNewTabpNotificationWhenBreak !== null && (
-                <SettingToggle
-                  id="showNewTabNotificationWhenBreak"
-                  currentValue={showNewTabpNotificationWhenBreak}
                 />
               )}
             </SettingRow>

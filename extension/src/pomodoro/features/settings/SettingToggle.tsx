@@ -26,10 +26,10 @@ const SettingToggle: React.FC<IProps> = ({
         setStorage({ showDesktopNotificationWhenBreak: e.target.checked })
         break
       case 'showNewTabNotificationWhenPomodoro':
-        setStorage({ showNewTabNotificationWhenPomodoro: e.target.checked })
+        setStorage({ showNewTabNotificationWhenPomodoro: true })
         break
       case 'showNewTabNotificationWhenBreak':
-        setStorage({ showNewTabNotificationWhenBreak: e.target.checked })
+        setStorage({ showNewTabNotificationWhenBreak: true })
         break
     }
     setChecked(e.target.checked)
@@ -44,7 +44,7 @@ const SettingToggle: React.FC<IProps> = ({
           defaultChecked={checked}
           onChange={(e) => handleOnChange(e)}
         />
-        <div className="border-color peer h-6 w-11 rounded-full bg-gray-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none dark:bg-gray-700"></div>
+        <div className="border-color peer h-6 w-11 rounded-full bg-gray-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
       </label>
     </>
   )

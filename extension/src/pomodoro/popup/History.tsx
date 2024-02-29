@@ -62,12 +62,12 @@ const History: React.FC = () => {
       />
       <div className="mx-auto">
         <div className="flex h-8 justify-center">
-          <div className="flex w-4/5 rounded-lg border bg-gray-200 p-[2px] dark:border-gray-700 dark:bg-gray-900">
+          <div className="flex w-4/5 rounded-lg border bg-gray-200 p-[2px] dark:border-gray-700 ">
             {termTypes.map((term) => (
               <button
                 key={term}
                 className={`${
-                  displayTermType === term ? 'bg-gray-50 dark:bg-gray-700' : ''
+                  displayTermType === term ? 'bg-gray-50 ' : ''
                 } px-2s flex-auto rounded-md`}
                 onClick={() => {
                   handleChangeDisplayTermType(term)

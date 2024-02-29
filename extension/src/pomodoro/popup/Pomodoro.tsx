@@ -10,7 +10,7 @@ const PomodoroInner = () => {
   const { displayPageType } = useContext(DisplayPageContext)
 
   return (
-    <div className="base-bg-color text-color min-w-[17rem] max-w-[20rem] p-4 dark:border-gray-950">
+    <div className="base-bg-color text-color min-w-[17rem] max-w-[20rem] p-4">
       {displayPageType === 'timer' ? (
         <Timer />
       ) : displayPageType === 'history' ? (

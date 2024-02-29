@@ -153,7 +153,7 @@ const Timer: React.FC = (props) => {
         </div>
       )}
 
-      <div className="mt-12 mb-2 flex items-center justify-between text-sm">
+      <div className="mt-12 flex items-center justify-between text-sm">
         <span>{totalPomodoroCountMessage}</span>
         <div className="flex justify-center gap-1">
           <PomodoroCircles
