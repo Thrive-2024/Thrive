@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
-import Pomodoro from './popup/Pomodoro';
+import './pomodoro/styles/globals.css'
+import Pomodoro from './pomodoro/popup/Pomodoro'
 
 function App() {
 
@@ -14,8 +15,8 @@ function App() {
         <div className="tab-section bg-gray-100 rounded-lg p-5 border-2 border-indigo-200">
           <div className="flex flex-wrap gap-1">
             <button className="p-4 rounded-lg text-gray-700 font-bold" data-tab-target="#tab1">Profile</button>
-            <button className="p-4 rounded-lg text-gray-700 font-bold" data-tab-target="#tab1">Profile</button>
-            <button className="p-4 rounded-lg text-gray-700 font-bold" data-tab-target="#tab1">Profile</button>
+            <button className="p-4 rounded-lg text-gray-700 font-bold" data-tab-target="#tab2">Profile</button>
+            <button className="p-4 rounded-lg text-gray-700 font-bold" data-tab-target="#tab3">Profile</button>
           </div>
         </div>
       </body>

@@ -19,7 +19,7 @@ const manifest = defineManifest({
     default_popup: "./public/pomodoro/index.html",
   },
   background: {
-    service_worker: "src/background/main.ts",
+    service_worker: "src/pomodoro/background/main.ts",
     type: "module",
   },
   permissions: ["storage", "tabs", "notifications", "background"],
