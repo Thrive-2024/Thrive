@@ -67,6 +67,7 @@ function generateSTYLING() {
       margin: 0 !important;
       background-color: #174b42 !important;
       font-family: 'Noto Serif', serif !important;
+      z-index: 9999
     }
     h1 {
       font-size: 3em !important;
