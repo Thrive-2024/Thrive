@@ -123,7 +123,7 @@ const Settings: React.FC = () => {
           <p className={twMerge(headingStyle)}>
             {translation.settings.notification.title}
           </p>
-          <div className="mt-3 text-sm">
+          <div className="mt-2 text-sm">
             <SettingRow label={translation.settings.notification.desktop.pomodoro}>
               {showDesktopNotificationWhenPomodoro !== null && (
                 <SettingToggle
