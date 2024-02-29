@@ -13,6 +13,7 @@ import { Container } from '@mui/joy';
 import './pomodoro/styles/globals.css'
 import Pomodoro from './pomodoro/popup/Pomodoro';
 import Assignment from './assignment/Assignment';
+import SiteBlocker from './siteBlocker/SiteBlocker';
 
 function App() {
 
@@ -77,7 +78,7 @@ function App() {
         {/* Site Restriction Tab */}
         <TabPanel value={2}>
           <Typography level="inherit">
-            Restricted Sites
+            <SiteBlocker />
           </Typography>
         </TabPanel>
 
