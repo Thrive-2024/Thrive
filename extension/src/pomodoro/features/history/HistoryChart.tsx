@@ -47,14 +47,14 @@ const HistoryChart: React.FC<IProps> = ({ historyData }) => {
   if (!historyData) return <LoadingSpinner />;
 
   return (
-    <ResponsiveContainer width={270} height={150}>
+    <ResponsiveContainer width={230} height={200}>
       <BarChart
         data={historyData}
         margin={{ top: 0, left: 0, bottom: 0, right: 0 }}
       >
         <CartesianGrid stroke={chartStrokeColor.light} vertical={false} />
         <XAxis dataKey="name" />
-        <YAxis width={35} axisLine={false} tickLine={false} />
+        <YAxis width={35} axisLine={false} tickLine={false}  />
         <Bar
           type="monotone"
           dataKey="count"

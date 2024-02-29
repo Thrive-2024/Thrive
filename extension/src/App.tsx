@@ -10,6 +10,7 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import { Container } from '@mui/joy';
+import './pomodoro/styles/globals.css'
 import Pomodoro from './pomodoro/popup/Pomodoro';
 import Assignment from './assignment/Assignment';
 

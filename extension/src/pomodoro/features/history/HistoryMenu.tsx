@@ -1,13 +1,9 @@
 import { getStorage, setStorage } from '../../utils/chrome'
 import {
-  BOM_ARRAY,
-  HISTORY_CSV_FILE_NAME,
   HISTORY_CSV_HEADER_ARRAY
 } from '../../consts'
 import { DailyPomodoro } from '../../types'
 import { NEW_LINE_CODE } from '../../consts/index'
-import Button from '../../components/Button'
-import { translation } from '../../_locales/en'
 
 const createStorageValue = (content: string): DailyPomodoro[] => {
   const newLineCodes =
@@ -55,30 +51,6 @@ const createBlobData = (dailyPomodoros: DailyPomodoro[]): string => {
   return header + joinedData
 }
 
-const downloadCsv = (blobData: string): void => {
-  const bom = new Uint8Array(BOM_ARRAY)
-  const blob = new Blob([bom, blobData], { type: 'text/csv' })
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = HISTORY_CSV_FILE_NAME
-  link.click()
-}
-
-const readCsv = async (uploadFile: File): Promise<any> => {
-  try {
-    return await new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = async (f) => {
-        const content = f?.target?.result
-        resolve(content)
-      }
-      if (uploadFile) reader.readAsText(uploadFile)
-    })
-  } catch (e) {
-    console.error(e)
-  }
-}
-
 const isValidContent = (content: string): boolean => {
   if (!content) {
     return false
@@ -87,57 +59,4 @@ const isValidContent = (content: string): boolean => {
   }
 }
 
-const HistoryMenu: React.FC = () => {
-  const handleExport = (): void => {
-    getStorage(['dailyPomodoros']).then(({ dailyPomodoros }) => {
-      const blobData = createBlobData(dailyPomodoros)
-      downloadCsv(blobData)
-    })
-  }
-
-  const handleOnChange = (): void => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.csv'
-    input.setAttribute('style', 'display: none; width: 0; height: 0')
-
-    document.body.appendChild(input)
-    input.click()
-    try {
-      input.onchange = (e: Event) => {
-        const target = e?.target as HTMLInputElement
-        const file = target.files ? target.files[0] : null
-        if (file) {
-          const message = translation.history.import.confirmMessage
-          if (!message) {
-            return
-          }
-          const result = readCsv(file)
-          result.then((content) => {
-            if (!isValidContent(content)) {
-              alert(translation.history.import.invalidMessage)
-            }
-            const storageValues = createStorageValue(content)
-            setStorage({ dailyPomodoros: storageValues })
-          })
-        }
-      }
-    } finally {
-      document.body.removeChild(input)
-    }
-  }
-  return (
-    <div>
-      <Button
-        text={translation.history.export.buttonText}
-        handleClick={handleExport}
-      />
-      <Button
-        text={translation.history.import.buttonText}
-        handleClick={handleOnChange}
-      />
-    </div>
-  )
-}
-
-export { HistoryMenu, createBlobData, createStorageValue, downloadCsv, readCsv }
+export { createBlobData, createStorageValue }

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { DisplayTermType, DailyPomodoro } from '../types/index'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { HistoryMenu } from '../features/history/HistoryMenu'
 import { getStorage } from '../utils/chrome'
 import HistoryChart from '../features/history/HistoryChart'
 import TargetTerm from '../features/history/TargetTerm'
@@ -95,9 +94,6 @@ const History: React.FC = () => {
       ) : (
         <HistoryChart historyData={historyData} />
       )}
-      <div className="flex justify-center">
-        <HistoryMenu />
-      </div>
     </div>
   )
 }
