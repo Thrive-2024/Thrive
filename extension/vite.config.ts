@@ -18,15 +18,9 @@ const manifest = defineManifest({
   action: {
     default_popup: "src/pomodoro/index.html",
   },
-  // "background": {
-  //   "service_worker": "src/service_worker/worker_wrapper.js"
-  // },
   "background": {
     "service_worker": "src/pomodoro/background/main.ts"
   },
-  // "background": {
-  //   "service_worker": "src/siteBlocker/background/main.ts"
-  // },
   permissions: ["storage", "tabs", "notifications", "background", "<all_urls>"],
   commands: {
     toggle_timer_status: {
