@@ -9,7 +9,7 @@ import { translation } from '../../_locales/en'
 type IProps = {
   inPopup: boolean
 }
-const iconStyle = 'w-8 h-8'
+const iconStyle = 'w-6 h-6'
 
 const CurrentPhase: React.FC<IProps> = ({ inPopup = false }) => {
   const [currentPhase, setCurrentPhase] = useState<Phase | null>(null)

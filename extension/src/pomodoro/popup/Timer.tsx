@@ -12,6 +12,7 @@ import { extractTodayPomodoroCount } from '../utils/pomodoroHelper'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Header from '../features/timer/Header'
 import { translation } from '../_locales/en'
+import { Button, IconButton } from '@mui/joy'
 
 const Timer: React.FC = (props) => {
   const [duration, setDuration] = useState<number>(0)
@@ -104,11 +105,11 @@ const Timer: React.FC = (props) => {
   const getCircleColor = (): string => {
     switch (currentPhase) {
       case 'focus':
-        return COLOR.primary
+        return "#9BC7EC"
       case 'break':
-        return COLOR.secondary
+        return "#C7D9E9"
       case 'longBreak':
-        return COLOR.secondary
+        return "#C7D9E9"
       default:
         return ''
     }
@@ -127,7 +128,7 @@ const Timer: React.FC = (props) => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="mt-12 flex justify-center ">
+        <div className="mt-2 flex justify-center ml-6">
           {duration !== 0 && remainingSeconds !== 0 && (
             <CountdownCircleTimer
               isPlaying={isRunning}
@@ -153,20 +154,35 @@ const Timer: React.FC = (props) => {
         </div>
       )}
 
-      <div className="mt-12 flex items-center justify-between text-sm">
-        <span>{totalPomodoroCountMessage}</span>
-        <div className="flex justify-center gap-1">
+      <div className="mt-2 flex items-center justify-center ml-6">
+        <IconButton
+          onClick={expire}
+          // startDecorator={<FastForward />}
+          sx={{
+            backgroundColor:'#9BC7EC',
+            borderRadius:'100px',
+            height:'8px',
+            width:'8px'
+          }}
+        >
+          <FastForward />
+        </IconButton>
+      </div>
+
+      <div className="mt-12 flex items-center justify-center text-sm">
+        {/* <span>{totalPomodoroCountMessage}</span> */}
+        <div className="flex justify-center gap-1 ml-6">
           <PomodoroCircles
             pomodorosUntilLongBreak={pomodorosUntilLongBreak}
             totalPomodoroCountInSession={totalPomodoroCountInSession}
           />
         </div>
-        <button
+        {/* <button
           className="ml-4 rounded-md px-1 text-lg hover:text-gray-300"
           onClick={expire}
         >
           <FastForward />
-        </button>
+        </button> */}
       </div>
     </div>
   )

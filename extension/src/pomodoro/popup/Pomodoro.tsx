@@ -5,6 +5,7 @@ import DisplayPageContextProvider, {
   DisplayPageContext
 } from './DisplayPageContextProvider'
 import Timer from './Timer'
+import { Typography } from '@mui/material'
 
 const PomodoroInner = () => {
   const { displayPageType } = useContext(DisplayPageContext)

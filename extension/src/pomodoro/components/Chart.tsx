@@ -7,8 +7,8 @@ const Chart: React.FC = () => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke= {COLOR.gray[500]}
-      className="icon-color h-8 w-8"
+      stroke= {"#95B6D4"}
+      className="icon-color h-6 w-6"
     >
       <path
         strokeLinecap="round"

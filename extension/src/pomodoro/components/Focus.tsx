@@ -7,12 +7,12 @@ const FocusIcon: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <>
       <svg
-        fill={COLOR.gray[500]}
+        fill={"#95B6D4"}
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 32 32"
         xmlSpace="preserve"
-        stroke= {COLOR.gray[500]}
+        stroke= {"#95B6D4"}
         className={twMerge('h-12 w-12', className)}
       >
         <path

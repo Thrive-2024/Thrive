@@ -6,11 +6,11 @@ const FastForward: React.FC = () => {
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+        fill={"white"}
         viewBox="0 0 24 24"
         strokeWidth={1.5}
-        stroke={COLOR.gray[500]}
-        className="icon-color h-8 w-8"
+        stroke={"white"}
+        className="icon-color h-5 w-5"
       >
         <path
           strokeLinecap="round"

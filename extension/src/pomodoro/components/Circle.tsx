@@ -7,8 +7,8 @@ type IProps = {
   isArchived?: boolean
   className?: string
 }
-const white = COLOR.gray[50]
-const black = COLOR.gray[500]
+const white = "#C7D9E9"
+const black = "#95B6D4"
 
 const Circle: React.FC<IProps> = ({ isArchived = false, className = '' }) => {
   const [fillColor, setFillColor] = useState<string>('')
@@ -30,7 +30,7 @@ const Circle: React.FC<IProps> = ({ isArchived = false, className = '' }) => {
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
-        className={twMerge('h-3 w-3', className)}
+        className={twMerge('h-2 w-2', className)}
       >
         <circle
           fill={fillColor}
