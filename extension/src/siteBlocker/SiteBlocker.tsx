@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, FormControl, IconButton, Input, InputLabel, Typography } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
@@ -7,6 +7,7 @@ import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
+import CreateIcon from '@mui/icons-material/Create';
 
 const SiteBlocker = () => {
   // Define state variables
@@ -14,6 +15,7 @@ const SiteBlocker = () => {
   const [blockedWebsites, setBlockedWebsites] = useState<string[]>([]);
   const [websiteInputValue, setWebsiteInputValue] = useState<string>('');
   const [errorValue, setErrorValue] = useState<string>('');
+  const [addWebsite, setAddWebsite] = useState<boolean>(false);
 
   // UseEffect to initialize the extension state and blocked websites array
   useEffect(() => {
@@ -40,6 +42,11 @@ const SiteBlocker = () => {
     // Update the state with the new value of the input field
     setWebsiteInputValue(event.target.value);
   };
+
+  // Function to handle the pressing of the edit button
+  const handleEditButton = (event: any) => {
+    setAddWebsite(true);
+  }
 
   // Define the options array based on the extension state
   const options = isExtensionOn ? ['Off restrictions'] : ['On restrictions'];
@@ -137,7 +144,7 @@ const SiteBlocker = () => {
         </Dropdown>
       </Box>
 
-      {/* second section: assignment name */}
+      {/* second section: Restricted Sites title */}
       <Typography
         sx={{
           fontSize: '18px',
@@ -147,37 +154,63 @@ const SiteBlocker = () => {
         Restricted Sites
       </Typography>
 
-      {/* fourth section: sites title*/}
-      <Box sx={{ display: 'flex', marginTop: '25px' }}>
-        {/* <Typography
-          sx={{
-            color: '#A3A3A3',
-            fontSize: '14px'
-          }}
-        >
-          Sites
-        </Typography> */}
-        {/* <CreateIcon sx={{ fontSize: '14px', color: '#787486', marginLeft: '5px', marginTop: '4px' }} /> */}
-        <TextField
-          id="filled-basic"
-          label="Site to Restrict"
-          variant="filled"
-          value={websiteInputValue}
-          onChange={handleInputChange}
-          size="small"
-          InputProps={{
-            onKeyDown: (event) => {
-              // Prevent default action for Enter key to prevent form submission
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                getWebsiteInput();
-              }
-            }
-          }}
-        />
+
+      {/* fourth section: enter restricted sites*/}
+      <Box sx={{ marginTop: '40px', display:'flex', flexDirection:'col' }}>
+        {addWebsite ? ( // If addWebsite is true, display the form control
+          <TextField 
+              id="outlined-basic"
+              label="Enter site"
+              variant="outlined"
+              size="small"
+              value={websiteInputValue}
+              onChange={handleInputChange}
+              inputProps={{
+                onKeyDown: (event) => {
+                  // Prevent default action for Enter key to prevent form submission
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    getWebsiteInput();
+                  }
+                }
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontSize: '13px'
+                }
+              }}
+              InputProps={{
+                classes: {
+                  root: '#95B6D4',
+                  focused: '#95B6D4'
+                }
+              }}
+          />
+        ) : ( // If addWebsite is false, display the sites typography and create icon
+          <>
+            <Typography
+              sx={{
+                color: '#A3A3A3',
+                fontSize: '14px',
+                marginRight: '1px'
+              }}
+            >
+              Sites
+            </Typography>
+            <IconButton 
+              size="small" 
+              onClick={handleEditButton}
+              sx={{ 
+                marginBottom:'8px' 
+              }}
+            >
+              <CreateIcon sx={{ fontSize:'14px', color:'#787486' }} />
+            </IconButton> 
+          </>
+        )}  
       </Box>
-      
-      <Divider sx={{ marginTop: '5px' }} />
+      <Divider sx={{ marginTop: '3px' }} /> 
+    
 
       {/* fifth section: restricted sites */}
       <Box sx={{ display: 'flex', marginTop: '15px' }}>
@@ -197,7 +230,8 @@ const SiteBlocker = () => {
                 marginRight: '2px', 
                 marginBottom: '2px', 
                 backgroundColor: '#9BC7EC', // Set background color
-                color: '#F5F5F4', // Set text color
+                color: '#FFFFFF', // Set text color
+                borderColor: '#9BC7EC', // Set border color
                 borderRadius: '20px',
                 '& .MuiChip-deleteIcon': {
                   color: '#F5F5F4', // Change color here
