@@ -39,7 +39,7 @@ const convertToHours = (timeInMinutes: any) => {
     return `${parseFloat(hours) < 2 ? hours + " Hr" : hours + ' Hrs'}`;
 };
 
-//for 
+//for task bottom right corner
 const getTimeElapsed = (dateTime: string): string => {
     const postDateTime = new Date(dateTime);
     const currentTime = new Date();
@@ -69,7 +69,7 @@ const getTimeElapsed = (dateTime: string): string => {
 }
 
 
-export const Leaderboard = () => {
+export const Leaderboard = (props:any) => {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
     const currentUser = 'james@gmail.com';
 
@@ -82,7 +82,7 @@ export const Leaderboard = () => {
         // Note: January is 0, February is 1, and so on...
         const month = currentDate.getMonth() +1 // Adding 1 to get the correct month
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/miscellaneous/getMonthlyLeaderboard?year=${year}&month=${month}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/miscellaneous/getMonthlyLeaderboard?year=${year}&month=2`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -108,7 +108,7 @@ export const Leaderboard = () => {
 
     useEffect(() => {
         fetchLeaderboard();
-    }, []);
+    }, [props.currentUser]);
 
     return (
 

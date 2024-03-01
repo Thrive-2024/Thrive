@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack, List, ListItem } from '@mui/material';
+import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack, List, ListItem} from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -27,6 +27,8 @@ import mascot from '../images/mascot.png';
 import James from '../images/James.jpg';
 import Tim from '../images/Tim.jpg';
 import Carrie from '../images/Carrie.jpg';
+import DefaultPhoto from '../images/default.jpg';
+
 const OnlineBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#44b700',
@@ -59,7 +61,7 @@ const Activity = styled(Card)(({ theme }) => ({
 
 }));
 
-const currentUser = 'james@gmail.com';
+// const currentUser = 'james@gmail.com';
 
 // https://www.npmjs.com/package/react-pro-sidebar
 export const Navbar = (props: any) => {
@@ -87,6 +89,11 @@ export const Navbar = (props: any) => {
     props.onNavValueChange(value); // Call the function passed from the parent with the new value
   };
 
+  const handleProfileClick=(event:any) => {
+    props.onProfileClick();
+  }
+
+
   return (
     <Sidebar style={{ width: "300", height: "100vh" }} >
       <Dialog
@@ -108,9 +115,17 @@ export const Navbar = (props: any) => {
         </Box>
         <Divider />
 
-        <Box style={{ display: 'flex', alignItems: 'center' }} sx={{ mt: 3, mb: 2, ml: 2 }}>
-          <Avatar src={James} sx={{ width: 50, height: 50, mr: 2 }} />
-          <Typography>Welcome, James</Typography>
+        <Box style={{ display: 'flex', alignItems: 'center' }} sx={{ mt: 3, mb: 2, ml: 2, ":hover":{cursor:'pointer', backgroundColor:'rgba(0, 0, 0, 0.04)'} }} onClick = {handleProfileClick}>
+          {props.currentUser === 'james@gmail.com' ? (
+            <Avatar src={James} sx={{ width: 50, height: 50, mr: 2 }} />
+          ) : props.currentUser === 'tim@gmail.com' ? (
+            <Avatar src={Tim} sx={{ width: 50, height: 50, mr: 2 }} />
+          ) : (
+            <Avatar src={DefaultPhoto} sx={{ width: 50, height: 50, mr: 2 }} />
+          )}
+
+
+          <Typography>Welcome, {props.currentUsername}</Typography>
         </Box>
         <Divider />
         <Menu>
@@ -139,7 +154,7 @@ export const Navbar = (props: any) => {
             data-value="Leaderboard"
             onClick={() => handleChange('Leaderboard')}
             icon={<LeaderboardOutlinedIcon />}
-            style={{ backgroundColor: isActive('Leaderboard') ? '#E3ECF6' : 'inherit' }}
+            style={{ backgroundColor: isActive('Leaderboard') ? '#E3ECF6' : 'inherit'}}
             id="menu-item3"
           >
             Leaderboard
@@ -198,7 +213,7 @@ export const MidTopSection = () => {
     </Box>
   );
 }
-export const RightNavbar = () => {
+export const RightNavbar = (props: any) => {
 
   const [motivationArray, setMotivationArray] = useState<any[]>([])
 
@@ -206,7 +221,7 @@ export const RightNavbar = () => {
   const fetchMotivation = async () => {
     console.log("motivation fetcher called");
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=${currentUser}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=${props.currentUser}`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -231,7 +246,7 @@ export const RightNavbar = () => {
 
   useEffect(() => {
     fetchMotivation();
-  }, []);
+  }, [props.currentUser]);
   return (
     <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: 300 }}>
       {/* Right top empty Space */}
