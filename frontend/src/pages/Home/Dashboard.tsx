@@ -91,6 +91,7 @@ export const Dashboard = () => {
     const [subjectName, setSubjectName] = useState('');
     const [notes, setNotes] = useState('');
 
+
     // const [tasksToUpdate, setTasksToUpdate] = useState<any[]>([]);
     const [tasksModified, setTasksModified] = useState(false);
 
@@ -159,6 +160,7 @@ export const Dashboard = () => {
         if (!result.destination) return;
         const { source, destination } = result;
         setTasksModified(true);
+        console.log("task modified");
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = taskboard[source.droppableId];
@@ -342,7 +344,7 @@ export const Dashboard = () => {
                 tasksToUpdate.push({ taskId: task._id, newStatus: key });
             });
         });
-        console.log(tasksToUpdate)
+        // console.log(tasksToUpdate)
         return tasksToUpdate;
 
     }
@@ -350,7 +352,7 @@ export const Dashboard = () => {
         // console.log("updateTasks called")
         const tasksToUpdate = returnTasksForUpdate();
 
-        console.log(tasksToUpdate);
+        // console.log(tasksToUpdate);
 
         fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/updateTaskStatusBulk`, {
             headers: {
@@ -380,7 +382,7 @@ export const Dashboard = () => {
                 window.alert(`Error during update tasks:${error}`);
             });
 
-        console.log('Function called every 10 seconds');
+        setTasksModified(false);
     };
 
     //execute once
@@ -388,15 +390,35 @@ export const Dashboard = () => {
         fetchTask()
     }, []);
 
+    // useEffect(() => {
+
+
+    //     if (tasksModified) {
+    //         console.log('Got tasks to update')
+    //         updateTasks();
+    //     } else{
+    //         console.log('NO TASKS TO UPDATE');
+    //     }
+
+    //     // 10 seconds in milliseconds
+
+    // }, [taskboard, tasksModified]); // Run whenever taskboard changes
+
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            console.log('Got tasks to update')
-            updateTasks();
-        }, 10000); // 10 seconds in milliseconds
+        let timeoutId: any;
+        // console.log('useeffect called')
     
-        // Clean up the interval on component unmount
-        return () => clearInterval(intervalId);
-    }, [taskboard]); // Run whenever taskboard changes
+        if (tasksModified) {
+            // console.log('Got tasks to update');
+            timeoutId = setTimeout(() => {
+                updateTasks();
+            }, 5000); // 10 seconds in milliseconds
+        }
+    
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [tasksModified,taskboard]);
 
 
 
