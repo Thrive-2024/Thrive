@@ -21,7 +21,8 @@ const manifest = defineManifest({
   "background": {
     "service_worker": "src/pomodoro/background/main.ts"
   },
-  permissions: ["storage", "tabs", "notifications", "background", "<all_urls>"],
+  permissions: ["storage", "tabs", "notifications", "background"],
+  host_permissions:["http://*/*", "https://*/*"],
   commands: {
     toggle_timer_status: {
       suggested_key: {
@@ -33,7 +34,7 @@ const manifest = defineManifest({
   },
   options_page: "src/pomodoro/expire.html",
   "content_scripts": [{
-    "matches": ["<all_urls>"],
+    "matches": ["http://*/*", "https://*/*"],
     "js": ["src/siteBlocker/background/contentScript.ts"]
   }]
 });

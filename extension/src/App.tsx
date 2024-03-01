@@ -33,7 +33,7 @@ function App() {
           width: 343,
           borderRadius: 'lg',
           boxShadow: 'sm',
-          height: 430,
+          height: 500,
           flexDirection: 'row-reverse'
         }}
       >

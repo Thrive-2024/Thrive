@@ -16,6 +16,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Header from "../features/timer/Header";
 import { translation } from "../_locales/en";
 import { Button, IconButton } from "@mui/joy";
+import Mascot from "../components/mascot.png";
 
 const Timer: React.FC = (props) => {
   const [duration, setDuration] = useState<number>(0);
@@ -132,7 +133,7 @@ const Timer: React.FC = (props) => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="ml-6 mt-2 flex items-center justify-center">
+        <div className="ml-7 mt-3 flex items-center justify-center">
           {duration !== 0 && remainingSeconds !== 0 && (
             <div className="mr-4">
               <CountdownCircleTimer
@@ -141,7 +142,20 @@ const Timer: React.FC = (props) => {
                 initialRemainingTime={remainingSeconds}
                 isSmoothColorTransition
                 colors={getCircleColor() as ColorFormat}
-                trailColor={COLOR.gray[200] as ColorFormat}
+                trailColor={COLOR.gray[200] as ColorFormat}               
+              />
+              <img
+                src={Mascot}
+                alt="Mascot"
+                style={{
+                  position: "absolute",
+                  height:'110px',
+                  // marginTop: '-55px',
+                  // marginLeft:'45px',
+                  // marginBottom:'150px'
+                  top: '33.5%',
+                  left: '28%',
+                }}
               />
             </div>
           )}
@@ -159,7 +173,7 @@ const Timer: React.FC = (props) => {
         />
       </div>
 
-      <div className="mt-12 flex items-center justify-center text-sm">
+      <div className="mt-6 flex items-center justify-center text-sm">
         {/* <span>{totalPomodoroCountMessage}</span>  */}
         <div className="ml-6 flex justify-center gap-1">
           <PomodoroCircles
