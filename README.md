@@ -24,6 +24,9 @@ A collaborative goal management application
 - go to 'chrome://extensions' on the browser and enter developer mode
 - load the build folder into 'chrome://extensions'
 
+### Docker 
+- in root run `make run` or `docker compose up` to build both frontend and backend docker image and run them
+
 ## Team Member : 
 - [GEORGIA NG](https://github.com/georgiaxng)
 - [LIM ZHENGLONG BRIAN](https://github.com/Liseon617)
