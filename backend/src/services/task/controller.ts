@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 const taskModel = require("../../models/task");
 const usermodel = require("../../models/user");
+const getDateTime = require("../../utils/getDateTime");
 
 export const create = async (req: any, res: any, next: NextFunction) => {
     try {
@@ -18,6 +19,7 @@ export const create = async (req: any, res: any, next: NextFunction) => {
             "colour": data.colour, 
             "dueDate": data.dueDate,
             "status": data.status, 
+            "lastUpdated": getDateTime.now(),
             "notes": data.notes? data.notes: "",  // optional, is not passed in, default as ""
         });
         // add a new record to mongodb
@@ -46,7 +48,31 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
             return res.status(400).json({ message: "Owner email is required" });
         }
         
-        const records = await taskModel.find({ ownerEmail: ownerEmail }).sort({ dueDate: 1 }); // sorted by dueDate ascending;;
+        // Constructing the start and end of the day in YYYY-MM-DDTHH:MM:SS format
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0); // Set to start of the day
+        const todayStartISO = todayStart.toISOString();
+
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999); // Set to end of the day
+        const todayEndISO = todayEnd.toISOString();
+
+        // MongoDB query to find tasks that are either not done or are done and last updated today
+        const query = {
+            ownerEmail: ownerEmail,
+            $or: [
+                { status: { $ne: 'done' } },
+                {
+                    status: 'done',
+                    lastUpdated: {
+                        $gte: todayStartISO,
+                        $lte: todayEndISO
+                    }
+                }
+            ]
+        };
+
+        const records = await taskModel.find(query).sort({ lastUpdated: 1 }); // sorted by dueDate ascending;;
         
         if (records.length === 0) {
             return res.status(404).json({ message: "No records found for the given owner email" });
@@ -74,7 +100,7 @@ export const updateTaskStatusBulk = async (req: any, res: any, next: NextFunctio
         const bulkOps = updates.map(update => ({
             updateOne: {
                 filter: { _id: update.taskId },
-                update: { $set: { status: update.newStatus } }
+                update: { $set: { status: update.newStatus , lastUpdated: getDateTime.now(), } }
             }
         }));
 
