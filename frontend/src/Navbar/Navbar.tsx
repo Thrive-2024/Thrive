@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack, List, ListItem} from '@mui/material';
+import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack} from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -273,7 +273,7 @@ export const RightNavbar = (props: any) => {
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               variant="dot"
             >
-              <Avatar src={Carrie} sx={{ width: 50, height: 50 }} />
+              <Avatar src={Tim} sx={{ width: 50, height: 50 }} />
             </OnlineBadge></Box>
           <Box sx={{ marginRight: 1 }}>
             <OfflineBadge
@@ -281,7 +281,7 @@ export const RightNavbar = (props: any) => {
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               variant="dot"
             >
-              <Avatar src={Carrie} sx={{ width: 50, height: 50 }} />
+              <Avatar src={DefaultPhoto} sx={{ width: 50, height: 50 }} />
             </OfflineBadge></Box>
         </Box>
 

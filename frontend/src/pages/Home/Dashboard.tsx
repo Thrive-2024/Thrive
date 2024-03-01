@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
 import { Box, Button, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText, Modal, Tooltip, TextField, Snackbar, Alert, MenuItem, Select, LinearProgress, FormControl } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ThemeProvider, createTheme } from "@mui/material/styles";

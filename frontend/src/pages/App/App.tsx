@@ -80,7 +80,6 @@ export const App = () => {
 
   useEffect(() => {
     fetchAllUsers();
-    // setOpen(true); //open login dialog
   }, [])
   return (
     <div
