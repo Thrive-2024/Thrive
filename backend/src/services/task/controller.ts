@@ -49,13 +49,10 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
         }
         
         // Constructing the start and end of the day in YYYY-MM-DDTHH:MM:SS format
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0); // Set to start of the day
-        const todayStartISO = todayStart.toISOString();
-
-        const todayEnd = new Date();
-        todayEnd.setHours(23, 59, 59, 999); // Set to end of the day
-        const todayEndISO = todayEnd.toISOString();
+        const dateTimeString = getDateTime.now();
+        const parts: string[] = dateTimeString.split('T');
+        const todayStart = parts[0]+"T00:00:00";
+        const todayEnd = parts[0]+"T23:59:59";
 
         // MongoDB query to find tasks that are either not done or are done and last updated today
         const query = {
@@ -65,13 +62,13 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
                 {
                     status: 'done',
                     lastUpdated: {
-                        $gte: todayStartISO,
-                        $lte: todayEndISO
+                        $gte: todayStart,
+                        $lte: todayEnd
                     }
                 }
             ]
         };
-
+ 
         const records = await taskModel.find(query).sort({ lastUpdated: 1 }); // sorted by dueDate ascending;;
         
         if (records.length === 0) {
