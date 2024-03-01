@@ -69,7 +69,7 @@ export const getAllByOwner = async (req: any, res: any, next: NextFunction) => {
             ]
         };
  
-        const records = await taskModel.find(query).sort({ lastUpdated: 1 }); // sorted by dueDate ascending;;
+        const records = await taskModel.find(query).sort({ status: 1, lastUpdated: 1 }); // sorted by dueDate ascending;;
         
         if (records.length === 0) {
             return res.status(404).json({ message: "No records found for the given owner email" });
