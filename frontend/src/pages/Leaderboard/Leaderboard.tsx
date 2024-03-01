@@ -163,12 +163,12 @@ export const Leaderboard = (props: any) => {
                                     {leaderboard.length > 0 ? (
                                         <>
                                             {leaderboard[0].email === 'james@gmail.com' ? (
-                                                <Avatar src={James} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #93BFF0 solid' }} />)
+                                                <Avatar src={James} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #FFAA00 solid' }} />)
                                                 : leaderboard[0].email === 'tim@gmail.com' ? (
-                                                    <Avatar src={Tim} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #93BFF0 solid' }} />) : (
-                                                    <Avatar src={DefaultPhoto} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #93BFF0 solid' }} />)}      </>
+                                                    <Avatar src={Tim} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #FFAA00 solid' }} />) : (
+                                                    <Avatar src={DefaultPhoto} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #FFAA00 solid' }} />)}      </>
                                     ) : (
-                                        <Avatar src={DefaultPhoto} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #93BFF0 solid' }} />
+                                        <Avatar src={DefaultPhoto} sx={{ width: '80px', height: '80px', margin: 'auto', border: '5px #FFAA00 solid' }} />
                                     )}
                                     <div style={{ width: '150px', height: '160px', background: '#F1F1F1', marginTop: -30, borderRadius: '10px 10px 0 0' }}>
                                         {leaderboard.length > 0 ? (
