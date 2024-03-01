@@ -80,7 +80,7 @@ export const Leaderboard = () => {
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         // Note: January is 0, February is 1, and so on...
-        const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
+        const month = currentDate.getMonth() +1 // Adding 1 to get the correct month
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/miscellaneous/getMonthlyLeaderboard?year=${year}&month=${month}`, {
                 headers: {
@@ -132,15 +132,15 @@ export const Leaderboard = () => {
                                                         {leaderboard[1].name}
                                                     </Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '40px' }}>
+                                                        None
                                                     </Typography>
                                                 )}
                                                 {leaderboard.length > 1 ? (
                                                     <Typography sx={{ paddingTop: '5px', color: '#93BFF0' }}><b>{convertToHours(leaderboard[1].totalDuration)}</b></Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '5px', color: '#93BFF0' }}>
+                                                        0 hrs
                                                     </Typography>
                                                 )}
                                             </div>
@@ -155,15 +155,15 @@ export const Leaderboard = () => {
                                                         {leaderboard[0].name}
                                                     </Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '40px' }}>
+                                                        None
                                                     </Typography>
                                                 )}
                                                 {leaderboard.length > 0 ? (
                                                     <Typography sx={{ paddingTop: '5px', color: '#FFAA00' }}><b>{convertToHours(leaderboard[0].totalDuration)}</b></Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '5px', color: '#FFAA00' }}>
+                                                        0 hrs
                                                     </Typography>
                                                 )}
                                             </div>
@@ -177,15 +177,15 @@ export const Leaderboard = () => {
                                                         {leaderboard[2].name}
                                                     </Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '40px' }}>
+                                                        None
                                                     </Typography>
                                                 )}
                                                 {leaderboard.length > 2 ? (
                                                     <Typography sx={{ paddingTop: '5px', color: '#93BFF0' }}><b>{convertToHours(leaderboard[2].totalDuration)}</b></Typography>
                                                 ) : (
-                                                    <Typography>
-                                                        Null
+                                                    <Typography sx={{ paddingTop: '5px', color: '#93BFF0' }}>
+                                                        0 hrs
                                                     </Typography>
                                                 )}
                                                 {/* <Chip sx={{marginTop:'10px'}} label={'4 hrs'}/> */}
@@ -216,7 +216,7 @@ export const Leaderboard = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody >
-                                            {leaderboard.slice(3).map((row, index) => (
+                                            {leaderboard.length> 0 ?leaderboard.slice(3).map((row, index) => (
                                                 <TableRow
                                                     key={row.email}
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: row.email === currentUser ? '#E5F1FF' : 'inherit', }}
@@ -241,7 +241,11 @@ export const Leaderboard = () => {
                                                     </TableCell>
                                                     <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{convertToHours(row.totalDuration)}</TableCell>
                                                 </TableRow>
-                                            ))}
+                                            )):    <TableRow>
+                                            <TableCell colSpan={6}>
+                                                <Typography sx={{ textAlign: 'center', height: 100, pt:10 }}>No Results Found...</Typography>
+                                            </TableCell>
+                                        </TableRow>}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>

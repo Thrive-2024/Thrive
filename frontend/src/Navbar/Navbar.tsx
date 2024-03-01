@@ -215,7 +215,6 @@ export const RightNavbar = () => {
 
       if (response.status != 200) {
         console.log("ERROR FETCHING MOTIVATION");
-
       } else {
         const apiResponse = await response.json();
         // console.log(apiResponse);
@@ -317,7 +316,7 @@ export const RightNavbar = () => {
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden', height: 100
                 }}>
-                  <b>{word.sender}</b>: {word.message}
+                  <b>{word.senderName}</b>: {word.message}
                 </Typography>
               ))}
             </Carousel>
