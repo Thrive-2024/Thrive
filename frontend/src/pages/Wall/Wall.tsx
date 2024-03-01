@@ -43,10 +43,22 @@ const MessageCard: React.FC<{ message: Message }> = ({ message }) => {
 export const Wall = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   useEffect(() => {
-    // Replace this with your actual data fetching logic
+
+      // Function to fetch data from your API
+    //   const fetchMessages = async () => {
+    //     try {
+    //       const response = await fetch('YOUR_API_ENDPOINT');
+    //       const data = await response.json();
+    //       setMessages(data);
+    //     } catch (error) {
+    //       console.error('Failed to fetch messages:', error);
+    //     }
+    //   };
+  
+    //   fetchMessages();
+    // }, []); 
+    // MOCK DATA VERSION -------------------------
     const fetchMessages = async () => {
-      // const response = await fetch('your-api-endpoint');
-      // const data = await response.json();
       const data: Message[] = [
         {
           id: "1",
