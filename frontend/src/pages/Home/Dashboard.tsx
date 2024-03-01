@@ -54,9 +54,9 @@ const processingStyle = {
 <style>
 </style>
 
-export const Dashboard = () => {
+export const Dashboard = (props: any) => {
     //active user
-    const currentUser = 'james@gmail.com';
+    // const currentUser = props.currentUser;
 
     //task
     interface Task {
@@ -216,7 +216,7 @@ export const Dashboard = () => {
         }
 
         const formData = new FormData();
-        formData.append('ownerEmail', currentUser);
+        formData.append('ownerEmail', props.currentUser);
         formData.append('taskName', taskName);
         formData.append('subjectName', subjectName);
         formData.append('colour', selectedColor);
@@ -254,7 +254,7 @@ export const Dashboard = () => {
                             ...prevState.toDo,
                             items: [
                                 ...prevState.toDo.items,
-                                { _id: apiResponse.id, ownerEmail: currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
+                                { _id: apiResponse.id, ownerEmail: props.currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
                             ]
                         }
                     }));
@@ -285,7 +285,7 @@ export const Dashboard = () => {
         // // Note: January is 0, February is 1, and so on...
         // const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=james@gmail.com`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=${props.currentUser}`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -387,8 +387,9 @@ export const Dashboard = () => {
 
     //execute once
     useEffect(() => {
+        console.log(props.currentUser)
         fetchTask()
-    }, []);
+    }, [props.currentUser]);
 
     // useEffect(() => {
 

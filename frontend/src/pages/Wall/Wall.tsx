@@ -71,7 +71,7 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
   );
 };
 
-export const Wall = () => {
+export const Wall = (props:any) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [msgBoardOpen, setMsgBoardOpen] = useState(false);
