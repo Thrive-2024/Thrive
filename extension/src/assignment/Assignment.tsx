@@ -1,34 +1,64 @@
 import { Box, Container, Divider, IconButton, Typography } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CreateIcon from '@mui/icons-material/Create';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 
-const options = [
-    'None',
-    'Atria',
-    'Callisto',
-    'Dione',
-    'Ganymede',
-    'Hangouts Call',
-    'Luna',
-    'Oberon',
-    'Phobos',
-    'Pyxis',
-    'Sedna',
-    'Titania',
-    'Triton',
-    'Umbriel',
-];
+// const options = [
+//     'None',
+//     'Atria',
+//     'Callisto',
+//     'Dione',
+//     'Ganymede',
+//     'Hangouts Call',
+//     'Luna',
+//     'Oberon',
+//     'Phobos',
+//     'Pyxis',
+//     'Sedna',
+//     'Titania',
+//     'Triton',
+//     'Umbriel',
+// ];
 
 const ITEM_HEIGHT = 48;
 
 const Assignment = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [options, setOptions] = useState<string[]>([]);
+
+    function fetchData() {
+        // API endpoint URL
+        const apiUrl = 'http://localhost:8000/api/task/getAllByOwner?ownerEmail=james@gmail.com';
+      
+        // Fetch data from the API
+        fetch(apiUrl)
+            .then(response => {
+                // Check if the response is successful
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                // Parse the JSON response
+                return response.json();
+            })
+            .then(data => {
+                // // Do something with the data
+                console.log('Data received:', data);
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error fetching data:', error);
+            });
+    }
+    
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -63,10 +93,15 @@ const Assignment = () => {
                                 overflowY:'auto'
                             }}
                         >
-                            {options.map((option) => (
+                            {/* {options.map((option) => (
                             <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose} sx ={{ fontSize:'14px' }}>
                                 {option}
                             </MenuItem>
+                            ))} */}
+                            {options && options.map((option: string, index: number) => (
+                                <MenuItem key={index} selected={option === 'Pyxis'} onClick={handleClose} sx={{ fontSize:'14px' }}>
+                                    {option}
+                                </MenuItem>
                             ))}
                         </Menu>
                     </Dropdown>
