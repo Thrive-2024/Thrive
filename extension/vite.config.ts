@@ -36,7 +36,13 @@ const manifest = defineManifest({
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],
     "js": ["src/siteBlocker/background/contentScript.ts"]
-  }]
+  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/siteBlocker/background/mascot.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 });
 
 export default defineConfig({
