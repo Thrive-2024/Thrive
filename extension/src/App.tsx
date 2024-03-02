@@ -16,10 +16,12 @@ import Assignment from "./assignment/Assignment";
 import SiteBlocker from "./siteBlocker/SiteBlocker";
 
 function App() {
-  chrome.identity.getProfileUserInfo(function (info) {
-    const email = info.email;
-    console.log(email);
-  });
+    let email = "james@gmail.com"
+    chrome.identity.getProfileUserInfo(function (info) {
+      email = info.email;
+      console.log(email);
+    });
+    chrome.storage.sync.set({ "currentUser": email });
 
   const [value, setValue] = React.useState("1");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
