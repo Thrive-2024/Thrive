@@ -21,7 +21,7 @@ const manifest = defineManifest({
   "background": {
     "service_worker": "src/pomodoro/background/main.ts"
   },
-  permissions: ["storage", "tabs", "notifications", "background"],
+  permissions: ["storage", "tabs", "notifications", "background", "identity", "identity.email"],
   host_permissions:["http://*/*", "https://*/*"],
   commands: {
     toggle_timer_status: {
