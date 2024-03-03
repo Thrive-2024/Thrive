@@ -3,7 +3,6 @@ import Digit from "./Digit";
 import Pause from "../../components/Pause";
 import Play from "../../components/Play";
 import FastForward from "../../components/FastForward";
-import { expire } from "@/pomodoro/background/Timer";
 import { IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -14,6 +13,7 @@ type IProps = {
   expire: () => void;
 };
 
+
 const Countdown: React.FC<IProps> = ({
   remainingSeconds,
   isRunning,
@@ -22,6 +22,7 @@ const Countdown: React.FC<IProps> = ({
 }) => {
   const { seconds: displaySeconds, minutes: displayMinutes } =
     getTimeFromSeconds(remainingSeconds);
+    
   const [selectedTask, setSelectedTask] = useState<string>("");
   useEffect(() => {
     const fetchData = async () => {
@@ -44,10 +45,10 @@ const Countdown: React.FC<IProps> = ({
             color: "#A3A3A3",
           }}
         >
-          {selectedTask}
+          {selectedTask != "" ? selectedTask : "No Task Selected"}
         </Typography>
       </div>
-      <div id="countdown" className="mt-0 flex w-20 items-center justify-center text-2xl">
+      <div id="countdown" className="mt-0 flex items-center justify-center text-2xl">
         <Digit count={displayMinutes} />
         <span className="mx-1 pb-2">:</span>
         <Digit count={displaySeconds} />
