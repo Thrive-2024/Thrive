@@ -28,7 +28,6 @@ const HeaderMenu = () => {
   const fetchMessageFromSystem = async () => {
     try {
       const response = await fetch(
-        // `http://localhost:8000/api/motivation/randomMessageFromSystem?receiver=james@gmail.com`,
         `${REACT_APP_BACKEND_DEV_URL}/motivation/randomMessageFromSystem?receiver=${currentUser}`,
         {
           headers: {
