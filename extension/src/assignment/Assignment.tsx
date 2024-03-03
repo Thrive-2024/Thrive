@@ -61,8 +61,18 @@ const Assignment = () => {
             setTasks(mappedTasks);
 
             if (mappedTasks.length !== 0) {
-                chrome.storage.sync.set({ selectedTask: mappedTasks[0] });
-                setSelectedTask(mappedTasks[0]);
+                chrome.storage.sync.get('selectedTask', (result) => {
+                    const storedTask = result.selectedTask;
+                    if (storedTask === null) {
+                        // if selectedTask in chrome storage is null, set the first task from mappedTasks and store it in chrome storage
+                        const firstTask = mappedTasks[0];
+                        chrome.storage.sync.set({ selectedTask: firstTask });
+                        setSelectedTask(firstTask);
+                    } else {
+                        // if selectedTask is not null, set it from chrome storage
+                        setSelectedTask(storedTask);
+                    }
+                });
             }
             
         } catch (error) {
