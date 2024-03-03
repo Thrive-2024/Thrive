@@ -8,23 +8,6 @@ import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import { REACT_APP_BACKEND_DEV_URL } from "../constants/envConsts";
 
-// const options = [
-//     'None',
-//     'Atria',
-//     'Callisto',
-//     'Dione',
-//     'Ganymede',
-//     'Hangouts Call',
-//     'Luna',
-//     'Oberon',
-//     'Phobos',
-//     'Pyxis',
-//     'Sedna',
-//     'Titania',
-//     'Triton',
-//     'Umbriel',
-// ];
-
 const ITEM_HEIGHT = 48;
 
 const Assignment = () => {
@@ -36,8 +19,12 @@ const Assignment = () => {
     async function fetchData(receivedEmail: string) {
         try {
             const apiUrl = `${REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=${receivedEmail}`;
-            console.log("apiUrl", apiUrl);
-            const response = await fetch(apiUrl);
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'GET'
+            });
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -111,16 +98,17 @@ const Assignment = () => {
                             overflowY: 'auto'
                         }}
                     >
-                        {/* {options.map((option) => (
-                            <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose} sx ={{ fontSize:'14px' }}>
-                                {option}
+                        {options.length === 0 ? (
+                            <MenuItem disabled sx={{ fontSize: '14px' }}>
+                                No tasks available
                             </MenuItem>
-                            ))} */}
-                        {options && options.map((option: string, index: number) => (
-                            <MenuItem key={index} selected={option === 'Pyxis'} onClick={handleClose} sx={{ fontSize: '14px' }}>
-                                {option}
-                            </MenuItem>
-                        ))}
+                        ) : (
+                            options.map((option: string, index: number) => (
+                                <MenuItem key={index} selected={option === 'Pyxis'} onClick={handleClose} sx={{ fontSize: '14px' }}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        )}
                     </Menu>
                 </Dropdown>
             </Box>
