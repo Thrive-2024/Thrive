@@ -2,9 +2,10 @@ import { getTimeFromSeconds } from "../../utils/timeHelper";
 import Digit from "./Digit";
 import Pause from "../../components/Pause";
 import Play from "../../components/Play";
-import FastForward from '../../components/FastForward';
+import FastForward from "../../components/FastForward";
 import { expire } from "@/pomodoro/background/Timer";
 import { IconButton, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 type IProps = {
   remainingSeconds: number;
@@ -21,20 +22,32 @@ const Countdown: React.FC<IProps> = ({
 }) => {
   const { seconds: displaySeconds, minutes: displayMinutes } =
     getTimeFromSeconds(remainingSeconds);
+  const [selectedTask, setSelectedTask] = useState<string>("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await new Promise<{ selectedTask: string }>((resolve) => {
+        chrome.storage.sync.get("selectedTask", (data) => {
+          resolve({ selectedTask: data.selectedTask.taskName });
+        });
+      });
+      setSelectedTask(data.selectedTask);
+    };
 
+    fetchData();
+  }, []);
   return (
     <div className="">
-      <div className="flex items center mt-1 mb-0">
+      <div className="items-center mb-0 mt-1 flex">
         <Typography
           sx={{
-            fontSize: '13px',
-            color:'#A3A3A3'
+            fontSize: "13px",
+            color: "#A3A3A3",
           }}
         >
-          Assignment 2
+          {selectedTask}
         </Typography>
       </div>
-      <div id="countdown" className="mt-0 flex w-20 items-center text-2xl">
+      <div id="countdown" className="mt-0 flex w-20 items-center justify-center text-2xl">
         <Digit count={displayMinutes} />
         <span className="mx-1 pb-2">:</span>
         <Digit count={displaySeconds} />
@@ -45,7 +58,7 @@ const Countdown: React.FC<IProps> = ({
             sx={{
               backgroundColor: "#9BC7EC",
               borderRadius: "100px",
-              marginRight:'6px'
+              marginRight: "6px",
             }}
             onClick={onToggleStatus}
           >
@@ -56,7 +69,7 @@ const Countdown: React.FC<IProps> = ({
             sx={{
               backgroundColor: "#9BC7EC",
               borderRadius: "100px",
-              marginRight:'6px'
+              marginRight: "6px",
             }}
             onClick={onToggleStatus}
           >
