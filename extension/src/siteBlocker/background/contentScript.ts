@@ -70,30 +70,9 @@ function generateSTYLING() {
       font-family: Roboto, Helvetica, Arial, sans-serif !important;
       z-index: 9999 !important;
     }
-    h1 {
-      font-size: 4em !important;
-      color: #1c1c1c !important;
-      margin-right: 48px !important; 
-    }
-    h2 {
-      font-size: 3em !important;
-      color: #1c1c1c !important;
-      margin-right: 48px !important; 
-    }
-    h3 {
-      font-size: 2em !important;
-      color: #686b69 !important;
-      text-wrap: wrap !important;
-      margin-right: 48px !important; 
-    }
     img{
       margin:48px !important;
-      height:256px !important;
-    }
-    
-    .text-container {
-      display: flex;
-      flex-direction: column;
+      height:50% !important;
     }
     </style>
   `;
@@ -110,12 +89,7 @@ function generateHTML() {
       <link href="https://fonts.googleapis.com/css2?family=YourSelectedFont&display=swap" rel="stylesheet">
     </head>
     <body>
-      <img src="${chrome.runtime.getURL("src/siteBlocker/background/mascot.png")}" alt="Dive Image">
-      <div id="text-container">
-        <h1>Oh No! Dive blocked this site!</h1>
-        <h2>You tried to open a tab that you restricted.</h1>
-        <h3>If you need to access this site, remove it from your restricted sites and refresh the page.</h3>
-      </div>
+      <img src="${chrome.runtime.getURL("src/siteBlocker/background/blocked_page.png")}" alt="Block Page">
     </body>
     </html>
   `;

@@ -39,7 +39,7 @@ const manifest = defineManifest({
   }],
   "web_accessible_resources": [
     {
-      "resources": ["src/siteBlocker/background/mascot.png"],
+      "resources": ["src/siteBlocker/background/blocked_page.png"],
       "matches": ["<all_urls>"]
     }
   ]
