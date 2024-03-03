@@ -16,11 +16,13 @@ import Assignment from "./assignment/Assignment";
 import SiteBlocker from "./siteBlocker/SiteBlocker";
 
 function App() {
-    let email = "james@gmail.com"
-    chrome.identity.getProfileUserInfo(function (info) {
-      email = info.email;
-      console.log(email);
-    });
+    let email = "james@gmail.com" // our scenario user
+
+    // NOTE: do not delete, this is used to detect information about an actual user
+    // chrome.identity.getProfileUserInfo(function (info) {
+    //   email = info.email;
+    //   console.log(email);
+    // });
     chrome.storage.sync.set({ "currentUser": email });
 
   const [value, setValue] = React.useState("1");
