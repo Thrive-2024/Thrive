@@ -57,6 +57,7 @@ const Timer: React.FC = (props) => {
         if (message.type === "reduce-count") {
           setRemainingSeconds(message.data.secs);
         } else if (message.type === "expire") {
+          console.log(message.data.phase)
           setCurrentPhase(message.data.phase);
           setDuration(await getDuration(message.data.phase));
           setRemainingSeconds(message.data.secs);
@@ -68,6 +69,7 @@ const Timer: React.FC = (props) => {
           setPomodorosUntilLongBreak(message.data.pomodorosUntilLongBreak);
         } else if (message.type === "toggle-timer-status") {
           setIsRunning(message.data.toggledTimerStatus);
+          console.log(message.data.phase)
         }
       });
     })();
@@ -86,7 +88,7 @@ const Timer: React.FC = (props) => {
 
   const expire = (): void => {
     setRemainingSeconds(0);
-    // closeTabs()
+    closeTabs()
     chrome.runtime.sendMessage<Message>({ type: FromPopupMessageType.EXPIRE });
   };
   const pause = (): void => {
@@ -152,8 +154,8 @@ const Timer: React.FC = (props) => {
                   height:'110px',
                   // marginTop: '-55px',
                   // marginLeft:'45px',
-                  // marginBottom:'150px'
-                  top: '33.5%',
+                  // marginBottom:'150px',
+                  top: '30%',
                   left: '28%',
                 }}
               />

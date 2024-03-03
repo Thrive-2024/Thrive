@@ -1,11 +1,11 @@
 import dayjs from 'dayjs'
-import ja from 'dayjs/locale/ja'
+import sg from 'dayjs/locale/en-sg'
 import { useState, useEffect } from 'react'
 import { DisplayTermType } from '../../types'
 import ArrowBackward from '../../components/ArrowBackward'
 import ArrowForward from '../../components/ArrowForward'
 
-dayjs.locale(ja)
+dayjs.locale(sg)
 
 type IProps = {
   displayTermType: DisplayTermType

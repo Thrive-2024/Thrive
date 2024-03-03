@@ -33,6 +33,7 @@ export const DEFAULT_STORAGE_VALUE: StorageValue = {
   updatingPomodoroSeconds: 0,
   updatingBreakSeconds: 0,
   updatingLongBreakSeconds: 0,
+  currentUser: "james@gmail.com"
 };
 
 export const HISTORY_CSV_COLUMN_COUNT = 4;
