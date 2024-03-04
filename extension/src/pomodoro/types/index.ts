@@ -41,6 +41,7 @@ export type StorageValue = {
   updatingPomodoroSeconds: number
   updatingBreakSeconds: number
   updatingLongBreakSeconds: number
+  currentUser: string
 }
 
 export type StorageKey = keyof StorageValue

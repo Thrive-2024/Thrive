@@ -90,6 +90,61 @@ export const insertUser = async (req: any, res: any, next: NextFunction) => {
     }
 };
 
+export const checkIfUserExist = async (req: any, res: any, next: NextFunction) => {
+    try {
+        const email = req.body.email;
+        // Check if the email contains '@'
+        if (!email.includes('@')) {
+            // If the '@' symbol is missing, return a 404 response
+            return res.status(404).json({ message: 'Invalid email format: "@" symbol missing.' });
+        }
+        const user = await userModel.findOne({ 'email': email }); // Find the user by their email
+
+        if (user != null) {
+            return res.status(200).json({ message: `User with email:${email} already existed!` });
+        }
+
+
+        const parts: string[] = email.split('@');
+        //create the DB object
+        const newRecord = new userModel({
+            "email": email,
+            "name": parts[0]
+        });
+        // add a new record to mongodb
+        newRecord
+            .save()
+            .then((response: any) => {
+                return res.status(200).send({
+                    message: `User created successfully! Database Record ID : ${response._id}`
+                });
+            })
+            .catch((error: any) => {
+                res.status(400).json({ error: String(error) });
+            });
+    } catch (error) {
+        return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
+    }
+};
+
+export const getAllUser = async (req: any, res: any, next: NextFunction) => {
+    try {
+        // Fetch all users from the database
+        const users = await userModel.find({});
+        // if no users are found
+        if (!users.length) {
+            return res.status(404).json({ message: "No users found" });
+        }
+        // Successfully return the list of all users
+        return res.status(200).json({
+            message: "User List",
+            data: users
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "An error occurred while fetching users", error: "Internal Server Error" });
+    }
+};
+
 export const userAddFriend = async (req: any, res: any, next: NextFunction) => {
     try {
         const { userEmail, friendEmail } = req.body; // Assuming the frontend sends the userId and the friendId to be added
@@ -155,7 +210,7 @@ export const updateTimeTracked = async (req: any, res: any, next: NextFunction) 
                 "durationDay": durationDay,
                 "lastUpdated": getDateTime.now(),
                 "lastTask": lastTask,
-                "lastTimeTracked" : durationDay
+                "lastTimeTracked": durationDay
             });
             // add a new record to mongodb
             newRecord
@@ -246,7 +301,7 @@ export const getMonthlyLeaderboard = async (req: any, res: any, next: NextFuncti
                     name: "$userInfo.name",
                     year: 1,
                     month: 1,
-                    lastTimeTracked:"$lastTask.lastTimeTracked",
+                    lastTimeTracked: "$lastTask.lastTimeTracked",
                     lastUpdated: "$lastTask.lastUpdated",
                     totalDuration: 1,
                     lastTask: "$lastTask.lastTask",

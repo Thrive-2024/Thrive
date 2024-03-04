@@ -18,11 +18,11 @@ const manifest = defineManifest({
   action: {
     default_popup: "src/pomodoro/index.html",
   },
-  background: {
-    service_worker: "src/pomodoro/background/main.ts",
-    type: "module",
+  "background": {
+    "service_worker": "src/pomodoro/background/main.ts"
   },
-  permissions: ["storage", "tabs", "notifications", "background"],
+  permissions: ["storage", "tabs", "notifications", "background", "identity", "identity.email"],
+  host_permissions:["http://*/*", "https://*/*"],
   commands: {
     toggle_timer_status: {
       suggested_key: {
@@ -33,6 +33,16 @@ const manifest = defineManifest({
     },
   },
   options_page: "src/pomodoro/expire.html",
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["src/siteBlocker/background/contentScript.ts"]
+  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/siteBlocker/background/blocked_page.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 });
 
 export default defineConfig({

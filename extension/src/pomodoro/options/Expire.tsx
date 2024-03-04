@@ -73,7 +73,7 @@ const ExpireMenu: React.FC<IProps> = (props) => {
       </div>
       <div className="mt-5 flex justify-center">
         <button onClick={onStartBreak}>
-          <Play className="h-16 w-16" />
+          <Play className="h-16 w-16" strokeColor='#95B6D4' />
         </button>
       </div>
       <div className="mt-5 flex justify-center gap-2">

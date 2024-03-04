@@ -3,19 +3,22 @@ import { twMerge } from 'tailwind-merge'
 
 type IProps = {
   className?: string
+  strokeColor?: string
 }
 
-const Play: React.FC<IProps> = ({ className = '' }) => {
+
+
+const Play: React.FC<IProps> = ({ className = '', strokeColor = 'white'}) => {
   return (
     <svg
       id="play"
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
+      fill="white"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       // stroke="currentColor"
-      stroke= {COLOR.gray[500]}
-      className={twMerge('w-8 h-8 icon-color', className)}
+      stroke= {strokeColor}
+      className={twMerge('w-5 h-5 icon-color', className)}
     >
       <path
         strokeLinecap="round"

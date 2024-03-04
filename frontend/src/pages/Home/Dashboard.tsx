@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, RightNavbar, MidTopSection } from '../../Navbar';
 import { Box, Button, Divider, Grid, Typography, Card, Chip, List, ListItem, ListItemIcon, ListItemText, Modal, Tooltip, TextField, Snackbar, Alert, MenuItem, Select, LinearProgress, FormControl } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -54,9 +53,9 @@ const processingStyle = {
 <style>
 </style>
 
-export const Dashboard = () => {
+export const Dashboard = (props: any) => {
     //active user
-    const currentUser = 'james@gmail.com';
+    // const currentUser = props.currentUser;
 
     //task
     interface Task {
@@ -90,6 +89,7 @@ export const Dashboard = () => {
     const [dueDate, setDueDate] = useState('');
     const [subjectName, setSubjectName] = useState('');
     const [notes, setNotes] = useState('');
+
 
     // const [tasksToUpdate, setTasksToUpdate] = useState<any[]>([]);
     const [tasksModified, setTasksModified] = useState(false);
@@ -159,6 +159,7 @@ export const Dashboard = () => {
         if (!result.destination) return;
         const { source, destination } = result;
         setTasksModified(true);
+        console.log("task modified");
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = taskboard[source.droppableId];
@@ -214,7 +215,7 @@ export const Dashboard = () => {
         }
 
         const formData = new FormData();
-        formData.append('ownerEmail', currentUser);
+        formData.append('ownerEmail', props.currentUser);
         formData.append('taskName', taskName);
         formData.append('subjectName', subjectName);
         formData.append('colour', selectedColor);
@@ -252,7 +253,7 @@ export const Dashboard = () => {
                             ...prevState.toDo,
                             items: [
                                 ...prevState.toDo.items,
-                                { _id: apiResponse.id, ownerEmail: currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
+                                { _id: apiResponse.id, ownerEmail: props.currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
                             ]
                         }
                     }));
@@ -283,7 +284,7 @@ export const Dashboard = () => {
         // // Note: January is 0, February is 1, and so on...
         // const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=james@gmail.com`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=${props.currentUser}`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -342,7 +343,7 @@ export const Dashboard = () => {
                 tasksToUpdate.push({ taskId: task._id, newStatus: key });
             });
         });
-        console.log(tasksToUpdate)
+        // console.log(tasksToUpdate)
         return tasksToUpdate;
 
     }
@@ -350,7 +351,7 @@ export const Dashboard = () => {
         // console.log("updateTasks called")
         const tasksToUpdate = returnTasksForUpdate();
 
-        console.log(tasksToUpdate);
+        // console.log(tasksToUpdate);
 
         fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/updateTaskStatusBulk`, {
             headers: {
@@ -380,23 +381,44 @@ export const Dashboard = () => {
                 window.alert(`Error during update tasks:${error}`);
             });
 
-        console.log('Function called every 10 seconds');
+        setTasksModified(false);
     };
 
     //execute once
     useEffect(() => {
+        console.log(props.currentUser)
         fetchTask()
-    }, []);
+    }, [props.currentUser]);
+
+    // useEffect(() => {
+
+
+    //     if (tasksModified) {
+    //         console.log('Got tasks to update')
+    //         updateTasks();
+    //     } else{
+    //         console.log('NO TASKS TO UPDATE');
+    //     }
+
+    //     // 10 seconds in milliseconds
+
+    // }, [taskboard, tasksModified]); // Run whenever taskboard changes
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            console.log('Got tasks to update')
-            updateTasks();
-        }, 10000); // 10 seconds in milliseconds
+        let timeoutId: any;
+        // console.log('useeffect called')
     
-        // Clean up the interval on component unmount
-        return () => clearInterval(intervalId);
-    }, [taskboard]); // Run whenever taskboard changes
+        if (tasksModified) {
+            // console.log('Got tasks to update');
+            timeoutId = setTimeout(() => {
+                updateTasks();
+            }, 5000); // 10 seconds in milliseconds
+        }
+    
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [tasksModified,taskboard]);
 
 
 

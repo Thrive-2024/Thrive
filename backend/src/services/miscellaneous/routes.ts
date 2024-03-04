@@ -11,7 +11,9 @@ miscellaneousRouter.post("/create",controller.create);
 miscellaneousRouter.post("/insertSampleMessage",controller.insertSampleMessage);
 
 //method to insert new user
+miscellaneousRouter.get("/getAllUser",controller.getAllUser);
 miscellaneousRouter.post("/insertUser",controller.insertUser);
+miscellaneousRouter.post("/checkIfUserExist",controller.checkIfUserExist);
 
 //method to insert new friend
 miscellaneousRouter.put("/userAddFriend",controller.userAddFriend);

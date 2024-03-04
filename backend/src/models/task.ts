@@ -27,6 +27,10 @@ const TaskSchema = new Schema({
         required : true,
         default : "toDo" //Type : toDo, inProgress, done
     },
+    lastUpdated: {
+        type: String,
+        required: true
+    },
     notes : {
         type : String,
         default : ""

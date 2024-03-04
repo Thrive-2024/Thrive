@@ -1,5 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
-import { twMerge } from 'tailwind-merge'
+import { useState, useEffect } from 'react';
+import { Box, Divider, FormControl, IconButton, Input, InputLabel, Typography } from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Dropdown from '@mui/joy/Dropdown';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
+import CreateIcon from '@mui/icons-material/Create';
 
 const SiteBlocker = () => {
   // Define state variables
@@ -7,6 +15,7 @@ const SiteBlocker = () => {
   const [blockedWebsites, setBlockedWebsites] = useState<string[]>([]);
   const [websiteInputValue, setWebsiteInputValue] = useState<string>('');
   const [errorValue, setErrorValue] = useState<string>('');
+  const [addWebsite, setAddWebsite] = useState<boolean>(false);
 
   // UseEffect to initialize the extension state and blocked websites array
   useEffect(() => {
@@ -34,7 +43,14 @@ const SiteBlocker = () => {
     setWebsiteInputValue(event.target.value);
   };
 
+  // Function to handle the pressing of the edit button
+  const handleEditButton = (event: any) => {
+    setAddWebsite(true);
+  }
 
+  // Define the options array based on the extension state
+  const options = isExtensionOn ? ['Off restrictions'] : ['On restrictions'];
+  const ITEM_HEIGHT = 48;
 
   // Function to handle adding website to block list
   const getWebsiteInput = () => {
@@ -93,33 +109,139 @@ const SiteBlocker = () => {
   };
 
   return (
-    <div id="content-container">
-      <section className="on-off-block">
-        <button id="toggleButton" onClick={toggleExtensionState}>
-          {isExtensionOn ? 'Turn Off' : 'Turn On'}
-        </button>
-      </section>
-      <section className="add-block">
-        <h2>Add to Block List</h2>
-        <div className="main">
-          <input type="text" id="websiteInput" value={websiteInputValue} onChange={handleInputChange} />
-          <button className="block" id="blockButton" onClick={getWebsiteInput}>Block</button>
-        </div>
-        {errorValue && <div>{errorValue}</div>}
-      </section>
-      <section className="remove-block">
-        <h2>Blocked Websites</h2>
-        <div className="main" id="blockedWebsitesDiv">
+
+    <div style={{ width: '90%', marginLeft: '10px', marginTop: '10px' }}>
+
+      {/* first section: Settings  */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          sx={{
+            color: "#A3A3A3",
+            fontSize: '14px',
+          }}
+        >
+          Settings
+        </Typography>
+        <Dropdown>
+          <MenuButton
+            variant="plain"
+            size="sm"
+          >
+            <MoreVertIcon sx={{ fontSize: '20px' }} />
+          </MenuButton>
+          <Menu
+            sx={{
+              maxHeight: ITEM_HEIGHT * 4.5,
+              overflowY: 'auto'
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem key={option} onClick={toggleExtensionState} sx={{ fontSize: '14px' }}>
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Dropdown>
+      </Box>
+
+      {/* second section: Restricted Sites title */}
+      <Typography
+        sx={{
+          fontSize: '18px',
+          fontWeight: '500'
+        }}
+      >
+        Restricted Sites
+      </Typography>
+
+
+      {/* fourth section: enter restricted sites*/}
+      <Box sx={{ marginTop: '40px', display:'flex', flexDirection:'col' }}>
+        {addWebsite ? ( // If addWebsite is true, display the form control
+          <TextField 
+              id="outlined-basic"
+              label="Enter site"
+              variant="outlined"
+              size="small"
+              value={websiteInputValue}
+              onChange={handleInputChange}
+              inputProps={{
+                onKeyDown: (event) => {
+                  // Prevent default action for Enter key to prevent form submission
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    getWebsiteInput();
+                  }
+                }
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontSize: '13px'
+                }
+              }}
+              InputProps={{
+                classes: {
+                  root: '#95B6D4',
+                  focused: '#95B6D4'
+                }
+              }}
+          />
+        ) : ( // If addWebsite is false, display the sites typography and create icon
+          <>
+            <Typography
+              sx={{
+                color: '#A3A3A3',
+                fontSize: '14px',
+                marginRight: '1px'
+              }}
+            >
+              Sites
+            </Typography>
+            <IconButton 
+              size="small" 
+              onClick={handleEditButton}
+              sx={{ 
+                marginBottom:'8px' 
+              }}
+            >
+              <CreateIcon sx={{ fontSize:'14px', color:'#787486' }} />
+            </IconButton> 
+          </>
+        )}  
+      </Box>
+      <Divider sx={{ marginTop: '3px' }} /> 
+    
+
+      {/* fifth section: restricted sites */}
+      <Box sx={{ display: 'flex', marginTop: '15px' }}>
+        <Typography
+          sx={{
+            fontSize: '12px'
+          }}
+        >
           {blockedWebsites.map((website, index) => (
-            <div key={index} className="flex">
-              {website}
-              <button className="justify-self-end m-[2px]" id={index.toString()} onClick={() => unblockURL(index)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" id="trash"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M1 5h18M17 5v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5m3 0V3a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M8 10v6M12 10v6"></path></g></svg>
-              </button>
-            </div>
+            <Chip
+              key={index}
+              label={website}
+              onDelete={() => unblockURL(index)}
+              variant="outlined"
+              // deleteIcon={<DeleteIcon sx={{ color: '#F5F5F4' }} />}
+              sx={{
+                marginRight: '2px', 
+                marginBottom: '2px', 
+                backgroundColor: '#9BC7EC', // Set background color
+                color: '#FFFFFF', // Set text color
+                borderColor: '#9BC7EC', // Set border color
+                borderRadius: '20px',
+                '& .MuiChip-deleteIcon': {
+                  color: '#F5F5F4', // Change color here
+                },
+              }}
+            />
           ))}
-        </div>
-      </section>
+        </Typography>
+      </Box>
+
     </div>
   );
 }
