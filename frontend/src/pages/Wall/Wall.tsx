@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream
-import React, { useEffect, useState } from "react";
-import { Navbar, RightNavbar, MidTopSection } from "../../Navbar";
-=======
 import React, { useEffect, useState, useRef } from "react";
->>>>>>> Stashed changes
 import {
   Box,
   Divider,
@@ -75,11 +70,7 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
   );
 };
 
-<<<<<<< Updated upstream
-export const Wall = () => {
-=======
 export const Wall = (props: any) => {
->>>>>>> Stashed changes
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [msgBoardOpen, setMsgBoardOpen] = useState(false);
