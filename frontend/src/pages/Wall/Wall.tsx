@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Navbar, RightNavbar, MidTopSection } from "../../Navbar";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Divider,
@@ -16,7 +15,7 @@ import {
   Fab,
   Button,
 } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import { red, blue, green, amber, deepPurple } from "@mui/material/colors";
 
 interface Message {
@@ -71,12 +70,13 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
   );
 };
 
-export const Wall = () => {
+export const Wall = (props: any) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [msgBoardOpen, setMsgBoardOpen] = useState(false);
-  const [msgBoardRecipient, setMsgBoardRecipient] = useState('');
-  const [msgBoardMessage, setMsgBoardMessage] = useState('');
+  const [msgBoardRecipient, setMsgBoardRecipient] = useState("");
+  const [msgBoardMessage, setMsgBoardMessage] = useState("");
+  const boardRef = useRef<HTMLDivElement>(null);
 
   const handleMsgBoardClickOpen = () => {
     setMsgBoardOpen(true);
@@ -88,11 +88,16 @@ export const Wall = () => {
 
   const handleMsgBoardSend = () => {
     // Implement the send logic here
-    console.log('Sending message to:', msgBoardRecipient, 'Message:', msgBoardMessage);
+    console.log(
+      "Sending message to:",
+      msgBoardRecipient,
+      "Message:",
+      msgBoardMessage
+    );
     setMsgBoardOpen(false);
     // Reset form fields
-    setMsgBoardRecipient('');
-    setMsgBoardMessage('');
+    setMsgBoardRecipient("");
+    setMsgBoardMessage("");
   };
 
   useEffect(() => {
@@ -182,9 +187,22 @@ export const Wall = () => {
     fetchMessages();
   }, []);
 
+  const getRandomPosition = (messageIndex: any) => {
+    if (!boardRef.current) return { top: 0, left: 0 };
+
+    const boardRect = boardRef.current.getBoundingClientRect();
+    const maxTop = boardRect.height - 100; // Assuming an approximate height for each card
+    const maxLeft = boardRect.width - 200; // Assuming an approximate width for each card
+
+    return {
+      top: Math.min(Math.random() * maxTop, maxTop) + "px",
+      left: Math.min(Math.random() * maxLeft, maxLeft) + "px",
+    };
+  };
+
   const handleSendClick = () => {
     // Implement the logic to send a message or open a dialog/form for sending messages
-    console.log('Send to button clicked');
+    console.log("Send to button clicked");
   };
 
   const handleCardClick = (message: Message) => {
@@ -197,7 +215,7 @@ export const Wall = () => {
 
   const handleCloseDialog = () => {
     setSelectedMessage(null);
-  };  
+  };
   // Function to chunk messages array into a 2D array for 3 columns
   const chunkMessages = (
     messages: Message[],
@@ -231,13 +249,16 @@ export const Wall = () => {
           </Typography>
         </Grid>{" "}
         <Box
-          minHeight={500}
-          minWidth={1000}
+          ref={boardRef}
           sx={{
+            position: "relative",
+            height: "500px",
+            overflow: "hidden",
             backgroundColor: "brown",
             borderRadius: 4,
             border: 15,
             borderColor: "burlywood",
+            boxSizing: "content-box",
           }} //WALL BASE
         >
           <Grid container spacing={2} padding={2}>
@@ -257,26 +278,47 @@ export const Wall = () => {
               </Grid>
             ))}
           </Grid>
-          <Box sx={{ position: 'absolute', bottom: 97, right: 320  }}> {/* Position the button at the bottom right */}
-        <Fab color="primary" aria-label="send" onClick={handleMsgBoardClickOpen}>
-          <SendIcon />
-        </Fab>
-      </Box>
-      <Dialog open={selectedMessage != null} onClose={handleCloseDialog} aria-labelledby="message-dialog" maxWidth="sm" fullWidth>
-        <DialogContent>
-          {selectedMessage && (
-            <>
-              <Typography variant="h5" component="p" gutterBottom style={{ wordBreak: 'break-word', marginBottom: '16px' }}>
-                {selectedMessage.content}
-              </Typography>
-              <Box display="flex" justifyContent="space-between">
-                <Typography variant="caption">{selectedMessage.dateSent}</Typography>
-                <Typography variant="caption">{selectedMessage.fromWho}</Typography>
-              </Box>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+          <Box sx={{ position: "absolute", bottom: 97, right: 320 }}>
+            {" "}
+            {/* Position the button at the bottom right */}
+            <Fab
+              color="primary"
+              aria-label="send"
+              onClick={handleMsgBoardClickOpen}
+            >
+              <SendIcon />
+            </Fab>
+          </Box>
+          <Dialog
+            open={selectedMessage != null}
+            onClose={handleCloseDialog}
+            aria-labelledby="message-dialog"
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogContent>
+              {selectedMessage && (
+                <>
+                  <Typography
+                    variant="h5"
+                    component="p"
+                    gutterBottom
+                    style={{ wordBreak: "break-word", marginBottom: "16px" }}
+                  >
+                    {selectedMessage.content}
+                  </Typography>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography variant="caption">
+                      {selectedMessage.dateSent}
+                    </Typography>
+                    <Typography variant="caption">
+                      {selectedMessage.fromWho}
+                    </Typography>
+                  </Box>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
         </Box>
       </Grid>
       <Dialog open={msgBoardOpen} onClose={handleMsgBoardClose}>
