@@ -14,15 +14,19 @@ import {
   TextField,
   Fab,
   Button,
+  Tooltip,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { red, blue, green, amber, deepPurple } from "@mui/material/colors";
 
 interface Message {
-  id: string;
+  id: number;
   content: string;
   dateSent: string; // Assuming dateSent is a string, you might need to format it
-  fromWho: string;
+  sender: string;
+  senderName: string;
+  x: number;
+  y: number;
 }
 
 const backgroundColors = [
@@ -42,6 +46,7 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
 
   return (
     <Card
+      
       onClick={onClick}
       style={{ cursor: "pointer" }}
       sx={{ backgroundColor }}
@@ -61,7 +66,7 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
           </Typography>
           <Box display="flex" justifyContent="flex-end">
             <Typography variant="caption" color="textSecondary">
-              {message.fromWho}
+              {message.senderName}
             </Typography>
           </Box>
         </Box>
@@ -101,104 +106,107 @@ export const Wall = (props: any) => {
   };
 
   useEffect(() => {
-    // CALL FROM DATABASE (IDK HOW)
-    // Function to fetch data from your API
-    //   const fetchMessages = async () => {
-    //     try {
-    //       const response = await fetch('YOUR_API_ENDPOINT');
-    //       const data = await response.json();
-    //       setMessages(data);
-    //     } catch (error) {
-    //       console.error('Failed to fetch messages:', error);
-    //     }
-    //   };
-
-    //   fetchMessages();
-    // }, []);
-    // MOCK DATA VERSION -------------------------
     const fetchMessages = async () => {
-      const data: Message[] = [
-        {
-          id: "1",
-          content:
-            "Decide stand identify watch speak candidate institution. Radio ok indicate.\nEconomy mother five floor. Benefit modern coach nearly amount. About amount try meet garden.",
-          dateSent: "1997-12-23",
-          fromWho: "Jonathan Osborne",
-        },
-        {
-          id: "2",
-          content:
-            "Field set marriage detail. Example Mr crime wear war concern above yourself. That better two behind establish popular probably.",
-          dateSent: "2017-10-18",
-          fromWho: "Katherine Smith",
-        },
-        {
-          id: "3",
-          content:
-            "Notice state meet really. Might over article may now choose. Late beautiful picture available.",
-          dateSent: "1999-06-26",
-          fromWho: "Tammy Rodriguez",
-        },
-        {
-          id: "4",
-          content:
-            "Expert campaign sure difficult miss effort. Effect culture red reality.",
-          dateSent: "2007-09-29",
-          fromWho: "Ashley Mccarthy",
-        },
-        {
-          id: "5",
-          content:
-            "Author either draw agree enter sure include baby. Seem itself office one popular dinner.",
-          dateSent: "1972-09-17",
-          fromWho: "Jill Alvarez",
-        },
-        {
-          id: "6",
-          content: "Suffer most window spend.",
-          dateSent: "2014-06-18",
-          fromWho: "Christopher Andrade",
-        },
-        {
-          id: "7",
-          content:
-            "Nor like it turn evidence color clearly simple. Teacher consider miss state personal.",
-          dateSent: "1970-02-22",
-          fromWho: "Shawn Alexander",
-        },
-        {
-          id: "8",
-          content: "Close court perform well small participant.",
-          dateSent: "1977-05-05",
-          fromWho: "Barbara Harper",
-        },
-        {
-          id: "9",
-          content:
-            "Deal record much woman. Else statement defense situation standard south off.\nPass character message long. Other next away.",
-          dateSent: "2009-12-24",
-          fromWho: "Heather Jones",
-        },
-        //mock messages here
-      ];
-      setMessages(data);
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`
+        );
+        const input = await response.json();
+        let data = input.data;
+        data = data.slice(0, 20);
+        const mappedMessages = data.map(
+          (msg: any, index: number): Message => ({
+            id: index,
+            content: msg.message,
+            dateSent: msg.createdDateTime,
+            sender: msg.sender,
+            senderName:  msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
+            x: Math.random() * 100,
+            y: Math.random() * 100, // left the x y as random bc data is all 0s, just change to msg.x/y
+          })
+        );
+        setMessages(mappedMessages);
+        console.log(mappedMessages);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+      }
     };
 
     fetchMessages();
   }, []);
 
-  const getRandomPosition = (messageIndex: any) => {
-    if (!boardRef.current) return { top: 0, left: 0 };
+  // MOCK DATA VERSION -------------------------
+  //   const fetchMessages = async () => {
+  //     const data: Message[] = [
+  //       {
+  //         id: "1",
+  //         content:
+  //           "Decide stand identify watch speak candidate institution. Radio ok indicate.\nEconomy mother five floor. Benefit modern coach nearly amount. About amount try meet garden.",
+  //         dateSent: "1997-12-23",
+  //         sender: "Jonathan Osborne",
+  //       },
+  //       {
+  //         id: "2",
+  //         content:
+  //           "Field set marriage detail. Example Mr crime wear war concern above yourself. That better two behind establish popular probably.",
+  //         dateSent: "2017-10-18",
+  //         sender: "Katherine Smith",
+  //       },
+  //       {
+  //         id: "3",
+  //         content:
+  //           "Notice state meet really. Might over article may now choose. Late beautiful picture available.",
+  //         dateSent: "1999-06-26",
+  //         sender: "Tammy Rodriguez",
+  //       },
+  //       {
+  //         id: "4",
+  //         content:
+  //           "Expert campaign sure difficult miss effort. Effect culture red reality.",
+  //         dateSent: "2007-09-29",
+  //         sender: "Ashley Mccarthy",
+  //       },
+  //       {
+  //         id: "5",
+  //         content:
+  //           "Author either draw agree enter sure include baby. Seem itself office one popular dinner.",
+  //         dateSent: "1972-09-17",
+  //         sender: "Jill Alvarez",
+  //       },
+  //       {
+  //         id: "6",
+  //         content: "Suffer most window spend.",
+  //         dateSent: "2014-06-18",
+  //         sender: "Christopher Andrade",
+  //       },
+  //       {
+  //         id: "7",
+  //         content:
+  //           "Nor like it turn evidence color clearly simple. Teacher consider miss state personal.",
+  //         dateSent: "1970-02-22",
+  //         sender: "Shawn Alexander",
+  //       },
+  //       {
+  //         id: "8",
+  //         content: "Close court perform well small participant.",
+  //         dateSent: "1977-05-05",
+  //         sender: "Barbara Harper",
+  //       },
+  //       {
+  //         id: "9",
+  //         content:
+  //           "Deal record much woman. Else statement defense situation standard south off.\nPass character message long. Other next away.",
+  //         dateSent: "2009-12-24",
+  //         sender: "Heather Jones",
+  //       },
+  //       //mock messages here
+  //     ];
+  //     setMessages(data);
+  //   };
 
-    const boardRect = boardRef.current.getBoundingClientRect();
-    const maxTop = boardRect.height - 100; // Assuming an approximate height for each card
-    const maxLeft = boardRect.width - 200; // Assuming an approximate width for each card
+  //   fetchMessages();
+  // }, []);
 
-    return {
-      top: Math.min(Math.random() * maxTop, maxTop) + "px",
-      left: Math.min(Math.random() * maxLeft, maxLeft) + "px",
-    };
-  };
 
   const handleSendClick = () => {
     // Implement the logic to send a message or open a dialog/form for sending messages
@@ -216,22 +224,6 @@ export const Wall = (props: any) => {
   const handleCloseDialog = () => {
     setSelectedMessage(null);
   };
-  // Function to chunk messages array into a 2D array for 3 columns
-  const chunkMessages = (
-    messages: Message[],
-    numOfColumns: number
-  ): Message[][] => {
-    const chunked = [];
-    const chunkSize = Math.ceil(messages.length / numOfColumns);
-
-    for (let i = 0; i < numOfColumns; i++) {
-      chunked.push(messages.slice(i * chunkSize, (i + 1) * chunkSize));
-    }
-
-    return chunked;
-  };
-
-  const columns = chunkMessages(messages, 3);
 
   return (
     <div
@@ -249,10 +241,10 @@ export const Wall = (props: any) => {
           </Typography>
         </Grid>{" "}
         <Box
-          ref={boardRef}
           sx={{
             position: "relative",
-            height: "500px",
+            height: "50vh",
+            width: "inherit",
             overflow: "hidden",
             backgroundColor: "brown",
             borderRadius: 4,
@@ -261,33 +253,54 @@ export const Wall = (props: any) => {
             boxSizing: "content-box",
           }} //WALL BASE
         >
-          <Grid container spacing={2} padding={2}>
-            {columns.map((colMessages, colIndex) => (
-              <Grid item xs={4} key={colIndex}>
-                {" "}
-                <Stack spacing={2}>
-                  {" "}
-                  {colMessages.map((message) => (
-                    <MessageCard
-                      key={message.id}
-                      message={message}
-                      onClick={() => handleCardClick(message)}
-                    />
-                  ))}
-                </Stack>
-              </Grid>
+          <Box sx ={{
+            position: "relative",
+            height: "90%",
+            width: "95%",
+            padding: "5px",
+            paddingRight: "40px"
+          }}>
+            {messages.map((message) => (
+              <Box
+                key={message.id}
+                sx={{
+                  position: "absolute",
+                  left: `${message.x}%`, // Position based on the message's x coordinate
+                  top: `${message.y}%`, // Position based on the message's y coordinate
+                }}
+              >
+                <MessageCard
+                  message={message}
+                  onClick={() => handleCardClick(message)
+                  }
+                />
+              </Box>
             ))}
-          </Grid>
-          <Box sx={{ position: "absolute", bottom: 97, right: 320 }}>
+          </Box>
+          <Box sx={{ position: "absolute", bottom: 14, right: 14 }}>
             {" "}
             {/* Position the button at the bottom right */}
-            <Fab
-              color="primary"
-              aria-label="send"
-              onClick={handleMsgBoardClickOpen}
+            <Tooltip
+              title="Send a message!"
+              placement="left"
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    fontSize: "1.25rem", // Larger text
+                    backgroundColor: "rgba(255, 255, 255, 0.3)", // Semi-transparent background
+                    padding: "10px", // Larger padding
+                  },
+                },
+              }}
             >
-              <SendIcon />
-            </Fab>
+              <Fab
+                color="primary"
+                aria-label="send"
+                onClick={handleMsgBoardClickOpen}
+              >
+                <SendIcon />
+              </Fab>
+            </Tooltip>
           </Box>
           <Dialog
             open={selectedMessage != null}
@@ -312,7 +325,7 @@ export const Wall = (props: any) => {
                       {selectedMessage.dateSent}
                     </Typography>
                     <Typography variant="caption">
-                      {selectedMessage.fromWho}
+                      {selectedMessage.senderName}
                     </Typography>
                   </Box>
                 </>
