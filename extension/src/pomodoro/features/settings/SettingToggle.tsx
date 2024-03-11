@@ -26,10 +26,10 @@ const SettingToggle: React.FC<IProps> = ({
         setStorage({ showDesktopNotificationWhenBreak: e.target.checked })
         break
       case 'showNewTabNotificationWhenPomodoro':
-        setStorage({ showNewTabNotificationWhenPomodoro: true })
+        setStorage({ showNewTabNotificationWhenPomodoro: e.target.checked })
         break
       case 'showNewTabNotificationWhenBreak':
-        setStorage({ showNewTabNotificationWhenBreak: true })
+        setStorage({ showNewTabNotificationWhenBreak: e.target.checked })
         break
     }
     setChecked(e.target.checked)

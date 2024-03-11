@@ -33,11 +33,11 @@ const Settings: React.FC = () => {
   ] = useState<boolean | null>(null)
   const [
     showNewTabNotificationWhenPomodoro,
-    setShowNewTabpNotificationWhenPomodoro
+    setShowNewTabNotificationWhenPomodoro
   ] = useState<boolean | null>(null)
   const [
-    showNewTabpNotificationWhenBreak,
-    setShowNewTabpNotificationWhenBreak
+    showNewTabNotificationWhenBreak,
+    setShowNewTabNotificationWhenBreak
   ] = useState<boolean | null>(null)
   const [pomodorosUntilLongBreak, setpomodorosUntilLongBreak] =
     useState<number>(0)
@@ -64,10 +64,10 @@ const Settings: React.FC = () => {
       setShowDesktopNotificationWhenBreak(
         value.showDesktopNotificationWhenBreak
       )
-      setShowNewTabpNotificationWhenPomodoro(
+      setShowNewTabNotificationWhenPomodoro(
         value.showNewTabNotificationWhenPomodoro
       )
-      setShowNewTabpNotificationWhenBreak(value.showNewTabNotificationWhenBreak)
+      setShowNewTabNotificationWhenBreak(value.showNewTabNotificationWhenBreak)
       setpomodorosUntilLongBreak(value.pomodorosUntilLongBreak)
     })
   }, [])
@@ -132,11 +132,27 @@ const Settings: React.FC = () => {
                 />
               )}
             </SettingRow>
+            <SettingRow label={translation.settings.notification.showNewTab.pomodoro}>
+              {showNewTabNotificationWhenPomodoro !== null && (
+                <SettingToggle
+                  id="showNewTabNotificationWhenPomodoro"
+                  currentValue={showNewTabNotificationWhenPomodoro}
+                />
+              )}
+            </SettingRow>
             <SettingRow label={translation.settings.notification.desktop.break}>
               {showDesktopNotificationWhenBreak !== null && (
                 <SettingToggle
                   id="showDesktopNotificationWhenBreak"
                   currentValue={showDesktopNotificationWhenBreak}
+                />
+              )}
+            </SettingRow>
+            <SettingRow label={translation.settings.notification.showNewTab.break}>
+              {showNewTabNotificationWhenBreak !== null && (
+                <SettingToggle
+                  id="showNewTabNotificationWhenBreak"
+                  currentValue={showNewTabNotificationWhenBreak}
                 />
               )}
             </SettingRow>

@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Box, Divider, FormControl, IconButton, Input, InputLabel, Typography } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Dropdown from '@mui/joy/Dropdown';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import CreateIcon from '@mui/icons-material/Create';
+import SettingToggle from './SettingsToggle';
 
 const SiteBlocker = () => {
   // Define state variables
@@ -21,7 +17,7 @@ const SiteBlocker = () => {
   useEffect(() => {
     // Retrieve the current state of the extension (whether it's on or off) from Chrome storage
     chrome.storage.sync.get("isExtensionOn", function (data) {
-      setIsExtensionOn(data.isExtensionOn !== undefined ? data.isExtensionOn : false);
+      setIsExtensionOn(data.isExtensionOn !== undefined ? data.isExtensionOn : true);
     });
 
     // Retrieve the array of blocked websites from Chrome storage
@@ -29,7 +25,7 @@ const SiteBlocker = () => {
       setBlockedWebsites(data.blockedWebsitesArray || []);
     });
   }, []); // Empty dependency array ensures this effect runs only once on component mount
-
+  console.log(isExtensionOn);
   // Function to toggle the state of the extension
   const toggleExtensionState = () => {
     const newExtensionState = !isExtensionOn;
@@ -47,10 +43,6 @@ const SiteBlocker = () => {
   const handleEditButton = (event: any) => {
     setAddWebsite(true);
   }
-
-  // Define the options array based on the extension state
-  const options = isExtensionOn ? ['Off restrictions'] : ['On restrictions'];
-  const ITEM_HEIGHT = 48;
 
   // Function to handle adding website to block list
   const getWebsiteInput = () => {
@@ -120,28 +112,12 @@ const SiteBlocker = () => {
             fontSize: '14px',
           }}
         >
-          Settings
+          Restriction Status
         </Typography>
-        <Dropdown>
-          <MenuButton
-            variant="plain"
-            size="sm"
-          >
-            <MoreVertIcon sx={{ fontSize: '20px' }} />
-          </MenuButton>
-          <Menu
-            sx={{
-              maxHeight: ITEM_HEIGHT * 4.5,
-              overflowY: 'auto'
-            }}
-          >
-            {options.map((option) => (
-              <MenuItem key={option} onClick={toggleExtensionState} sx={{ fontSize: '14px' }}>
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Dropdown>
+        <SettingToggle
+          currentValue={isExtensionOn}
+          handleToggle={toggleExtensionState}
+        />
       </Box>
 
       {/* second section: Restricted Sites title */}
