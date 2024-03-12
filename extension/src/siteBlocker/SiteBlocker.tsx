@@ -11,6 +11,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import React from "react";
+import { getStorage, } from "../pomodoro/utils/chrome";
+import { Phase } from '../pomodoro/types';
 
 const SiteBlocker = () => {
   // Define state variables
@@ -20,22 +22,33 @@ const SiteBlocker = () => {
   const [errorValue, setErrorValue] = useState<string>("");
   const [addWebsite, setAddWebsite] = useState<boolean>(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   // UseEffect to initialize the extension state and blocked websites array
+  const [currentPhase, setCurrentPhase] = useState<Phase | null>(null)
   useEffect(() => {
-    // Retrieve the current state of the extension (whether it's on or off) from Chrome storage
-    chrome.storage.sync.get("isExtensionOn", function (data) {
-      setIsExtensionOn(
-        data.isExtensionOn !== undefined ? data.isExtensionOn : true
-      );
-    });
+    // Retrieve the current state of the pomodoro status
+    getStorage(['phase']).then(({ phase }) => {
+      setCurrentPhase(phase)
+
+      if(phase != "focus" ){
+        // Retrieve the current state of the extension (whether it's on or off) from Chrome storage
+        chrome.storage.sync.get("isExtensionOn", function (data) {
+          setIsExtensionOn(
+            data.isExtensionOn !== undefined ? data.isExtensionOn : true
+          );
+        });
+      } else {
+        setIsExtensionOn(true);
+      }
+    })
 
     // Retrieve the array of blocked websites from Chrome storage
     chrome.storage.sync.get("blockedWebsitesArray", function (data) {
       setBlockedWebsites(data.blockedWebsitesArray || []);
     });
   }, []); // Empty dependency array ensures this effect runs only once on component mount
-  console.log(isExtensionOn);
+
+  console.log(currentPhase)
+
   // Function to toggle the state of the extension
   const toggleExtensionState = () => {
     const newExtensionState = !isExtensionOn;
@@ -129,21 +142,22 @@ const SiteBlocker = () => {
   return (
     <div style={{ width: "90%", marginLeft: "10px", marginTop: "10px" }}>
       {/* first section: Settings  */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography
-          sx={{
-            color: "#A3A3A3",
-            fontSize: "14px",
-          }}
-        >
-          Restriction Status
-        </Typography>
-        <SettingToggle
-          currentValue={isExtensionOn}
-          handleToggle={toggleExtensionState}
-        />
-      </Box>
-
+      {currentPhase == "break" && (
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            sx={{
+              color: "#A3A3A3",
+              fontSize: "14px",
+            }}
+          >
+            Restriction Status
+          </Typography>
+          <SettingToggle
+            currentValue={isExtensionOn}
+            handleToggle={toggleExtensionState}
+          />
+        </Box>
+      )}
       {/* second section: Restricted Sites title */}
       <Typography
         sx={{
@@ -153,7 +167,6 @@ const SiteBlocker = () => {
       >
         Restricted Sites
       </Typography>
-
       {/* fourth section: enter restricted sites*/}
       <Box sx={{ marginTop: "40px", display: "flex", flexDirection: "col" }}>
         {addWebsite ? ( // If addWebsite is true, display the form control
@@ -170,7 +183,7 @@ const SiteBlocker = () => {
                 if (event.key === "Enter") {
                   event.preventDefault();
                   getWebsiteInput();
-                  setWebsiteInputValue("")
+                  setWebsiteInputValue("");
                 }
               },
             }}
@@ -211,7 +224,6 @@ const SiteBlocker = () => {
         )}
       </Box>
       <Divider sx={{ marginTop: "3px" }} />
-
       {/* fifth section: restricted sites */}
       <Box sx={{ display: "flex", marginTop: "15px" }}>
         <Typography
@@ -221,40 +233,40 @@ const SiteBlocker = () => {
         >
           {blockedWebsites.map((website, index) => (
             <React.Fragment key={index}>
-            <Chip
-              label={website}
-              onDelete={() => handleClickOpen(index)}
-              variant="outlined"
-              sx={{
-                marginRight: "2px",
-                marginBottom: "2px",
-                backgroundColor: "#9BC7EC",
-                color: "#FFFFFF",
-                borderColor: "#9BC7EC",
-                borderRadius: "20px",
-                "& .MuiChip-deleteIcon": {
-                  color: "#F5F5F4",
-                },
-              }}
-            />
-            <Dialog
-              open={openIndex === index}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{`Unrestrict ${blockedWebsites[index]}?`}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">{`Are you sure?`}</DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>No</Button>
-                <Button onClick={() => unblockURL(index)} autoFocus>
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </React.Fragment>
+              <Chip
+                label={website}
+                onDelete={() => handleClickOpen(index)}
+                variant="outlined"
+                sx={{
+                  marginRight: "2px",
+                  marginBottom: "2px",
+                  backgroundColor: "#9BC7EC",
+                  color: "#FFFFFF",
+                  borderColor: "#9BC7EC",
+                  borderRadius: "20px",
+                  "& .MuiChip-deleteIcon": {
+                    color: "#F5F5F4",
+                  },
+                }}
+              />
+              <Dialog
+                open={openIndex === index}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">{`Unrestrict ${blockedWebsites[index]}?`}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">{`Are you sure?`}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>No</Button>
+                  <Button onClick={() => unblockURL(index)} autoFocus>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </React.Fragment>
           ))}
         </Typography>
       </Box>
