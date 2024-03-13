@@ -99,10 +99,10 @@ const updateTimeTrack = async (
   month: number,
   day: number,
   durationDay: number,
-  lastTask: string
+  lastTask: string,
 ) => {
   try {
-    const response = await fetch(
+    const updateTimeResponse = await fetch(
       // `http://localhost:8000/api/motivation/randomMessageFromSystem?receiver=james@gmail.com`,
       `${REACT_APP_BACKEND_DEV_URL}/miscellaneous/updateTimeTracked`,
       {
@@ -121,12 +121,39 @@ const updateTimeTrack = async (
       }
     );
 
-    if (response.status != 200) {
+    if (updateTimeResponse.status != 200) {
       console.log("ERROR UPDATING TIME");
-      const apiResponse = await response.json();
+      const apiResponse = await updateTimeResponse.json();
       console.log(apiResponse);
     } else {
-      const apiResponse = await response.json();
+      const apiResponse = await updateTimeResponse.json();
+      console.log(apiResponse);
+    }
+
+    const updateSessionResponse = await fetch(
+      // `http://localhost:8000/api/motivation/randomMessageFromSystem?receiver=james@gmail.com`,
+      `${REACT_APP_BACKEND_DEV_URL}/miscellaneous/updateSession`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({
+          email: email,
+          year: year,
+          month: month,
+          day: day,
+          numOfSession: 1,
+        }),
+      }
+    );
+
+    if (updateSessionResponse.status != 200) {
+      console.log("ERROR UPDATING TIME");
+      const apiResponse = await updateSessionResponse.json();
+      console.log(apiResponse);
+    } else {
+      const apiResponse = await updateSessionResponse.json();
       console.log(apiResponse);
     }
   } catch (err) {

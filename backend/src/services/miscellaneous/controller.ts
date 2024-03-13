@@ -383,7 +383,7 @@ export const updateSession = async (req: any, res: any, next: NextFunction) => {
             record.lastUpdated = getDateTime.now();
             record.lastNumOfSession = numOfSession;
             record.save();
-            return res.status(200).json({ message: 'Number of sessionupdated successfully' });
+            return res.status(200).json({ message: 'Number of session updated successfully' });
         }
 
     } catch (error) {
