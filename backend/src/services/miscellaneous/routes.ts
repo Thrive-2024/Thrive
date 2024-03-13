@@ -24,4 +24,4 @@ miscellaneousRouter.get("/getMonthlyLeaderboard",controller.getMonthlyLeaderboar
 miscellaneousRouter.get("/getMonthStatsByEmail",controller.getMonthStatsByEmail);
 
 //method for session
-miscellaneousRouter.get("/updateSession",controller.updateSession);
+miscellaneousRouter.put("/updateSession",controller.updateSession);

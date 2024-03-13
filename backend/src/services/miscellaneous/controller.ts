@@ -345,11 +345,10 @@ export const getMonthStatsByEmail = async (req: any, res: any, next: NextFunctio
     }
 };
 
-
 export const updateSession = async (req: any, res: any, next: NextFunction) => {
     try {
         const { email, year, month, day, numOfSession } = req.body;
-        const user = await sessonModel.findOne({ 'email': email }); // Find the user by their ID
+        const user = await userModel.findOne({ 'email': email }); // Find the user by their ID
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -373,7 +372,7 @@ export const updateSession = async (req: any, res: any, next: NextFunction) => {
                 .save()
                 .then((response: any) => {
                     return res.status(200).json({
-                        message: `Time tracked  created successfully! Database Record ID : ${response._id}`
+                        message: `Number of session  created successfully! Database Record ID : ${response._id}`
                     });
                 })
                 .catch((error: any) => {
@@ -384,7 +383,7 @@ export const updateSession = async (req: any, res: any, next: NextFunction) => {
             record.lastUpdated = getDateTime.now();
             record.lastNumOfSession = numOfSession;
             record.save();
-            return res.status(200).json({ message: 'Time tracked updated successfully' });
+            return res.status(200).json({ message: 'Number of sessionupdated successfully' });
         }
 
     } catch (error) {
