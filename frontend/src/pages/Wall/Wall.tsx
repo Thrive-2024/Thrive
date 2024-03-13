@@ -46,7 +46,6 @@ const MessageCard: React.FC<{ message: Message; onClick: () => void }> = ({
 
   return (
     <Card
-      
       onClick={onClick}
       style={{ cursor: "pointer" }}
       sx={{ backgroundColor }}
@@ -81,7 +80,6 @@ export const Wall = (props: any) => {
   const [msgBoardOpen, setMsgBoardOpen] = useState(false);
   const [msgBoardRecipient, setMsgBoardRecipient] = useState("");
   const [msgBoardMessage, setMsgBoardMessage] = useState("");
-  const boardRef = useRef<HTMLDivElement>(null);
 
   const handleMsgBoardClickOpen = () => {
     setMsgBoardOpen(true);
@@ -90,6 +88,23 @@ export const Wall = (props: any) => {
   const handleMsgBoardClose = () => {
     setMsgBoardOpen(false);
   };
+
+  // Function to chunk messages array into a 2D array for columns
+  const chunkMessages = (
+    messages: Message[],
+    numOfColumns: number
+  ): Message[][] => {
+    const chunked = [];
+    const chunkSize = Math.ceil(messages.length / numOfColumns);
+
+    for (let i = 0; i < numOfColumns; i++) {
+      chunked.push(messages.slice(i * chunkSize, (i + 1) * chunkSize));
+    }
+
+    return chunked;
+  };
+
+  const columns = chunkMessages(messages, 3); // Create 3 columns
 
   const handleMsgBoardSend = () => {
     // Implement the send logic here
@@ -120,7 +135,7 @@ export const Wall = (props: any) => {
             content: msg.message,
             dateSent: msg.createdDateTime,
             sender: msg.sender,
-            senderName:  msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
+            senderName: msg.senderName === "SYSTEM" ? "Dive" : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
             x: Math.random() * 100,
             y: Math.random() * 100, // left the x y as random bc data is all 0s, just change to msg.x/y
           })
@@ -134,79 +149,6 @@ export const Wall = (props: any) => {
 
     fetchMessages();
   }, []);
-
-  // MOCK DATA VERSION -------------------------
-  //   const fetchMessages = async () => {
-  //     const data: Message[] = [
-  //       {
-  //         id: "1",
-  //         content:
-  //           "Decide stand identify watch speak candidate institution. Radio ok indicate.\nEconomy mother five floor. Benefit modern coach nearly amount. About amount try meet garden.",
-  //         dateSent: "1997-12-23",
-  //         sender: "Jonathan Osborne",
-  //       },
-  //       {
-  //         id: "2",
-  //         content:
-  //           "Field set marriage detail. Example Mr crime wear war concern above yourself. That better two behind establish popular probably.",
-  //         dateSent: "2017-10-18",
-  //         sender: "Katherine Smith",
-  //       },
-  //       {
-  //         id: "3",
-  //         content:
-  //           "Notice state meet really. Might over article may now choose. Late beautiful picture available.",
-  //         dateSent: "1999-06-26",
-  //         sender: "Tammy Rodriguez",
-  //       },
-  //       {
-  //         id: "4",
-  //         content:
-  //           "Expert campaign sure difficult miss effort. Effect culture red reality.",
-  //         dateSent: "2007-09-29",
-  //         sender: "Ashley Mccarthy",
-  //       },
-  //       {
-  //         id: "5",
-  //         content:
-  //           "Author either draw agree enter sure include baby. Seem itself office one popular dinner.",
-  //         dateSent: "1972-09-17",
-  //         sender: "Jill Alvarez",
-  //       },
-  //       {
-  //         id: "6",
-  //         content: "Suffer most window spend.",
-  //         dateSent: "2014-06-18",
-  //         sender: "Christopher Andrade",
-  //       },
-  //       {
-  //         id: "7",
-  //         content:
-  //           "Nor like it turn evidence color clearly simple. Teacher consider miss state personal.",
-  //         dateSent: "1970-02-22",
-  //         sender: "Shawn Alexander",
-  //       },
-  //       {
-  //         id: "8",
-  //         content: "Close court perform well small participant.",
-  //         dateSent: "1977-05-05",
-  //         sender: "Barbara Harper",
-  //       },
-  //       {
-  //         id: "9",
-  //         content:
-  //           "Deal record much woman. Else statement defense situation standard south off.\nPass character message long. Other next away.",
-  //         dateSent: "2009-12-24",
-  //         sender: "Heather Jones",
-  //       },
-  //       //mock messages here
-  //     ];
-  //     setMessages(data);
-  //   };
-
-  //   fetchMessages();
-  // }, []);
-
 
   const handleSendClick = () => {
     // Implement the logic to send a message or open a dialog/form for sending messages
@@ -240,43 +182,24 @@ export const Wall = (props: any) => {
             Your Wall
           </Typography>
         </Grid>{" "}
-        <Box
-          sx={{
-            position: "relative",
-            height: "50vh",
-            width: "inherit",
-            overflow: "hidden",
-            backgroundColor: "brown",
-            borderRadius: 4,
-            border: 15,
-            borderColor: "burlywood",
-            boxSizing: "content-box",
-          }} //WALL BASE
-        >
-          <Box sx ={{
-            position: "relative",
-            height: "90%",
-            width: "95%",
-            padding: "5px",
-            paddingRight: "40px"
-          }}>
-            {messages.map((message) => (
-              <Box
-                key={message.id}
-                sx={{
-                  position: "absolute",
-                  left: `${message.x}%`, // Position based on the message's x coordinate
-                  top: `${message.y}%`, // Position based on the message's y coordinate
-                }}
-              >
-                <MessageCard
-                  message={message}
-                  onClick={() => handleCardClick(message)
-                  }
-                />
-              </Box>
+          <Grid container spacing={4}>
+            {columns.map((colMessages, colIndex) => (
+              <Grid item marginBottom={2} xs={4} key={colIndex}>
+                {" "}
+                {/* xs={4} for 3 columns */}
+                <Stack spacing={2}>
+                  {" "}
+                  {/* Stack with spacing for vertical spacing */}
+                  {colMessages.map((message) => (
+                    <MessageCard
+                      message={message}
+                      onClick={() => handleCardClick(message)}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
             ))}
-          </Box>
+          </Grid>
           <Box sx={{ position: "absolute", bottom: 14, right: 14 }}>
             {" "}
             {/* Position the button at the bottom right */}
@@ -301,7 +224,6 @@ export const Wall = (props: any) => {
                 <SendIcon />
               </Fab>
             </Tooltip>
-          </Box>
           <Dialog
             open={selectedMessage != null}
             onClose={handleCloseDialog}
