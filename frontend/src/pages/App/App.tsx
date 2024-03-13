@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Navbar, RightNavbar, MidTopSection } from "../../Navbar";
 import { Box, Divider, Grid, Typography, DialogContent, DialogTitle, Dialog, DialogActions, Button, DialogContentText, InputLabel, Select, MenuItem, DialogProps } from "@mui/material";
 import { Dashboard } from "../Home";
-import { Wall } from "../Wall";
+// import { Wall } from "../Wall";
+import { Motivation } from "../Motivation";
 import { Leaderboard } from "../Leaderboard";
 
 export const App = () => {
@@ -103,7 +104,7 @@ export const App = () => {
             // Conditionally render components based on navValue
             <>
               {navValue === 'Dashboard' && <Dashboard currentUser = {currentUser} />}
-              {navValue === 'Wall' && <Wall currentUser = {currentUser}/>}
+              {navValue === 'Wall' && <Motivation currentUser = {currentUser}/>}
               {navValue === 'Leaderboard' && <Leaderboard currentUser = {currentUser}/>}
             </>
           ) : (
