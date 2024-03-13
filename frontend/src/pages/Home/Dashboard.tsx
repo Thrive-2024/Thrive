@@ -64,7 +64,7 @@ export const Dashboard = (props: any) => {
         taskName: string;
         subjectName: string;
         colour: string;
-        dueDate: Date; // Assuming dueDate is a Date object
+        dueDate: String; // Assuming dueDate is a Date object
         status: string;
         notes: string;
     }
@@ -90,15 +90,13 @@ export const Dashboard = (props: any) => {
     const [subjectName, setSubjectName] = useState('');
     const [notes, setNotes] = useState('');
 
-
-    // const [tasksToUpdate, setTasksToUpdate] = useState<any[]>([]);
+    const [allTasks, setAllTasks] = useState<Task[]>([]);
     const [tasksModified, setTasksModified] = useState(false);
 
     // task creation modal
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [render, setRender] = React.useState(false);
 
     //color selections
     const colorOptions = [
@@ -111,7 +109,7 @@ export const Dashboard = (props: any) => {
     ];
 
     //allocate tasks to respective boards (todo, in progress,done)
-    const setTaskList = (fetchedTasks: Task[]) => {
+    const allocateToTaskBoard = (fetchedTasks: Task[]) => {
         const updatedTaskList: TaskStatus = {
             toDo: { name: "To Do", items: [] },
             inProgress: { name: "In Progress", items: [] },
@@ -129,7 +127,7 @@ export const Dashboard = (props: any) => {
             }
         });
 
-        // setTaskList(updatedTaskList);
+        // allocateToTaskBoard(updatedTaskList);
         setTaskBoard(updatedTaskList);
     };
 
@@ -245,6 +243,16 @@ export const Dashboard = (props: any) => {
                     setAlertType('success');
                     setAlertMsg(`Task: ${taskName} created successfully`);
 
+                    const newTask:Task = {
+                        _id: apiResponse.id,
+                        ownerEmail: props.currentUser,
+                        taskName,
+                        subjectName,
+                        colour: selectedColor,
+                        dueDate,
+                        status: 'toDo',
+                        notes
+                    };
                     // fetchTask();
                     // Add the newly created task to the task board
                     setTaskBoard((prevState: any) => ({
@@ -253,10 +261,12 @@ export const Dashboard = (props: any) => {
                             ...prevState.toDo,
                             items: [
                                 ...prevState.toDo.items,
-                                { _id: apiResponse.id, ownerEmail: props.currentUser, taskName, subjectName, colour: selectedColor, dueDate, status: 'toDo', notes }
+                                newTask
                             ]
                         }
                     }));
+
+                    setAllTasks((prevTasks) => [...prevTasks, newTask]);
 
                     setSelectedColor('');
                     setTaskName('');
@@ -276,13 +286,7 @@ export const Dashboard = (props: any) => {
     //GET method to fetch all tasks and update 
     const fetchTask = async () => {
         console.log("task fetcher called");
-        // const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // console.log(timezone);
-        // // Get current year and month
-        // const currentDate = new Date();
-        // const year = currentDate.getFullYear();
-        // // Note: January is 0, February is 1, and so on...
-        // const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
+
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=${props.currentUser}`, {
                 headers: {
@@ -291,13 +295,24 @@ export const Dashboard = (props: any) => {
                 method: 'GET'
             });
 
+            if (response.status == 404) {
+                console.log("No tasks found")
+                setAllTasks([]);
+                setTaskBoard({
+                    toDo: { name: "To Do", items: [] },
+                    inProgress: { name: "In Progress", items: [] },
+                    done: { name: "Done", items: [] }
+                });
+            }
             if (response.status != 200) {
                 console.log("ERROR FETCHING TASKS");
 
             } else {
                 const apiResponse = await response.json();
                 console.log(apiResponse);
-                setTaskList(apiResponse.data)
+                const fetchedTasks = apiResponse.data;
+                setAllTasks(fetchedTasks); //full task list
+                allocateToTaskBoard(fetchedTasks); //allocate to respective task board
             }
 
         } catch (err) {
@@ -347,6 +362,7 @@ export const Dashboard = (props: any) => {
         return tasksToUpdate;
 
     }
+
     const updateTasks = () => {
         // console.log("updateTasks called")
         const tasksToUpdate = returnTasksForUpdate();
@@ -407,18 +423,18 @@ export const Dashboard = (props: any) => {
     useEffect(() => {
         let timeoutId: any;
         // console.log('useeffect called')
-    
+
         if (tasksModified) {
             // console.log('Got tasks to update');
             timeoutId = setTimeout(() => {
                 updateTasks();
             }, 5000); // 10 seconds in milliseconds
         }
-    
+
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [tasksModified,taskboard]);
+    }, [tasksModified, taskboard]);
 
 
 
@@ -533,22 +549,7 @@ export const Dashboard = (props: any) => {
                                 </DragDropContext>
                             </div>
                         </div></Grid>
-                    {/* <Grid item xs={6}>
-                                <Typography variant={'h5'} sx={{ mb: 1, ml: 1, color: 'secondary.main' }}>Statistics</Typography>
-
-                                <Card sx={{ border: '1px black', height: '25vh', padding: 3, ml: 1,mt:2 }}>
-
-                                </Card>
-
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography variant={'h5'} sx={{ mb: 1, color: 'secondary.main' }}>Today's Agenda</Typography>
-
-                                <Card sx={{ border: '1px black', height: '25vh', padding: 3, mr: 1,mt:2 }}>
-
-                                </Card>
-
-                            </Grid> */}
+                    
                     <Grid item xs={6}>
                         {/* Statistics */}
                         <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
@@ -563,33 +564,28 @@ export const Dashboard = (props: any) => {
                     <Grid item xs={6}>
                         {/* Today's Agenda */}
                         <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
-                            <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Today's Agenda</b></Typography>
+                            <Typography sx={{ mb: 1, color: 'secondary.main',overflow:'auto' }}><b>Urgent Tasks</b></Typography>
                             <Divider />
-                            <List dense={false}>
+                            <List dense={false} >
+                                {
+                                    allTasks.length > 0 ? (
+                                        allTasks.sort((a:any, b:any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()).slice(0,4).map((value:Task) => (
+                                            <ListItem key={value._id}> {/* Assuming each task has a unique identifier */}
+                                                <ListItemIcon>
+                                                    <ScheduleIcon />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={value.taskName} 
+                                                />
+                                            </ListItem>
+                                        ))
+                                    ) : (
+                                        <Typography>No Items</Typography>
+                                    )
+                                }
 
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <ScheduleIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Assignment 2"
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <ScheduleIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Lab 3"
-                                    />
-                                </ListItem>     <ListItem>
-                                    <ListItemIcon>
-                                        <ScheduleIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary="Project Outline"
-                                    />
-                                </ListItem>
+
+
 
                             </List>
                         </Card>
@@ -720,6 +716,6 @@ export const Dashboard = (props: any) => {
                 </Modal>
 
 
-            </div></ThemeProvider>
+            </div></ThemeProvider >
     )
 }

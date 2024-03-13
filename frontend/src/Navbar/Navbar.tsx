@@ -161,18 +161,18 @@ export const Navbar = (props: any) => {
           </MenuItem>
           <MenuItem onClick={() => showDialog('Where got time for this')} icon={<SettingsOutlinedIcon />}>Settings</MenuItem>
         </Menu>
-        <Divider />
-        <Box>
+        {/* <Divider /> */}
+        {/* <Box>
           {/* Title Row */}
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} sx={{ m: 2 }}>
+          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} sx={{ m: 2 }}>
             <Typography>CLOSE FRIENDS</Typography>
             <IconButton size="small">
               <AddBoxOutlinedIcon />
             </IconButton>
-          </Box>
+          </Box> */}
 
           {/* Friend Row 1 */}
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
+          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <Avatar src={Tim} sx={{ width: 50, height: 50, marginRight: 1 }} />
               <Typography>Tim Kowalski</Typography>
@@ -180,10 +180,10 @@ export const Navbar = (props: any) => {
             <IconButton size="small">
               <MoreVertOutlinedIcon />
             </IconButton>
-          </Box>
+          </Box> */}
 
           {/* Friend Row 2 */}
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
+          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <Avatar src={Carrie} sx={{ width: 50, height: 50, marginRight: 1 }} />
               <Typography>Carrie Walsh</Typography>
@@ -192,7 +192,7 @@ export const Navbar = (props: any) => {
               <MoreVertOutlinedIcon />
             </IconButton>
           </Box>
-        </Box>
+        </Box> */} 
       </Box>
     </Sidebar>
   );
