@@ -4,6 +4,7 @@ const SampleMessageModel = require("../../models/sampleMessage");
 const userModel = require("../../models/user");
 const taskModel = require("../../models/task");
 const timeTrackedModel = require("../../models/timeTracked");
+const sessonModel = require("../../models/session");
 const getDateTime = require("../../utils/getDateTime");
 
 // to create a new record
@@ -338,6 +339,53 @@ export const getMonthStatsByEmail = async (req: any, res: any, next: NextFunctio
             message: "Monthly stats",
             data: timeTrackedRecord
         });
+
+    } catch (error) {
+        return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });
+    }
+};
+
+
+export const updateSession = async (req: any, res: any, next: NextFunction) => {
+    try {
+        const { email, year, month, day, numOfSession } = req.body;
+        const user = await sessonModel.findOne({ 'email': email }); // Find the user by their ID
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // Check if the record is created for today
+        const record = await sessonModel.findOne({ 'email': email, 'year': year, 'month': month, 'day': day }); // Find the user by their ID
+        // if not exists, create
+        if (record == null) {
+            //create the DB object
+            const newRecord = new sessonModel({
+                "email": email,
+                "year": year,
+                "month": month,
+                "day": day,
+                "totalNumOfSession": numOfSession,
+                "lastNumOfSession":numOfSession,
+                "lastUpdated": getDateTime.now()
+            });
+            // add a new record to mongodb
+            newRecord
+                .save()
+                .then((response: any) => {
+                    return res.status(200).json({
+                        message: `Time tracked  created successfully! Database Record ID : ${response._id}`
+                    });
+                })
+                .catch((error: any) => {
+                    res.status(400).json({ error: String(error) });
+                });
+        } else {
+            record.totalNumOfSession = parseFloat(record.totalNumOfSession) + parseFloat(numOfSession);
+            record.lastUpdated = getDateTime.now();
+            record.lastNumOfSession = numOfSession;
+            record.save();
+            return res.status(200).json({ message: 'Time tracked updated successfully' });
+        }
 
     } catch (error) {
         return res.status(400).json({ message: "Please make sure the input parameters is correct", error: String(error) });

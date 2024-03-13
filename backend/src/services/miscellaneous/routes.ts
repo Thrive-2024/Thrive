@@ -22,3 +22,6 @@ miscellaneousRouter.put("/userAddFriend",controller.userAddFriend);
 miscellaneousRouter.put("/updateTimeTracked",controller.updateTimeTracked);
 miscellaneousRouter.get("/getMonthlyLeaderboard",controller.getMonthlyLeaderboard);
 miscellaneousRouter.get("/getMonthStatsByEmail",controller.getMonthStatsByEmail);
+
+//method for session
+miscellaneousRouter.get("/updateSession",controller.updateSession);
