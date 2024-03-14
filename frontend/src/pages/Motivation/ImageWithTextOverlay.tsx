@@ -9,8 +9,8 @@ import Blue4 from './Blue4.png';
 import Blue5 from './Blue5.png';
 
 interface ImageWithTextOverlayProps {
-  variant: number;
-  text: string;
+  variant: number | undefined; 
+  text: string | undefined;
 }
 
 const MessageText = styled(Typography)(({ theme }) => ({
@@ -33,7 +33,7 @@ const MessageText = styled(Typography)(({ theme }) => ({
 
 const ImageWithTextOverlay: React.FC<ImageWithTextOverlayProps> = ({ variant, text }) => {
 
-  const getImageUrl = (variant: number) => {
+  const getImageUrl = (variant: number | undefined) => {
     switch (variant) {
       case 1:
         return Blue1;
