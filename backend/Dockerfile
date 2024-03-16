@@ -1,6 +1,9 @@
 # Update the base image to Node 20
 FROM node:20-buster-slim
 
+# Set the timezone in the Dockerfile
+ENV TZ=Asia/Singapore
+
 WORKDIR /app
 
 # Copy other files as well

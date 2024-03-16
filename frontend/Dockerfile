@@ -1,6 +1,9 @@
 # from base image node
 FROM node:20-alpine
 
+# Set the timezone in the Dockerfile
+ENV TZ=Asia/Singapore
+
 WORKDIR /app
 
 # copy other files as well

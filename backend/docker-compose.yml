@@ -3,6 +3,9 @@ services:
   backend:
     build:
       dockerfile: Dockerfile
+    image: thrive-backend:latest
     container_name: thrive-backend
     ports:
       - "8000:8000"
+    environment:
+      - TZ=Asia/Singapore
