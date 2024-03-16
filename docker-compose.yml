@@ -1,22 +1,15 @@
-version: "3"
+version: '3'
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: thrive-backend:latest
-    container_name: thrive-backend
-    ports:
-      - "8000:8000"
-    environment:
-      - TZ=Asia/Singapore
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: thrive-frontend:latest
-    container_name: thrive-frontend
+    image: panmingwei/thrive-frontend
     ports:
       - "3000:3000"
+    environment:
+      - TZ=Asia/Singapore
+
+  backend:
+    image: panmingwei/thrive-backend
+    ports:
+      - "8080:8080"
     environment:
       - TZ=Asia/Singapore
