@@ -27,6 +27,11 @@ const MotivationSchema = new Schema({
         required: true,
         default: 0
     },
+    variant: {
+        type: Number,
+        required: true,
+        default: 1
+    },
 
 });
 

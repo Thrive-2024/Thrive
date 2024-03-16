@@ -130,6 +130,12 @@ export const getAllBySender = async (req: any, res: any, next: NextFunction) => 
     }
 };
 
+function getRandomInt(min: any, max : any) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+}
+
 //Http Post Request : for extension to call, to generate random motivation message
 //{{dev_url}}/api/motivation/randomMessageFromSystem?receiver=james@gmail.com
 export const randomMessageFromSystem = async (req: any, res: any, next: NextFunction) => {
@@ -153,7 +159,8 @@ export const randomMessageFromSystem = async (req: any, res: any, next: NextFunc
             "receiver": receiver,
             "sender": "thrive@gmail.com",
             "message": randomMessage.message,
-            "createdDateTime": getDateTime.now()
+            "createdDateTime": getDateTime.now(),
+            "variant": getRandomInt(1,5)
         });
         // add a new record to mongodb
         newRecord
