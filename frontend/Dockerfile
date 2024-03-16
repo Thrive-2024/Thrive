@@ -11,10 +11,17 @@ COPY . .
 
 RUN rm -rf /app/node_modules
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
-#expose the port
+# Build for production.
+RUN npm run build
+
+# Install `serve` to run the application.
+RUN npm install -g serve
+
+# Uses port which is used by the actual application
 EXPOSE 3000
 
-# command to run when intantiate an image
-CMD ["npm","start"]
+# Run application
+# CMD [ "npm", "start" ]
+CMD serve -s build
