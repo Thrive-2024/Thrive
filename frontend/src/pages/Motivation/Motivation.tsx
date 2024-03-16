@@ -2,23 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
     Box,
-    Divider,
     Grid,
     Typography,
-    Card,
-    CardContent,
-    Stack,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     TextField,
-    Fab,
     Button,
-    Tooltip,
+    Modal,
+    FormControl,
+    Autocomplete
 } from "@mui/material";
 import ImageWithTextOverlay from './ImageWithTextOverlay';
-import zIndex from '@mui/material/styles/zIndex';
+import Post from './Post';
 
 const theme = createTheme({
     palette: {
@@ -39,12 +32,30 @@ interface Message {
     variant: number;
 }
 
+//styles for add task modal
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    height: 500,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 5,
+};
+
 export const Motivation = (props: any) => {
 
     const [messages, setMessages] = useState<Message[]>([]);
-    const [enlarged, setEnlarged] = useState<Boolean>(false);
+    const [enlarged, setEnlarged] = useState<boolean>(false);
     const [chosen, setChosen] = useState<Message | null>(null);
+    const [open, setOpen] = useState<boolean>(false);
 
+    const [userFriends, setUserFriends] = useState<string[]>([]);
+    const [sendMessageContent, setSendMessageContent] = useState<string>();
     useEffect(() => {
         const fetchMessages = async () => {
             try {
@@ -73,7 +84,13 @@ export const Motivation = (props: any) => {
             }
         };
 
+        const fetchFriends = async () => {
+            const data: string[] = ["Alice", "Brian", "Crayon", "Danielle"];
+            setUserFriends(data);
+        }
+
         fetchMessages();
+        fetchFriends();
     }, []);
     // useEffect(() => {
     //     const fetchMessages = async () => {
@@ -171,73 +188,141 @@ export const Motivation = (props: any) => {
         }
     }
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleNotesChange = (event: any) => {
+        setSendMessageContent(event.target.value);
+    }
+
+    //send post
+    const handleSendPost = (event: any) => {
+        event.preventDefault()
+        console.log("handleSendPost called")
+        setOpen(false);
+
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <div style={{ display: 'flex', flexDirection: 'row', maxHeight: '100vh' }}>
                 <Grid container spacing={3} sx={{ py: 2, px: 5 }}>
-                    <Grid item xs={12}>
+
+                    <Grid item xs={6} >
                         <Typography variant="h5" sx={{ ml: 1, mb: 1.5 }}>
                             Your Wall
                         </Typography>
-                        <Box sx={{
-                            height: '50vh',
-                            overflow: 'auto',
-                            background: '#F7F7F7',
-                            borderRadius: '10px',
-                            '&::-webkit-scrollbar': {
-                                width: '10px',
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                borderRadius: '10px',
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                background: '#C7D9E9',
-                                borderRadius: '10px',
-                            },
-                            '&::-webkit-scrollbar-thumb:hover': {
-                                background: '#95B6D4',
-                            },
-                        }}
-                            onClick={() => handlePostClose(chosen)}>
-
-                            <Grid container spacing={0}>
-                                {messages.map((message, index) => (
-                                    <Grid item sm={12} md={6} lg={4} key={index} sx={{ height: '100%' }}>
-                                        <Box
-                                            sx={{
-                                                position: "relative",
-                                                padding: "5px",
-                                                overflow: 'hidden',
-                                            }}
-                                            onClick={() => handlePostEnlarge(message)}
-                                        >
-                                            <ImageWithTextOverlay
-                                                variant={message?.variant}
-                                                text={message?.content}
-                                            />
-                                        </Box>
-                                    </Grid>
-                                ))}
-                            </Grid>
-
-                            {enlarged &&
-                                <Typography sx={{
-                                    padding: '5px',
-                                    position: 'absolute',
-                                    left: '38%',
-                                    top: '38%',
-                                    maxWidth: '20%',
-                                    whiteSpace: 'normal', // Allow text wrapping
-                                    background: 'rgba(243, 244, 246, 0.7)',
-                                    borderRadius: '5px',
-                                    zIndex: 99
-                                }} >
-                                    {chosen?.content}
-                                </Typography>
-                            }
-                        </Box>
                     </Grid>
+                    <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
+
+                        <Button sx={{ margin: '0', mr: 1, height: 32, width: '30%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}> Send a Message </Button>
+                    </Grid>
+
+                    {/* the wall */}
+                    <Box sx={{
+                        height: '50vh',
+                        overflow: 'auto',
+                        background: '#F7F7F7',
+                        borderRadius: '10px',
+                        '&::-webkit-scrollbar': {
+                            width: '10px',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            borderRadius: '10px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            background: '#C7D9E9',
+                            borderRadius: '10px',
+                        },
+                        '&::-webkit-scrollbar-thumb:hover': {
+                            background: '#95B6D4',
+                        },
+                    }}
+                        onClick={() => handlePostClose(chosen)}>
+
+                        <Grid container spacing={0}>
+                            {messages.map((message, index) => (
+                                <Grid item sm={12} md={6} lg={4} key={index} sx={{ height: '100%' }}>
+                                    <Box
+                                        sx={{
+                                            position: "relative",
+                                            padding: "5px",
+                                            overflow: 'hidden',
+                                        }}
+                                        onClick={() => handlePostEnlarge(message)}
+                                    >
+                                        <ImageWithTextOverlay
+                                            variant={message?.variant}
+                                            text={message?.content}
+                                        />
+                                    </Box>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                        {enlarged &&
+                            <Typography sx={{
+                                padding: '5px',
+                                position: 'absolute',
+                                left: '38%',
+                                top: '38%',
+                                maxWidth: '20%',
+                                whiteSpace: 'normal', // Allow text wrapping
+                                background: 'rgba(243, 244, 246, 0.7)',
+                                borderRadius: '5px',
+                                zIndex: 99
+                            }} >
+                                {chosen?.content}
+                            </Typography>
+                        }
+                    </Box>
                 </Grid>
+
+                {/* send post to friend modal */}
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <FormControl>
+                            <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center' }} >
+                                <Grid item xs={12}>
+                                    {/* Choose a friend to send to */}
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={userFriends}
+                                        renderInput={(params) => <TextField {...params} label="Choose a Friend" />}
+                                    />
+                                </Grid>
+                                <Grid item xs={6} sx={{ paddingX: 2 }}>
+                                    {/* Post it selection */}
+                                    <Post
+                                        variant={4}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {/* Message */}
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Notes"
+                                        multiline
+                                        rows={12}
+                                        placeholder="..."
+                                        onChange={handleNotesChange}
+                                        sx={{ width: '100%' }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                                    <Button sx={{ width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleSendPost}>Send Post</Button>
+                                </Grid>
+
+                            </Grid>
+                        </FormControl>
+                    </Box>
+                </Modal>
             </div>
         </ThemeProvider >
     );
