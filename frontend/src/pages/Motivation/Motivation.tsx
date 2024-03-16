@@ -28,7 +28,7 @@ interface Message {
     id: number;
     content: string;
     dateSent: string;
-    sender: string;
+    senderName: string;
     variant: number;
 }
 
@@ -39,7 +39,7 @@ const modalStyle = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 800,
-    height: 500,
+    height: 550,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -49,18 +49,24 @@ const modalStyle = {
 
 export const Motivation = (props: any) => {
 
+    // to store all the messages
     const [messages, setMessages] = useState<Message[]>([]);
+
+    // to view an enlarged message
     const [enlarged, setEnlarged] = useState<boolean>(false);
     const [chosen, setChosen] = useState<Message | null>(null);
-    const [open, setOpen] = useState<boolean>(false);
+    const [viewPostEnlargeOpen, setViewPostEnlargeOpen] = useState<boolean>(false);
 
+    // to create messages for friends
+    const [createPostOpen, setCreatePostOpen] = useState<boolean>(false);
     const [userFriends, setUserFriends] = useState<string[]>([]);
     const [sendMessageContent, setSendMessageContent] = useState<string>();
+
     useEffect(() => {
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`
+                    `${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`
                 );
                 const input = await response.json();
                 let data = input.data;
@@ -70,15 +76,11 @@ export const Motivation = (props: any) => {
                         id: index,
                         content: msg.message,
                         dateSent: msg.createdDateTime,
-                        sender: msg.sender,
-                        variant: Math.floor(Math.random() * 5)
-                        // senderName:  msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
-                        // x: Math.random() * 100,
-                        // y: Math.random() * 100, // left the x y as random bc data is all 0s, just change to msg.x/y
+                        senderName:  msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
+                        variant: msg.variant
                     })
                 );
                 setMessages(mappedMessages);
-                console.log(mappedMessages);
             } catch (error) {
                 console.error("Failed to fetch messages:", error);
             }
@@ -174,22 +176,19 @@ export const Motivation = (props: any) => {
     // }, []);
 
 
-    const handlePostEnlarge = (post: Message | null) => {
+    const handleViewPostEnlargeOpen = (post: Message | null) => {
         if (post) {
-            setEnlarged(true);
+            setViewPostEnlargeOpen(true);
             setChosen(post);
         }
     };
 
-    const handlePostClose = (post: Message | null) => {
-        if (post) {
-            setEnlarged(false);
-            setChosen(null);
-        }
+    const handleViewPostEnlargeClose = () => {
+        setViewPostEnlargeOpen(false);
     }
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpenCreatePost = () => setCreatePostOpen(true);
+    const handleCloseCreatePost = () => setCreatePostOpen(false);
 
     const handleNotesChange = (event: any) => {
         setSendMessageContent(event.target.value);
@@ -198,8 +197,7 @@ export const Motivation = (props: any) => {
     //send post
     const handleSendPost = (event: any) => {
         event.preventDefault()
-        console.log("handleSendPost called")
-        setOpen(false);
+        setCreatePostOpen(false);
 
     }
 
@@ -215,12 +213,12 @@ export const Motivation = (props: any) => {
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
 
-                        <Button sx={{ margin: '0', mr: 1, height: 32, width: '30%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpen}> Send a Message </Button>
+                        <Button sx={{ margin: '0', mr: 1, height: 32, width: '30%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpenCreatePost}> Send a Message </Button>
                     </Grid>
 
                     {/* the wall */}
                     <Box sx={{
-                        height: '50vh',
+                        height: '70vh',
                         overflow: 'auto',
                         background: '#F7F7F7',
                         borderRadius: '10px',
@@ -237,8 +235,7 @@ export const Motivation = (props: any) => {
                         '&::-webkit-scrollbar-thumb:hover': {
                             background: '#95B6D4',
                         },
-                    }}
-                        onClick={() => handlePostClose(chosen)}>
+                    }}>
 
                         <Grid container spacing={0}>
                             {messages.map((message, index) => (
@@ -249,7 +246,7 @@ export const Motivation = (props: any) => {
                                             padding: "5px",
                                             overflow: 'hidden',
                                         }}
-                                        onClick={() => handlePostEnlarge(message)}
+                                        onClick={() => handleViewPostEnlargeOpen(message)}
                                     >
                                         <ImageWithTextOverlay
                                             variant={message?.variant}
@@ -259,35 +256,22 @@ export const Motivation = (props: any) => {
                                 </Grid>
                             ))}
                         </Grid>
-
-                        {enlarged &&
-                            <Typography sx={{
-                                padding: '5px',
-                                position: 'absolute',
-                                left: '38%',
-                                top: '38%',
-                                maxWidth: '20%',
-                                whiteSpace: 'normal', // Allow text wrapping
-                                background: 'rgba(243, 244, 246, 0.7)',
-                                borderRadius: '5px',
-                                zIndex: 99
-                            }} >
-                                {chosen?.content}
-                            </Typography>
-                        }
                     </Box>
                 </Grid>
 
                 {/* send post to friend modal */}
                 <Modal
-                    open={open}
-                    onClose={handleClose}
+                    open={createPostOpen}
+                    onClose={handleCloseCreatePost}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={modalStyle}>
                         <FormControl>
-                            <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center' }} >
+                        <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center' }} >
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Sending a Message</Typography>
+                                </Grid>
                                 <Grid item xs={12}>
                                     {/* Choose a friend to send to */}
                                     <Autocomplete
@@ -318,11 +302,45 @@ export const Motivation = (props: any) => {
                                 <Grid item xs={12} sx={{ textAlign: 'right' }}>
                                     <Button sx={{ width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleSendPost}>Send Post</Button>
                                 </Grid>
-
                             </Grid>
                         </FormControl>
                     </Box>
                 </Modal>
+
+                {/* enlarge friend's post modal */}
+                <Modal
+                    open={viewPostEnlargeOpen}
+                    onClose={handleViewPostEnlargeClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center', justifyContent: 'center' }} >
+                            <Grid item xs={12}>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Message from your friend:</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                                {/* Sender name */}
+                                <Typography>Sender: </Typography>
+                            </Grid>
+                            <Grid item xs={8}>
+                                {/* Sender name */}
+                                <Typography>{chosen?.senderName} </Typography>
+                            </Grid>
+                            <Grid item xs={6} sx={{justifyContent: 'center'}}>
+                                {/* Message */}
+                                <ImageWithTextOverlay
+                                            variant={chosen?.variant}
+                                            text={chosen?.content}
+                                        />
+                            </Grid>
+                            <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                                <Button sx={{ width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleViewPostEnlargeClose}>Close</Button>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Modal>
+
             </div>
         </ThemeProvider >
     );
