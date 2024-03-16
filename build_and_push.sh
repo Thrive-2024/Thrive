@@ -3,7 +3,7 @@
 # Build and push frontend Docker image
 echo "Building and pushing frontend Docker image..."
 cd frontend
-docker build -t panmingwei/thrive-frontend .
+docker build --platform linux/amd64 -t panmingwei/thrive-frontend .
 docker push panmingwei/thrive-frontend
 cd ..
 
