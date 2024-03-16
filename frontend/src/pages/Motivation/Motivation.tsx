@@ -225,7 +225,7 @@ export const Motivation = (props: any) => {
         formData.append('variant', String(sendMessageVariant));
 
         console.log('sending data', formData.get('variant'));
-        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/create`, {
+        fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/motivation/create`, {
             headers: {
             },
             method: 'POST',

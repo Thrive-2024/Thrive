@@ -8,10 +8,10 @@ docker push panmingwei/thrive-frontend
 cd ..
 
 # Build and push backend Docker image
-echo "Building and pushing backend Docker image..."
-cd backend
-docker build -t panmingwei/thrive-backend .
-docker push panmingwei/thrive-backend
-cd ..
+# echo "Building and pushing backend Docker image..."
+# cd backend
+# docker build -t panmingwei/thrive-backend .
+# docker push panmingwei/thrive-backend
+# cd ..
 
 echo "Done."

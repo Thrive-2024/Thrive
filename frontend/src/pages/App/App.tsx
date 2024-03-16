@@ -51,7 +51,7 @@ export const App = () => {
     console.log("user fetcher called");
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/miscellaneous/getAllUser`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/miscellaneous/getAllUser`, {
         headers: {
           'Content-Type': 'application/json'
         },

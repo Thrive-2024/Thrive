@@ -3,7 +3,7 @@ services:
   frontend:
     image: panmingwei/thrive-frontend
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
       - TZ=Asia/Singapore
 
@@ -15,6 +15,7 @@ services:
   #     - TZ=Asia/Singapore
   backend:
     build:
+      context: ./backend
       dockerfile: Dockerfile
     image: thrive-backend:latest
     container_name: thrive-backend

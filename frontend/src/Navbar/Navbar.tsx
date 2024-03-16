@@ -221,7 +221,7 @@ export const RightNavbar = (props: any) => {
   const fetchMotivation = async () => {
     console.log("motivation fetcher called");
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=${props.currentUser}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/motivation/getAllByReceiver?receiver=${props.currentUser}`, {
         headers: {
           'Content-Type': 'application/json'
         },

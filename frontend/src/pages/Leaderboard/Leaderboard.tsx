@@ -80,7 +80,7 @@ export const Leaderboard = (props: any) => {
         // Note: January is 0, February is 1, and so on...
         const month = currentDate.getMonth() + 1 // Adding 1 to get the correct month
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/miscellaneous/getMonthlyLeaderboard?year=${year}&month=${month}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/miscellaneous/getMonthlyLeaderboard?year=${year}&month=${month}`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

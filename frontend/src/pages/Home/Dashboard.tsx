@@ -220,7 +220,7 @@ export const Dashboard = (props: any) => {
         formData.append('dueDate', dueDate);
         formData.append('notes', notes);
 
-        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/create`, {
+        fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/task/create`, {
             headers: {
             },
             method: 'POST',
@@ -288,7 +288,7 @@ export const Dashboard = (props: any) => {
         console.log("task fetcher called");
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/getAllByOwner?ownerEmail=${props.currentUser}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/task/getAllByOwner?ownerEmail=${props.currentUser}`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -369,7 +369,7 @@ export const Dashboard = (props: any) => {
 
         // console.log(tasksToUpdate);
 
-        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/task/updateTaskStatusBulk`, {
+        fetch(`${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/task/updateTaskStatusBulk`, {
             headers: {
                 'Content-Type': 'application/json',
             },
