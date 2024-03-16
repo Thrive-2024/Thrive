@@ -206,13 +206,9 @@ export const Motivation = (props: any) => {
     //send post
     const handleSendPost = (event: any) => {
         event.preventDefault()
-        setCreatePostOpen(false);
-        console.log("here");
 
         // Check if any of the required variables are empty or empty strings
         if (receivingFriend == null || !receivingFriend.trim() || !sendMessageContent.trim() || sendMessageVariant === -1) {
-
-            console.log("problem with data")
 
             setAlertType('error');
             setSuccessMsgContent("Message failed to send. Please check your inputs and try again.");
@@ -236,7 +232,6 @@ export const Motivation = (props: any) => {
             body: formData
         })
             .then(async (response) => {
-                console.log('response received:', response);
                 if (response.status != 200) {
 
                     //show alert msg
@@ -249,6 +244,11 @@ export const Motivation = (props: any) => {
                     setOpenSnackbar(true);
                     setAlertType('success');
                     setSuccessMsgContent(`Message was sent successfully`);
+
+                    // return to default values
+                    setReceivingFriend('');
+                    setSendMessageVariant(-1);
+                    setSendMessageContent('');
 
                     // close the box
                     setCreatePostOpen(false);
@@ -348,32 +348,6 @@ export const Motivation = (props: any) => {
                                 </Grid>
                                 <Grid item xs={6} sx={{ paddingX: 2 }}>
                                     {/* Post it selection */}
-
-                                    {/* <Grid container spacing={0}>
-                                        {[1, 2, 3, 4, 5].map((variantElement, index) => (
-                                            <Grid item sm={12} md={6} lg={4} key={index} sx={{ height: '100%' }}>
-                                                <Box
-                                                    sx={{
-                                                        position: "relative",
-                                                        padding: "5px",
-                                                        overflow: 'hidden',
-                                                    }}
-                                                    onClick={() => setSendMessageVariant(variantElement)}
-                                                >
-                                                    <Post
-                                                        variant={variantElement}
-                                                    />
-                                                    {variantElement === sendMessageVariant && (
-                                                        <Badge
-                                                            badgeContent=" "
-                                                            color="success"
-                                                            size="large"
-                                                        />
-                                                    )}
-                                                </Box>
-                                            </Grid>
-                                        ))}
-                                    </Grid> */}
 
                                     <Grid container spacing={1}>
                                         {[1, 2, 3, 4, 5].map((variantElement, index) => (
