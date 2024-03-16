@@ -11,6 +11,7 @@ const userModel = require("../../models/user");
 // message : string
 // x : int
 // y : int
+// variant: int
 export const create = async (req: any, res: any, next: NextFunction) => {
     try {
         const data = req.body;
@@ -22,6 +23,7 @@ export const create = async (req: any, res: any, next: NextFunction) => {
             "createdDateTime": getDateTime.now(),
             "x": data.x,
             "y": data.y,
+            "variant": data.variant,
         });
         // add a new record to mongodb
         newRecord

@@ -8,7 +8,10 @@ import {
     Button,
     Modal,
     FormControl,
-    Autocomplete
+    Autocomplete,
+    Snackbar,
+    Alert,
+    Badge
 } from "@mui/material";
 import ImageWithTextOverlay from './ImageWithTextOverlay';
 import Post from './Post';
@@ -53,14 +56,20 @@ export const Motivation = (props: any) => {
     const [messages, setMessages] = useState<Message[]>([]);
 
     // to view an enlarged message
-    const [enlarged, setEnlarged] = useState<boolean>(false);
     const [chosen, setChosen] = useState<Message | null>(null);
     const [viewPostEnlargeOpen, setViewPostEnlargeOpen] = useState<boolean>(false);
 
     // to create messages for friends
     const [createPostOpen, setCreatePostOpen] = useState<boolean>(false);
     const [userFriends, setUserFriends] = useState<string[]>([]);
-    const [sendMessageContent, setSendMessageContent] = useState<string>();
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [successMsgContent, setSuccessMsgContent] = useState<string>();
+    const [alertType, setAlertType]: any = useState('info');
+
+    // created msg content
+    const [receivingFriend, setReceivingFriend] = useState<string | null>('');
+    const [sendMessageContent, setSendMessageContent] = useState<string>('');
+    const [sendMessageVariant, setSendMessageVariant] = useState<number>(-1);
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -76,7 +85,7 @@ export const Motivation = (props: any) => {
                         id: index,
                         content: msg.message,
                         dateSent: msg.createdDateTime,
-                        senderName:  msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
+                        senderName: msg.senderName === 'SYSTEM' ? 'Dive' : msg.senderName, // Replace 'SYSTEM' with 'DIVE'
                         variant: msg.variant
                     })
                 );
@@ -87,7 +96,7 @@ export const Motivation = (props: any) => {
         };
 
         const fetchFriends = async () => {
-            const data: string[] = ["Alice", "Brian", "Crayon", "Danielle"];
+            const data: string[] = ["Alice", "Brian", "Crayon", "tim@gmail.com"];
             setUserFriends(data);
         }
 
@@ -198,8 +207,60 @@ export const Motivation = (props: any) => {
     const handleSendPost = (event: any) => {
         event.preventDefault()
         setCreatePostOpen(false);
+        console.log("here");
+
+        // Check if any of the required variables are empty or empty strings
+        if (receivingFriend == null || !receivingFriend.trim() || !sendMessageContent.trim() || sendMessageVariant === -1) {
+
+            console.log("problem with data")
+
+            setAlertType('error');
+            setSuccessMsgContent("Message failed to send. Please check your inputs and try again.");
+            setOpenSnackbar(true);
+            return; // Exit the function if any of the required fields are empty
+
+        }
+
+        // collect the information for a message
+        const formData = new FormData();
+        formData.append('receiver', receivingFriend);
+        formData.append('sender', props.currentUser);
+        formData.append('message', sendMessageContent);
+        formData.append('variant', String(sendMessageVariant));
+
+        console.log('sending data', formData.get('variant'));
+        fetch(`${process.env.REACT_APP_BACKEND_DEV_URL}/motivation/create`, {
+            headers: {
+            },
+            method: 'POST',
+            body: formData
+        })
+            .then(async (response) => {
+                console.log('response received:', response);
+                if (response.status != 200) {
+
+                    //show alert msg
+                    setAlertType('error');
+                    setSuccessMsgContent("Message failed to send. Please check your inputs and try again.");
+                    setOpenSnackbar(true);
+
+                } else {
+                    //show alert msg
+                    setOpenSnackbar(true);
+                    setAlertType('success');
+                    setSuccessMsgContent(`Message was sent successfully`);
+
+                    // close the box
+                    setCreatePostOpen(false);
+                }
+            }
+            )
 
     }
+
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false);
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -268,7 +329,7 @@ export const Motivation = (props: any) => {
                 >
                     <Box sx={modalStyle}>
                         <FormControl>
-                        <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center' }} >
+                            <Grid container spacing={2} sx={{ padding: 5, pt: 4, alignItems: 'center' }} >
                                 <Grid item xs={12}>
                                     <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Sending a Message</Typography>
                                 </Grid>
@@ -278,14 +339,87 @@ export const Motivation = (props: any) => {
                                         disablePortal
                                         id="combo-box-demo"
                                         options={userFriends}
+                                        value={receivingFriend}
+                                        onChange={(event: any, newValue: string | null) => {
+                                            setReceivingFriend(newValue);
+                                        }}
                                         renderInput={(params) => <TextField {...params} label="Choose a Friend" />}
                                     />
                                 </Grid>
                                 <Grid item xs={6} sx={{ paddingX: 2 }}>
                                     {/* Post it selection */}
-                                    <Post
-                                        variant={4}
-                                    />
+
+                                    {/* <Grid container spacing={0}>
+                                        {[1, 2, 3, 4, 5].map((variantElement, index) => (
+                                            <Grid item sm={12} md={6} lg={4} key={index} sx={{ height: '100%' }}>
+                                                <Box
+                                                    sx={{
+                                                        position: "relative",
+                                                        padding: "5px",
+                                                        overflow: 'hidden',
+                                                    }}
+                                                    onClick={() => setSendMessageVariant(variantElement)}
+                                                >
+                                                    <Post
+                                                        variant={variantElement}
+                                                    />
+                                                    {variantElement === sendMessageVariant && (
+                                                        <Badge
+                                                            badgeContent=" "
+                                                            color="success"
+                                                            size="large"
+                                                        />
+                                                    )}
+                                                </Box>
+                                            </Grid>
+                                        ))}
+                                    </Grid> */}
+
+                                    <Grid container spacing={1}>
+                                        {[1, 2, 3, 4, 5].map((variantElement, index) => (
+                                            <Grid item sm={12} md={6} lg={4} key={index} sx={{ height: '100%' }}>
+                                                <Box
+                                                    sx={{
+                                                        position: "relative",
+                                                        padding: "5px",
+                                                    }}
+                                                    onClick={() => setSendMessageVariant(variantElement)}
+                                                >
+                                                    <Post
+                                                        variant={variantElement}
+                                                    />
+
+                                                    {variantElement === sendMessageVariant && (
+                                                        <Box
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: 0,
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                display: 'flex',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                zIndex: 1,
+                                                                border: '2px solid #95B6D4', 
+                                                                borderRadius: 2,
+                                                            }}>
+                                                            <Typography sx={{
+                                                                margin: '10px',
+                                                                color: theme.palette.text.secondary,
+                                                                background: '#95B6D4',
+                                                                borderRadius: 2,
+                                                                padding: '5px',
+                                                            }}>
+                                                                Selected
+                                                            </Typography>
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+
                                 </Grid>
                                 <Grid item xs={6}>
                                     {/* Message */}
@@ -327,12 +461,12 @@ export const Motivation = (props: any) => {
                                 {/* Sender name */}
                                 <Typography>{chosen?.senderName} </Typography>
                             </Grid>
-                            <Grid item xs={6} sx={{justifyContent: 'center'}}>
+                            <Grid item xs={6} sx={{ justifyContent: 'center' }}>
                                 {/* Message */}
                                 <ImageWithTextOverlay
-                                            variant={chosen?.variant}
-                                            text={chosen?.content}
-                                        />
+                                    variant={chosen?.variant}
+                                    text={chosen?.content}
+                                />
                             </Grid>
                             <Grid item xs={12} sx={{ textAlign: 'right' }}>
                                 <Button sx={{ width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleViewPostEnlargeClose}>Close</Button>
@@ -340,6 +474,14 @@ export const Motivation = (props: any) => {
                         </Grid>
                     </Box>
                 </Modal>
+
+
+                {/* snackbar */}
+                <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleSnackbarClose}>
+                    <Alert onClose={handleSnackbarClose} severity={alertType} sx={{ width: '100%' }}>
+                        {successMsgContent}
+                    </Alert>
+                </Snackbar>
 
             </div>
         </ThemeProvider >

@@ -1,16 +1,13 @@
 import React, { useRef, useEffect } from 'react';
-import { Typography, styled } from '@mui/material';
+import { Typography, styled, Box } from '@mui/material';
 import Post from './Post';
 
 interface ImageWithTextOverlayProps {
-  variant: number | undefined; 
+  variant: number | undefined;
   text: string | undefined;
 }
 
 const MessageText = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  top: '32%',
-  left: '15%',
   maxWidth: '65%',
   margin: '10px',
   color: theme.palette.text.secondary,
@@ -33,7 +30,19 @@ const ImageWithTextOverlay: React.FC<ImageWithTextOverlayProps> = ({ variant, te
       display: 'inline-block',
     }}>
       <Post variant={variant} />
-      <MessageText> {text} </MessageText>
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+      }}>
+        <MessageText> {text} </MessageText>
+      </Box>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { Typography, styled } from '@mui/material';
 
 // Images
 import Blue1 from './Blue1.png';
