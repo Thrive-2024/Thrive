@@ -44,6 +44,8 @@ const ExpireMenu: React.FC<IProps> = (props) => {
     await chrome.runtime.sendMessage<Message>({
       type: FromPopupMessageType.RESUME
     })
+      chrome.storage.sync.set({ isExtensionOn: true });
+
     const queryOptions = { active: true, lastFocusedWindow: true }
     await chrome.tabs.query(queryOptions, async ([result]) => {
       if (result.id) {

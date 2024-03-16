@@ -57,7 +57,7 @@ const HeaderMenu = () => {
       fetchMessageFromSystem()
       // For demonstration, let's just log a message
       console.log("Checking...");
-    }, 20 * 1000); // 10 minutes in milliseconds
+    }, 10 * 60 * 1000); // 10 minutes in milliseconds
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);

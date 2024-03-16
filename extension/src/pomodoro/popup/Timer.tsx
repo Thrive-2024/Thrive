@@ -47,6 +47,10 @@ const Timer: React.FC = (props) => {
       );
       setTotalPomodoroCountInSession(value.totalPomodoroCountsInSession);
       setPomodorosUntilLongBreak(value.pomodorosUntilLongBreak);
+
+      if(value.phase == "focus" ){
+        chrome.storage.sync.set({ isExtensionOn: true });
+      }
     });
   }, []);
 

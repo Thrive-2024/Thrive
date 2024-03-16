@@ -52,6 +52,7 @@ function createBlockedPage() {
 
 // Check if the website should be blocked and take appropriate action
 function check_if_restricted() {
+  console.log(isExtensionOn)
   if (isExtensionOn && shouldBlockWebsite()) {
     createBlockedPage();
   }

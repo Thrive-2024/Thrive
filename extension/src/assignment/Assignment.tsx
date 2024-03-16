@@ -12,6 +12,9 @@ import { REACT_APP_BACKEND_DEV_URL } from "../constants/envConsts";
 import { ITEM_HEIGHT, Task } from "./Task";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { getStorage, } from "../pomodoro/utils/chrome";
+import { Phase } from '../pomodoro/types';
+
 
 const Assignment = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -86,7 +89,11 @@ const Assignment = () => {
 
     fetchDataAndSetEmail();
 
-    return () => {};
+    getStorage(['phase']).then(({ phase }) => {
+      if(phase == "focus" ){
+        chrome.storage.sync.set({ isExtensionOn: true });
+      }
+    })
   }, [email, selectedTask]);
 
   const open = Boolean(anchorEl);

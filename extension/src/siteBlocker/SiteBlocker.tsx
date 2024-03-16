@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Box, Divider, IconButton, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
@@ -38,6 +38,7 @@ const SiteBlocker = () => {
         });
       } else {
         setIsExtensionOn(true);
+        chrome.storage.sync.set({ isExtensionOn: true });
       }
     })
 
@@ -48,6 +49,7 @@ const SiteBlocker = () => {
   }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   console.log(currentPhase)
+  console.log(isExtensionOn)
 
   // Function to toggle the state of the extension
   const toggleExtensionState = () => {
@@ -142,7 +144,7 @@ const SiteBlocker = () => {
   return (
     <div style={{ width: "90%", marginLeft: "10px", marginTop: "10px" }}>
       {/* first section: Settings  */}
-      {currentPhase == "break" && (
+      {currentPhase != "focus" && (
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
             sx={{
@@ -232,7 +234,7 @@ const SiteBlocker = () => {
           }}
         >
           {blockedWebsites.map((website, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               <Chip
                 label={website}
                 onDelete={() => handleClickOpen(index)}
@@ -266,7 +268,7 @@ const SiteBlocker = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
-            </React.Fragment>
+            </Fragment>
           ))}
         </Typography>
       </Box>
