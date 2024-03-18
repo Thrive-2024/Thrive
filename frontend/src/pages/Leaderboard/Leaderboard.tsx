@@ -119,6 +119,8 @@ export const Leaderboard = (props: any) => {
                     <Grid item xs={12} >
                         <Typography variant='h5' sx={{ ml: 1 }}>Leaderboard Page</Typography>
                     </Grid>
+
+                    {/* drawing of the standings */}
                     <Grid item xs={12} > <div>
                         <table id="ladder" align='center'>
                             <tr>
@@ -226,12 +228,15 @@ export const Leaderboard = (props: any) => {
                             </tr>
                         </table>
                     </div></Grid>
-                    <Grid item xs={12} >
+
+                    <Grid item xs={12}>
                         <Tabs
-                            aria-label="Tabs where each tab needs to be selected manually" sx={{ alignContent: 'center', ml: 1, borderRadius: 2 }}
+                            aria-label="Tabs where each tab needs to be selected manually"
+                            sx={{ display: 'flex', justifyContent: 'center', ml: 1, borderRadius: 2 }}
+                            centered
                         >
-                            <Tab value={0} label="Friends" sx={{ textTransform: "none", backgroundColor: 'rgba(153, 194, 240, 0.25)', width: '25%' }} />
-                            <Tab value={1} disabled label="Regional" sx={{ textTransform: "none", backgroundColor: 'rgba(241, 241, 241, 0.25)', width: '25%' }} />
+                            <Tab value={0} label="Friends" sx={{ textTransform: "none", backgroundColor: 'rgba(153, 194, 240, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopLeftRadius: 10 }} />
+                            <Tab value={1} disabled label="Regional" sx={{ textTransform: "none", backgroundColor: 'rgba(241, 241, 241, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopRightRadius: 10 }} />
                         </Tabs>
                         <TableContainer component={Paper} sx={{ ml: 1, maxHeight: 320 }}>
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
