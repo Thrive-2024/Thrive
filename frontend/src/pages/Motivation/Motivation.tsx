@@ -75,7 +75,7 @@ export const Motivation = (props: any) => {
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/motivation/getAllByReceiver?receiver=james@gmail.com`
+                    `${process.env.REACT_APP_BACKEND_PRODUCTION_URL}/motivation/getAllByReceiver?receiver=${props.currentUser}`
                 );
                 const input = await response.json();
                 let data = input.data;
