@@ -91,11 +91,12 @@ export const App = () => {
         overflow: "hidden",
       }}
     >
-      <Box sx={{ display: "flex", width: "100%" }}>
-        <Box id="navbar">
+      <Grid container>
+        <Grid item xs={2}>
           <Navbar onNavValueChange={handleNavValueChange} currentUser = {currentUser} currentUsername ={currentUsername} onProfileClick={handleProfileClick}/>
-        </Box>
-        <Box sx={{ width: "80%" }}>
+        </Grid>
+
+        <Grid item xs={8}>
           <Box>
             <MidTopSection />
             <Divider />
@@ -116,20 +117,19 @@ export const App = () => {
                 overflow: "hidden",
               }}
             >
-              <Grid container spacing={3} sx={{ padding: 5, pt: 4 }}>
+              <Grid container spacing={0} sx={{ padding: 5, pt: 4, backgroundColor:'blue' }}>
                 <Grid item xs={12}>
                   <Typography variant="h1" sx={{ textAlign: 'center', height: '100vh', pt: '30%' }}>
                     User Not Found
                   </Typography>
                 </Grid>{" "}</Grid></div>
           )}
+        </Grid>
 
-
-        </Box>
-        <Box id="rightNavbar" sx={{ boxShadow: "0px 0px 1px rgba(0,0,0,0.5)" }}>
+        <Grid item xs={2}>
           <RightNavbar currentUser = {currentUser}/>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
 
       <Dialog
         open={open}

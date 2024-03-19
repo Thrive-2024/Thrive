@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack} from '@mui/material';
+import { Box, Card, Divider, Typography, Avatar, DialogActions, Badge, Button, DialogTitle, Dialog, IconButton, styled, Stack } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
@@ -89,13 +89,13 @@ export const Navbar = (props: any) => {
     props.onNavValueChange(value); // Call the function passed from the parent with the new value
   };
 
-  const handleProfileClick=(event:any) => {
+  const handleProfileClick = (event: any) => {
     props.onProfileClick();
   }
 
 
   return (
-    <Sidebar style={{ width: "300", height: "100vh" }} >
+    <Box style={{ height: "100vh", borderRight: '1px solid #E0E0E0' }} >
       <Dialog
         open={openDialog}
         onClose={handleClose}
@@ -108,14 +108,14 @@ export const Navbar = (props: any) => {
         </DialogActions>
       </Dialog>
 
-      <Box id="leftSidebar" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box id="leftSidebar" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ height: '60px', display: 'flex', alignItems: 'center', }}>
           <img src={logo} alt="Logo" style={{ width: 50, height: 50 }} />
           <h2 style={{ marginRight: 8 }}>Thrive</h2>
         </Box>
         <Divider />
 
-        <Box style={{ display: 'flex', alignItems: 'center' }} sx={{ mt: 3, mb: 2, ml: 2, ":hover":{cursor:'pointer', backgroundColor:'rgba(0, 0, 0, 0.04)'} }} onClick = {handleProfileClick}>
+        <Box style={{ display: 'flex', alignItems: 'center' }} sx={{ margin: 2, ":hover": { cursor: 'pointer', backgroundColor: 'rgba(0, 0, 0, 0.04)' } }} onClick={handleProfileClick}>
           {props.currentUser === 'james@gmail.com' ? (
             <Avatar src={James} sx={{ width: 50, height: 50, mr: 2 }} />
           ) : props.currentUser === 'tim@gmail.com' ? (
@@ -128,7 +128,7 @@ export const Navbar = (props: any) => {
           <Typography>Welcome, {props.currentUsername}</Typography>
         </Box>
         <Divider />
-        <Menu>
+        <Menu style={{ width: '100%' }}>
           <MenuItem
             data-value="Dashboard"
             onClick={() => handleChange('Dashboard')}
@@ -154,7 +154,7 @@ export const Navbar = (props: any) => {
             data-value="Leaderboard"
             onClick={() => handleChange('Leaderboard')}
             icon={<LeaderboardOutlinedIcon />}
-            style={{ backgroundColor: isActive('Leaderboard') ? '#E3ECF6' : 'inherit'}}
+            style={{ backgroundColor: isActive('Leaderboard') ? '#E3ECF6' : 'inherit' }}
             id="menu-item3"
           >
             Leaderboard
@@ -164,15 +164,15 @@ export const Navbar = (props: any) => {
         {/* <Divider /> */}
         {/* <Box>
           {/* Title Row */}
-          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} sx={{ m: 2 }}>
+        {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} sx={{ m: 2 }}>
             <Typography>CLOSE FRIENDS</Typography>
             <IconButton size="small">
               <AddBoxOutlinedIcon />
             </IconButton>
           </Box> */}
 
-          {/* Friend Row 1 */}
-          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
+        {/* Friend Row 1 */}
+        {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <Avatar src={Tim} sx={{ width: 50, height: 50, marginRight: 1 }} />
               <Typography>Tim Kowalski</Typography>
@@ -182,8 +182,8 @@ export const Navbar = (props: any) => {
             </IconButton>
           </Box> */}
 
-          {/* Friend Row 2 */}
-          {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
+        {/* Friend Row 2 */}
+        {/* <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }} sx={{ m: 2 }}>
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <Avatar src={Carrie} sx={{ width: 50, height: 50, marginRight: 1 }} />
               <Typography>Carrie Walsh</Typography>
@@ -192,9 +192,9 @@ export const Navbar = (props: any) => {
               <MoreVertOutlinedIcon />
             </IconButton>
           </Box>
-        </Box> */} 
+        </Box> */}
       </Box>
-    </Sidebar>
+    </Box>
   );
 }
 export const MidTopSection = () => {
@@ -248,7 +248,7 @@ export const RightNavbar = (props: any) => {
     fetchMotivation();
   }, [props.currentUser]);
   return (
-    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: 300 }}>
+    <Box id="rightSidebar" sx={{ display: 'flex', flexDirection: 'column', height: '100%', borderLeft: '1px solid #E0E0E0' }}>
       {/* Right top empty Space */}
       <Box sx={{ height: '60px' }} />
       <Divider />
@@ -258,7 +258,6 @@ export const RightNavbar = (props: any) => {
           <Typography> Friends</Typography>
         </Box>
         <Box sx={{ mt: 0, mb: 2, ml: 2, display: 'flex' }}>
-
           <Box sx={{ marginRight: 1 }}>
             <OnlineBadge
               overlap="circular"
@@ -285,63 +284,83 @@ export const RightNavbar = (props: any) => {
             </OfflineBadge></Box>
         </Box>
 
-        <Divider />
-        <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
-          <Typography> Activities</Typography>
-        </Box>
-        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex' }}>
-          <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} sx={{}}>
-            <Stack spacing={1}>
-              <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
-              <Activity>Hayward achieved a new personal record of 25hrs this week.</Activity>
-              <Activity>Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position.  </Activity>
-              <Activity>Lily nailed her painting project, spending an impressive 7 hours bringing her canvas to life.</Activity>
-            </Stack>
-            {/* <List>
+        {/* Activities section */}
+
+        <Box>
+          <Divider />
+          <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
+            <Typography> Activities</Typography>
+          </Box>
+          <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex' }}>
+            <Box style={{ maxHeight: 200, overflow: 'auto', width: '100%' }} 
+              sx={{
+                '&::-webkit-scrollbar': {
+                  width: '10px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#C7D9E9',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: '#95B6D4',
+                },
+                paddingRight: 2
+              }}>
+              <Stack spacing={1}>
+                <Activity>Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</Activity>
+                <Activity>Hayward achieved a new personal record of 25hrs this week.</Activity>
+                <Activity>Exciting news! Jacob has surged ahead to claim the top spot on this week's leaderboard, surpassing Emily's previous position.  </Activity>
+                <Activity>Lily nailed her painting project, spending an impressive 7 hours bringing her canvas to life.</Activity>
+              </Stack>
+              {/* <List>
               <ListItem sx={{height:2}}><Avatar src = {Carrie}/> Tim completed Linear Algebra Assignment 2, clocking a record of 3hrs.</ListItem>
             </List> */}
+            </Box>
           </Box>
-        </Box>
 
 
 
-        <Divider />
+          <Divider />
 
-        <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
-          <Typography> Motivation Wall</Typography>
-        </Box>
-        <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex', height: '10%' }}>
-          {/* https://www.npmjs.com/package/react-responsive-carousel */}
-          {motivationArray.length > 0 ? (
-            <Carousel
-              autoPlay={true}
-              showArrows={false}
-              showIndicators={false}
-              showStatus={false}
-              showThumbs={false}
-              infiniteLoop={true}
-              stopOnHover={true}
-              interval={3000}
-              axis='vertical'
-            >
-              {motivationArray.map((word, index) => (
-                <Typography key={index} sx={{
-                  textAlign: 'left', display: '-webkit-box',
-                  WebkitLineClamp: 3, // Limit to 3 lines
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden', height: 100
-                }}>
-                  <b>{word.senderName}</b>: {word.message}
-                </Typography>
-              ))}
-            </Carousel>
-          ) : (
-            <div>Loading...</div> // Or any loading indicator
-          )}
-        </Box>
-        <Divider />
-        <Box sx={{ mt: 1, mb: 1, ml: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img src={mascot} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+          <Box sx={{ mt: 2, mb: 1, ml: 2, display: 'flex' }}>
+            <Typography> Motivation Wall</Typography>
+          </Box>
+          <Box sx={{ mb: 2, ml: 2, mr: 2, display: 'flex', maxHeight: '10%', overflow: 'hidden' }}>
+            {/* https://www.npmjs.com/package/react-responsive-carousel */}
+            {motivationArray.length > 0 ? (
+              <Carousel
+                autoPlay={true}
+                showArrows={false}
+                showIndicators={false}
+                showStatus={false}
+                showThumbs={false}
+                infiniteLoop={true}
+                stopOnHover={true}
+                interval={3000}
+                axis='vertical'
+              >
+                {motivationArray.map((word, index) => (
+                  <Typography key={index} sx={{
+                    textAlign: 'left', display: '-webkit-box',
+                    WebkitLineClamp: 3, // Limit to 3 lines
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden', height: 100
+                  }}>
+                    <b>{word.senderName}</b>: {word.message}
+                  </Typography>
+                ))}
+              </Carousel>
+            ) : (
+              <div>Loading...</div> // Or any loading indicator
+            )}
+          </Box>
+          <Divider />
+          <Box sx={{ alignItems: 'center', justifyContent: 'center', heigth: '15%', justifySelf: 'end' }}>
+            <img src={mascot} alt="Description of Image" style={{ maxHeight: '100%', maxWidth: '100%' }} />
+          </Box>
         </Box>
       </Box>
     </Box>
