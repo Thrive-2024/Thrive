@@ -9,11 +9,7 @@ interface ImageWithTextOverlayProps {
 
 const MessageText = styled(Typography)(({ theme }) => ({
   maxWidth: '65%',
-  margin: '10px',
   color: theme.palette.text.secondary,
-  background: '#f3f4f6',
-  borderRadius: 10,
-  padding: '5px',
   lineHeight: 1.5,
   display: '-webkit-box',
   WebkitLineClamp: 4,
@@ -41,7 +37,18 @@ const ImageWithTextOverlay: React.FC<ImageWithTextOverlayProps> = ({ variant, te
         alignItems: 'center',
         zIndex: 1,
       }}>
-        <MessageText> {text} </MessageText>
+        <Box sx={{
+          backgroundImage:'radial-gradient(circle at center, rgba(141, 190, 225, 0.8) 0%, rgba(141, 190, 225, 0.2) 90%)',
+          width: '60%',
+          height: '60%',
+          display: 'flex',
+          borderRadius: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <MessageText> {text} </MessageText>
+
+        </Box>
       </Box>
     </div>
   );

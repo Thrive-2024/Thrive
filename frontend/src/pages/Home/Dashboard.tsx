@@ -8,10 +8,11 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import dayjs from 'dayjs';
 
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
 import StatsPlaceholder from '../../images/stats.jpg';
 
-//creating theme
+// creating theme for text
 const theme = createTheme({
     palette: {
         primary: {
@@ -243,7 +244,7 @@ export const Dashboard = (props: any) => {
                     setAlertType('success');
                     setAlertMsg(`Task: ${taskName} created successfully`);
 
-                    const newTask:Task = {
+                    const newTask: Task = {
                         _id: apiResponse.id,
                         ownerEmail: props.currentUser,
                         taskName,
@@ -476,25 +477,42 @@ export const Dashboard = (props: any) => {
                                         return (
 
                                             <Grid item xs={4} sx={{ '&.MuiPaper-root': { boxShadow: '2px black' }, }} >
-                                                <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, backgroundColor: 'white' }} >
-                                                    <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1 }} /></Typography>
+                                                <Card sx={{ height: '35vh', padding: 3, ml: 1, mr: 1, borderRadius: 2 }} >
+                                                    <Typography sx={{ mb: 1, color: 'secondary.main', backgroundColor: '#F7F7F7', borderRadius: 2, padding: 2 }}><b>{column.name}</b><Chip size="small" label={column.items.length} sx={{ ml: 1, backgroundColor: '#99C2F0' }} /></Typography>
 
                                                     <Divider sx={{ mb: 2 }} />
                                                     <div >
                                                         <Droppable droppableId={columnId} key={columnId}>
                                                             {(provided, snapshot) => {
                                                                 return (
-                                                                    <div
+                                                                    <Box
                                                                         {...provided.droppableProps}
                                                                         ref={provided.innerRef}
                                                                         style={{
                                                                             background: snapshot.isDraggingOver
-                                                                                ? "white"
+                                                                                ? "#F7F7F7"
                                                                                 : "white",
                                                                             padding: 4,
-                                                                            height: '28vh',
+                                                                            height: '24vh',
                                                                             overflow: 'auto',
-                                                                            minWidth: 200
+                                                                            minWidth: 200,
+                                                                            borderRadius: 8
+
+                                                                        }}
+                                                                        sx={{
+                                                                            '&::-webkit-scrollbar': {
+                                                                                width: '10px',
+                                                                            },
+                                                                            '&::-webkit-scrollbar-track': {
+                                                                                borderRadius: '10px',
+                                                                            },
+                                                                            '&::-webkit-scrollbar-thumb': {
+                                                                                background: '#95B6D4',
+                                                                                borderRadius: '10px',
+                                                                            },
+                                                                            '&::-webkit-scrollbar-thumb:hover': {
+                                                                                background: '#95B6D4',
+                                                                            },
                                                                         }}
                                                                     >
                                                                         {column.items.map((item: any, index: number) => {
@@ -520,7 +538,7 @@ export const Dashboard = (props: any) => {
                                                                                                         : "#FFFFFF",
                                                                                                     color: "black",
                                                                                                     ...provided.draggableProps.style,
-                                                                                                    borderRadius: 4,
+                                                                                                    borderRadius: 8,
                                                                                                     // boxShadow:'2px 2px 5px -4px rgba(0,0,0,0.75)',
                                                                                                     border: '1px #d9d9d9 solid',
 
@@ -536,7 +554,7 @@ export const Dashboard = (props: any) => {
                                                                                 </Draggable>
                                                                             );
                                                                         })}
-                                                                    </div>
+                                                                    </Box>
                                                                 );
                                                             }}
                                                         </Droppable>
@@ -549,33 +567,35 @@ export const Dashboard = (props: any) => {
                                 </DragDropContext>
                             </div>
                         </div></Grid>
-                    
+
                     <Grid item xs={6}>
                         {/* Statistics */}
-                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1 }}>
-                            <Typography sx={{ mb: 1, color: 'secondary.main' }}><b>Statistics</b></Typography>
+                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, ml: 1, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+                        <Typography sx={{ mb: 1, color: 'secondary.main', backgroundColor: '#F7F7F7', borderRadius: 2, padding: 2 }}><b>Statistics</b></Typography>
 
                             <Divider />
-                            <img src={StatsPlaceholder} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',  maxHeight: '90%', paddingTop: 1 }}>
+                                <img src={StatsPlaceholder} alt="Description of Image" style={{ maxWidth: '100%', maxHeight: '100%', justifySelf: 'center', borderRadius: 8 }} />
+                            </Box>
 
                         </Card>
 
                     </Grid>
                     <Grid item xs={6}>
                         {/* Today's Agenda */}
-                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1 }}>
-                            <Typography sx={{ mb: 1, color: 'secondary.main',overflow:'auto' }}><b>Urgent Tasks</b></Typography>
+                        <Card sx={{ border: '1px black', height: '30vh', padding: 3, mr: 1, borderRadius: 2, }}>
+                        <Typography sx={{ mb: 1, color: 'secondary.main', backgroundColor: '#F7F7F7', borderRadius: 2, padding: 2 }}><b>Urgent Tasks</b></Typography>
                             <Divider />
                             <List dense={false} >
                                 {
                                     allTasks.length > 0 ? (
-                                        allTasks.sort((a:any, b:any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()).slice(0,4).map((value:Task) => (
+                                        allTasks.sort((a: any, b: any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()).slice(0, 4).map((value: Task) => (
                                             <ListItem key={value._id}> {/* Assuming each task has a unique identifier */}
                                                 <ListItemIcon>
-                                                    <ScheduleIcon />
+                                                    {value.status === "toDo" ? <AssignmentLateIcon /> : <ScheduleIcon /> }
                                                 </ListItemIcon>
                                                 <ListItemText
-                                                    primary={value.taskName} 
+                                                    primary={value.taskName}
                                                 />
                                             </ListItem>
                                         ))

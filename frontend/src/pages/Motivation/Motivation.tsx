@@ -264,25 +264,27 @@ export const Motivation = (props: any) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <div style={{ display: 'flex', flexDirection: 'row', maxHeight: '100vh' }}>
-                <Grid container spacing={3} sx={{ py: 2, px: 5 }}>
 
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+
+
+                <Grid container spacing={3} sx={{ padding: 5, pt: 4 }} >
                     <Grid item xs={6} >
-                        <Typography variant="h5" sx={{ ml: 1, mb: 1.5 }}>
-                            Your Wall
-                        </Typography>
+                        <Typography variant='h5' sx={{ ml: 1, margin: '0' }}>Your Motivation Wall</Typography>
                     </Grid>
+
                     <Grid item xs={6} sx={{ textAlign: "right", verticalAlign: 'top' }} >
 
-                        <Button sx={{ margin: '0', mr: 1, height: 32, width: '30%', minWidth: 100, textTransform: 'none', color: 'white' }} variant="contained" onClick={handleOpenCreatePost}> Send a Message </Button>
+                        <Button sx={{ margin: '0', mr: 1, height: 48, width: '30%', minWidth: 100, textTransform: 'none', color: 'white', fontSize: '1rem' }} variant="contained" onClick={handleOpenCreatePost}> Send a Message </Button>
                     </Grid>
 
                     {/* the wall */}
                     <Box sx={{
                         height: '70vh',
                         overflow: 'auto',
-                        background: '#F7F7F7',
+                        border: '1px solid #B1E5FF',
                         borderRadius: '10px',
+                        mt: 5, ml: 4, mr: 1, 
                         '&::-webkit-scrollbar': {
                             width: '10px',
                         },
@@ -437,10 +439,41 @@ export const Motivation = (props: any) => {
                             </Grid>
                             <Grid item xs={6} sx={{ justifyContent: 'center' }}>
                                 {/* Message */}
-                                <ImageWithTextOverlay
+                                {/* <ImageWithTextOverlay
                                     variant={chosen?.variant}
                                     text={chosen?.content}
-                                />
+                                /> */}
+                                
+                            <div style={{
+                                position: 'relative',
+                                display: 'inline-block',
+                                }}>
+                                <Post variant={chosen?.variant} />
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    zIndex: 1,
+                                }}>
+                                    <Box sx={{
+                                    backgroundColor: 'rgba(141, 190, 225, 0.6)',
+                                    width: '60%',
+                                    height: '60%',
+                                    display: 'flex',
+                                    borderRadius: 8,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                    }}>
+                                        <Typography sx={{overflow: 'auto', padding: 2, height: 'auto'}}> {chosen?.content} </ Typography>
+
+                                    </Box>
+                                </Box>
+                            </div>
                             </Grid>
                             <Grid item xs={12} sx={{ textAlign: 'right' }}>
                                 <Button sx={{ width: '20%', textTransform: 'none', color: 'white' }} variant="contained" onClick={handleViewPostEnlargeClose}>Close</Button>
