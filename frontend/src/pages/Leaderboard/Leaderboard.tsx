@@ -279,14 +279,14 @@ export const Leaderboard = (props: any) => {
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead sx={{ position: 'sticky', zIndex: 2, top: '0px', }}>
                                     <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Rank</b></TableCell>
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '5%' }}><b>Rank</b></TableCell>
                                         {/* <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}></TableCell> */}
-                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left' }}><b>User</b></TableCell>
-                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left' }}><b>Recent Activity</b></TableCell>
-                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}>Latest</TableCell>
-                                        {metric === 'totalHour' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Hours</b></TableCell>}
-                                        {metric === 'numOfTasks' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Tasks Completed</b></TableCell>}
-                                        {metric === 'numOfSession' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Sessions</b></TableCell>}
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left', width: '25%' }}><b>User</b></TableCell>
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left', width: '35%' }}><b>Recent Activity</b></TableCell>
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '15%' }}>Latest</TableCell>
+                                        {metric === 'totalHour' && <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '20%' }}><b>Total Hours</b></TableCell>}
+                                        {metric === 'numOfTasks' && <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '20%' }}><b>Total Tasks Completed</b></TableCell>}
+                                        {metric === 'numOfSession' && <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '20%' }}><b>Total Sessions</b></TableCell>}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody >
