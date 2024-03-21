@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Tab, Paper, Grid, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, ListItemText, Avatar, Chip } from '@mui/material';
+import { Tabs, Tab, Paper, Grid, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, ListItemText, Avatar, Chip, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 //import photos
@@ -72,6 +72,12 @@ const getTimeElapsed = (dateTime: string): string => {
 export const Leaderboard = (props: any) => {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
     const [hasUser, setHasUser] = useState<boolean>(false);
+
+    const [metric, setMetric] = useState('totalHour');
+
+    const handleMetricChange = (event: any) => {
+        setMetric(event.target.value);
+    };
 
     const fetchLeaderboard = async () => {
         console.log("leaderboard fetcher called");
@@ -237,6 +243,29 @@ export const Leaderboard = (props: any) => {
                     </div></Grid>
 
                     <Grid item xs={12}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <FormControl sx={{ minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-label">Metric</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={metric}
+                                    label="Metric"
+                                    onChange={handleMetricChange}
+                                    sx={{
+                                        height: '40px', // Adjust the height of the Select component
+                                        '& .MuiSelect-select': { height: '40px' }, // Adjust the inner select height
+                                        '& .MuiOutlinedInput-notchedOutline': { // Optionally adjust the border height if needed
+                                            top: 0,
+                                        },
+                                    }}
+                                >
+                                    <MenuItem value={'totalHour'}>Total Hour</MenuItem>
+                                    <MenuItem value={'numOfTasks'}>Number of Task Completed</MenuItem>
+                                    <MenuItem value={'numOfSession'}>Number of Session</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
                         <Tabs
                             aria-label="Tabs where each tab needs to be selected manually"
                             sx={{ display: 'flex', justifyContent: 'center', ml: 1, borderRadius: 2 }}
@@ -245,6 +274,7 @@ export const Leaderboard = (props: any) => {
                             <Tab value={0} label="Friends" sx={{ textTransform: "none", backgroundColor: 'rgba(153, 194, 240, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopLeftRadius: 10 }} />
                             <Tab value={1} disabled label="Regional" sx={{ textTransform: "none", backgroundColor: 'rgba(241, 241, 241, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopRightRadius: 10 }} />
                         </Tabs>
+
                         <TableContainer component={Paper} sx={{ ml: 1, maxHeight: '50vh' }}>
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead sx={{ position: 'sticky', zIndex: 2, top: '0px', }}>
@@ -254,7 +284,10 @@ export const Leaderboard = (props: any) => {
                                         <TableCell sx={{ color: '#ffffff' }}><b>User</b></TableCell>
                                         <TableCell sx={{ color: '#ffffff' }}><b>Recent Activity</b></TableCell>
                                         <TableCell sx={{ color: '#ffffff' }}></TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}><b>Time Tracked</b></TableCell>
+                                        {metric === 'totalHour' && <TableCell sx={{ color: '#ffffff' }}><b>Total Hours</b></TableCell>}
+                                        {metric === 'numOfTasks' && <TableCell sx={{ color: '#ffffff' }}><b>Tasks Completed</b></TableCell>}
+                                        {metric === 'numOfSession' && <TableCell sx={{ color: '#ffffff' }}><b>Sessions</b></TableCell>}
+
                                     </TableRow>
                                 </TableHead>
                                 <TableBody >
@@ -267,7 +300,7 @@ export const Leaderboard = (props: any) => {
                                         if (index < 3) {
                                             displayIndices.push(index);
 
-                                        // other wise if it is not, then check if it is the current user
+                                            // other wise if it is not, then check if it is the current user
                                         } else if (isCurrentUser) {
                                             // check the one above
                                             if (index - 1 >= 3) {
@@ -282,11 +315,11 @@ export const Leaderboard = (props: any) => {
                                                 displayIndices.push(index + 1);
                                             }
                                         }
-                                        
+
                                         return displayIndices.map((displayIndex) => {
                                             const displayRow = leaderboard[displayIndex];
                                             const isHighlighted = displayRow.email === props.currentUser;
-                                            
+
                                             return (
                                                 <TableRow
                                                     key={displayRow.email}
@@ -311,10 +344,16 @@ export const Leaderboard = (props: any) => {
                                                             secondaryTypographyProps={{ variant: 'caption' }}
                                                         />
                                                     </TableCell>
+
                                                     <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
-                                                        <Chip label={`${convertToHours(displayRow.lastTimeTracked)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>
+                                                        {metric === 'totalHour' && <Chip label={`${convertToHours(displayRow.lastTimeTracked)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
+                                                        {metric === 'numOfTasks' && <Chip label={`${Math.ceil(displayRow.lastTimeTracked / 75)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
+                                                        {metric === 'numOfSession' && <Chip label={`${Math.ceil(displayRow.totalDuration / 75) * 2}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
                                                     </TableCell>
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{convertToHours(displayRow.totalDuration)}</TableCell>
+
+                                                    {metric === 'totalHour' && <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{convertToHours(displayRow.totalDuration)}</TableCell>}
+                                                    {metric === 'numOfTasks' && <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{Math.ceil(displayRow.totalDuration / 75)}</TableCell>}
+                                                    {metric === 'numOfSession' && <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{Math.ceil(displayRow.totalDuration / 75) * 3}</TableCell>}
                                                 </TableRow>
                                             );
                                         });
@@ -326,11 +365,11 @@ export const Leaderboard = (props: any) => {
                                         </TableRow>
                                     )}
 
-                                    
-                                    {!hasUser && 
+
+                                    {!hasUser &&
                                         <TableRow>
                                             <TableCell colSpan={6}>
-                                                <Typography sx={{ textAlign: 'center',}}>Clock your hours with Thrive's Pomodoro timer to join the leaderboard!</Typography>
+                                                <Typography sx={{ textAlign: 'center', }}>Clock your hours with Thrive's Pomodoro timer to join the leaderboard!</Typography>
                                             </TableCell>
                                         </TableRow>
                                     }
@@ -338,6 +377,7 @@ export const Leaderboard = (props: any) => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+
                     </Grid>
                 </Grid>
             </div></ThemeProvider>
