@@ -279,15 +279,14 @@ export const Leaderboard = (props: any) => {
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead sx={{ position: 'sticky', zIndex: 2, top: '0px', }}>
                                     <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                                        <TableCell sx={{ color: '#ffffff' }}><b>Rank</b></TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}></TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}><b>User</b></TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}><b>Recent Activity</b></TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}></TableCell>
-                                        {metric === 'totalHour' && <TableCell sx={{ color: '#ffffff' }}><b>Total Hours</b></TableCell>}
-                                        {metric === 'numOfTasks' && <TableCell sx={{ color: '#ffffff' }}><b>Tasks Completed</b></TableCell>}
-                                        {metric === 'numOfSession' && <TableCell sx={{ color: '#ffffff' }}><b>Sessions</b></TableCell>}
-
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Rank</b></TableCell>
+                                        {/* <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}></TableCell> */}
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left' }}><b>User</b></TableCell>
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'left' }}><b>Recent Activity</b></TableCell>
+                                        <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}>Latest</TableCell>
+                                        {metric === 'totalHour' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Hours</b></TableCell>}
+                                        {metric === 'numOfTasks' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Tasks Completed</b></TableCell>}
+                                        {metric === 'numOfSession' && <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}><b>Total Sessions</b></TableCell>}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody >
@@ -325,8 +324,9 @@ export const Leaderboard = (props: any) => {
                                                     key={displayRow.email}
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: isHighlighted ? '#E5F1FF' : 'inherit', }}
                                                 >
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>{displayIndex + 1}.</TableCell>
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10, textAlign: 'center' }}>{displayIndex + 1}.</TableCell>
+
+                                                    {/* <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10,textAlign: 'center' }}>
                                                         {displayRow.email === 'james@gmail.com' ? (
                                                             <Avatar src={James} />
                                                         ) : displayRow.email === 'tim@gmail.com' ? (
@@ -335,7 +335,20 @@ export const Leaderboard = (props: any) => {
                                                             <Avatar src={DefaultPhoto} />
                                                         )}
                                                     </TableCell>
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>{displayRow.name}</TableCell>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 ,textAlign: 'center'}}>{displayRow.name}</TableCell> */}
+
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, textAlign: 'left' }}>
+                                                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left', justifyContent: 'left' }}>
+                                                            {displayRow.email === 'james@gmail.com' ? (
+                                                                <Avatar src={James} sx={{ marginRight: 1 }} />
+                                                            ) : displayRow.email === 'tim@gmail.com' ? (
+                                                                <Avatar src={Tim} sx={{ marginRight: 1 }} />
+                                                            ) : (
+                                                                <Avatar src={DefaultPhoto} sx={{ marginRight: 1 }} />
+                                                            )}
+                                                            <Typography variant="body2">{displayRow.name}</Typography>
+                                                        </Box>
+                                                    </TableCell>
                                                     <TableCell width={'30%'} sx={{ paddingTop: 0, paddingBottom: 0 }}>
                                                         <ListItemText
                                                             primary={`${displayRow.lastTask}`}
@@ -345,7 +358,7 @@ export const Leaderboard = (props: any) => {
                                                         />
                                                     </TableCell>
 
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, textAlign: 'center' }}>
                                                         {metric === 'totalHour' && <Chip label={`${convertToHours(displayRow.lastTimeTracked)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
                                                         {metric === 'numOfTasks' && <Chip label={`${Math.ceil(displayRow.lastTimeTracked / 75)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
                                                         {metric === 'numOfSession' && <Chip label={`${Math.ceil(displayRow.totalDuration / 75) * 2}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>}
