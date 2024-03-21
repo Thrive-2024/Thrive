@@ -71,6 +71,7 @@ const getTimeElapsed = (dateTime: string): string => {
 
 export const Leaderboard = (props: any) => {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
+    const [hasUser, setHasUser] = useState<boolean>(false);
 
     const fetchLeaderboard = async () => {
         console.log("leaderboard fetcher called");
@@ -107,6 +108,12 @@ export const Leaderboard = (props: any) => {
     useEffect(() => {
         fetchLeaderboard();
     }, [props.currentUser]);
+
+    useEffect(() => {
+        // Check if the current user is in the leaderboard
+        const currentUserIndex = leaderboard.findIndex((row) => row.email === props.currentUser);
+        setHasUser(currentUserIndex !== -1);
+    }, [leaderboard, props.currentUser]);
 
     return (
 
@@ -238,7 +245,7 @@ export const Leaderboard = (props: any) => {
                             <Tab value={0} label="Friends" sx={{ textTransform: "none", backgroundColor: 'rgba(153, 194, 240, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopLeftRadius: 10 }} />
                             <Tab value={1} disabled label="Regional" sx={{ textTransform: "none", backgroundColor: 'rgba(241, 241, 241, 0.25)', fontWeight: 'bold', fontSize: '1rem', width: '25%', borderTopRightRadius: 10 }} />
                         </Tabs>
-                        <TableContainer component={Paper} sx={{ ml: 1, maxHeight: 320 }}>
+                        <TableContainer component={Paper} sx={{ ml: 1, maxHeight: '50vh' }}>
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead sx={{ position: 'sticky', zIndex: 2, top: '0px', }}>
                                     <TableRow sx={{ backgroundColor: 'primary.main' }}>
@@ -251,45 +258,83 @@ export const Leaderboard = (props: any) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody >
-                                    {/* display from 4th place onwards */}
-                                    {leaderboard.length > 0 ? leaderboard.slice(3).map((row, index) => (
-                                        <TableRow
-                                            key={row.email}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: row.email === props.currentUser ? '#E5F1FF' : 'inherit', }}
-                                        >
-                                            <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>{index + 4}.</TableCell>
-                                            <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>
-                                                {/* <Avatar src={James} /> */}
-                                                {row.email === 'james@gmail.com' ? (
-                                                    <Avatar src={James} />
-                                                )
-                                                    : row.email === 'tim@gmail.com' ? (
-                                                        <Avatar src={Tim} />
-                                                    ) : (
-                                                        <Avatar src={DefaultPhoto} />
-                                                    )}
+                                    {/* display only the top 3 and the one above and below fo the user */}
+                                    {leaderboard.length > 0 ? leaderboard.map((row, index) => {
+                                        const isCurrentUser = row.email === props.currentUser;
+                                        let displayIndices = [];
 
+                                        // if this is the top 3 then add to the displayIndices
+                                        if (index < 3) {
+                                            displayIndices.push(index);
 
+                                        // other wise if it is not, then check if it is the current user
+                                        } else if (isCurrentUser) {
+                                            // check the one above
+                                            if (index - 1 >= 3) {
+                                                displayIndices.push(index - 1);
+                                            }
+
+                                            // add the current guy
+                                            displayIndices.push(index)
+
+                                            // check the one below
+                                            if (index + 1 < leaderboard.length) {
+                                                displayIndices.push(index + 1);
+                                            }
+                                        }
+                                        
+                                        return displayIndices.map((displayIndex) => {
+                                            const displayRow = leaderboard[displayIndex];
+                                            const isHighlighted = displayRow.email === props.currentUser;
+                                            
+                                            return (
+                                                <TableRow
+                                                    key={displayRow.email}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: isHighlighted ? '#E5F1FF' : 'inherit', }}
+                                                >
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>{displayIndex + 1}.</TableCell>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10 }}>
+                                                        {displayRow.email === 'james@gmail.com' ? (
+                                                            <Avatar src={James} />
+                                                        ) : displayRow.email === 'tim@gmail.com' ? (
+                                                            <Avatar src={Tim} />
+                                                        ) : (
+                                                            <Avatar src={DefaultPhoto} />
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>{displayRow.name}</TableCell>
+                                                    <TableCell width={'30%'} sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                                        <ListItemText
+                                                            primary={`${displayRow.lastTask}`}
+                                                            secondary={`${getTimeElapsed(displayRow.lastUpdated)}`}
+                                                            primaryTypographyProps={{ variant: 'body2' }}
+                                                            secondaryTypographyProps={{ variant: 'caption' }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                                        <Chip label={`${convertToHours(displayRow.lastTimeTracked)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>
+                                                    </TableCell>
+                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{convertToHours(displayRow.totalDuration)}</TableCell>
+                                                </TableRow>
+                                            );
+                                        });
+                                    }) : (
+                                        <TableRow>
+                                            <TableCell colSpan={6}>
+                                                <Typography sx={{ textAlign: 'center', height: 100, pt: 10 }}>No Results Found...</Typography>
                                             </TableCell>
-                                            <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell width={'30%'} sx={{ paddingTop: 0, paddingBottom: 0 }}><ListItemText
-                                                primary={`${row.lastTask}`}
-                                                secondary={`${getTimeElapsed(row.lastUpdated)}`}
-                                                primaryTypographyProps={{ variant: 'body2' }}
-                                                secondaryTypographyProps={{ variant: 'caption' }}
-                                            /></TableCell>
-                                            <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
-                                                <Chip label={`${convertToHours(row.lastTimeTracked)}`} sx={{ backgroundColor: 'primary.main', color: '#FFFFFF', width: 70 }} ></Chip>
-                                            </TableCell>
-                                            <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }} width={'15%'} align='center'>{convertToHours(row.totalDuration)}</TableCell>
                                         </TableRow>
-                                    )) : <TableRow>
-                                        <TableCell colSpan={6}>
-                                            <Typography sx={{ textAlign: 'center', height: 100, pt: 10 }}>No Results Found...</Typography>
-                                        </TableCell>
-                                    </TableRow>}
+                                    )}
+
+                                    
+                                    {!hasUser && 
+                                        <TableRow>
+                                            <TableCell colSpan={6}>
+                                                <Typography sx={{ textAlign: 'center',}}>Clock your hours with Thrive's Pomodoro timer to join the leaderboard!</Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    }
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
