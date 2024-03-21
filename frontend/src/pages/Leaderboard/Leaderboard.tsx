@@ -280,7 +280,6 @@ export const Leaderboard = (props: any) => {
                                 <TableHead sx={{ position: 'sticky', zIndex: 2, top: '0px', }}>
                                     <TableRow sx={{ backgroundColor: 'primary.main' }}>
                                         <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '5%' }}><b>Rank</b></TableCell>
-                                        {/* <TableCell sx={{ color: '#ffffff', textAlign: 'center' }}></TableCell> */}
                                         <TableCell sx={{ color: '#ffffff', textAlign: 'left', width: '25%' }}><b>User</b></TableCell>
                                         <TableCell sx={{ color: '#ffffff', textAlign: 'left', width: '35%' }}><b>Recent Activity</b></TableCell>
                                         <TableCell sx={{ color: '#ffffff', textAlign: 'center', width: '15%' }}>Latest</TableCell>
@@ -326,25 +325,14 @@ export const Leaderboard = (props: any) => {
                                                 >
                                                     <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10, textAlign: 'center' }}>{displayIndex + 1}.</TableCell>
 
-                                                    {/* <TableCell sx={{ paddingTop: 0, paddingBottom: 0, width: 10,textAlign: 'center' }}>
-                                                        {displayRow.email === 'james@gmail.com' ? (
-                                                            <Avatar src={James} />
-                                                        ) : displayRow.email === 'tim@gmail.com' ? (
-                                                            <Avatar src={Tim} />
-                                                        ) : (
-                                                            <Avatar src={DefaultPhoto} />
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 ,textAlign: 'center'}}>{displayRow.name}</TableCell> */}
-
                                                     <TableCell sx={{ paddingTop: 0, paddingBottom: 0, textAlign: 'left' }}>
-                                                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'left', justifyContent: 'left' }}>
+                                                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'left' }}>
                                                             {displayRow.email === 'james@gmail.com' ? (
                                                                 <Avatar src={James} sx={{ marginRight: 1 }} />
                                                             ) : displayRow.email === 'tim@gmail.com' ? (
                                                                 <Avatar src={Tim} sx={{ marginRight: 1 }} />
                                                             ) : (
-                                                                <Avatar src={DefaultPhoto} sx={{ marginRight: 1 }} />
+                                                                <Avatar sx={{ marginRight: 1 }}>{displayRow.name.charAt(0).toUpperCase()}</Avatar>
                                                             )}
                                                             <Typography variant="body2">{displayRow.name}</Typography>
                                                         </Box>
