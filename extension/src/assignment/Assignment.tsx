@@ -17,7 +17,6 @@ import { Phase } from '../pomodoro/types';
 
 
 const Assignment = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [email, setEmail] = useState<string>("");
   const [selectedTask, setSelectedTask] = useState<Task>();
@@ -94,20 +93,7 @@ const Assignment = () => {
         chrome.storage.sync.set({ isExtensionOn: true });
       }
     })
-  }, [email, selectedTask]);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (index: number) => {
-    setSelectedTask(tasks[index]);
-    chrome.storage.sync.set({ selectedTask: tasks[index] });
-  };
+  }, [email]);
 
   const handleChange = (event: { target: { value: any } }) => {
     const selectedIndex = event.target.value;
