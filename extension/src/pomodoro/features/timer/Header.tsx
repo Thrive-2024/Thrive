@@ -14,26 +14,26 @@ const HeaderMenu = () => {
     "Slay. Serve. Survive - Prof Ben"
   );
   const [currentUser, setCurrentUser] = useState<string>(
-    "james@gmail.com"
+    "tim@gmail.com"
   );
   const { setDisplayPageType } = useContext(DisplayPageContext);
 
-  getStorage([
-    "currentUser",
-  ]).
-  then((value: StorageValue) => {
-    setCurrentUser(value.currentUser);
-  });
+  // getStorage([
+  //   "currentUser",
+  // ]).
+  // then((value: StorageValue) => {
+  //   setCurrentUser(value.currentUser);
+  // });
 
   const fetchMessageFromSystem = async () => {
     try {
       const response = await fetch(
-        `${REACT_APP_BACKEND_DEV_URL}/motivation/randomMessageFromSystem?receiver=${currentUser}`,
+        `${REACT_APP_BACKEND_DEV_URL}/motivation/getAllByReceiver?receiver=${currentUser}`,
         {
           headers: {
             "Content-Type": "application/json",
           },
-          method: "POST",
+          method: "GET",
         }
       );
 
@@ -42,7 +42,16 @@ const HeaderMenu = () => {
       } else {
         const apiResponse = await response.json();
         console.log(apiResponse);
-        setCurrentMessage(apiResponse.message + " ");
+        let currentMessages= apiResponse.data;
+        if (currentMessages.length > 0) {
+          // Generate a random index within the range of the array length
+          const randomIndex = Math.floor(Math.random() * currentMessages.length);
+          
+          // Retrieve the randomly selected message
+          const randomMessage = currentMessages[randomIndex].message + " ";
+          // setCurrentMessage(randomMessage);
+          setCurrentMessage(currentMessages[0].message + " ");
+        }
       }
     } catch (err) {
       console.log("ERROR FETCHING MESSAGE");
@@ -57,7 +66,7 @@ const HeaderMenu = () => {
       fetchMessageFromSystem()
       // For demonstration, let's just log a message
       console.log("Checking...");
-    }, 10 * 60 * 1000); // 10 minutes in milliseconds
+    }, 10 * 1000); // 10 minutes in milliseconds
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
