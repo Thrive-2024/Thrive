@@ -96,7 +96,7 @@ export const Motivation = (props: any) => {
         };
 
         const fetchFriends = async () => {
-            const data: string[] = ["Alice", "Brian", "Crayon", "tim@gmail.com"];
+            const data: string[] = ["Alice", "Brian", "Crayon", "Tim","James"];
             setUserFriends(data);
         }
 
@@ -344,6 +344,14 @@ export const Motivation = (props: any) => {
                                         value={receivingFriend}
                                         onChange={(event: any, newValue: string | null) => {
                                             setReceivingFriend(newValue);
+                                            if (newValue === "Tim") {
+                                                setReceivingFriend("tim@gmail.com");
+                                            } else if (newValue === "James") {
+                                                setReceivingFriend("james@gmail.com");
+                                            }
+                                            else {
+                                                setReceivingFriend(newValue);
+                                            }
                                         }}
                                         renderInput={(params) => <TextField {...params} label="Choose a Friend" />}
                                     />
