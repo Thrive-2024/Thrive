@@ -16,7 +16,7 @@ import Assignment from "./assignment/Assignment";
 import SiteBlocker from "./siteBlocker/SiteBlocker";
 
 function App() {
-    let email = "tim@gmail.com" // our scenario user
+  let email = "james@gmail.com" // our scenario user
 
     // NOTE: do not delete, this is used to detect information about an actual user
     // chrome.identity.getProfileUserInfo(function (info) {

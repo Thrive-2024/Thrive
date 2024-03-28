@@ -14,7 +14,7 @@ const HeaderMenu = () => {
     "Slay. Serve. Survive - Prof Ben"
   );
   const [currentUser, setCurrentUser] = useState<string>(
-    "tim@gmail.com"
+    "james@gmail.com"
   );
   const { setDisplayPageType } = useContext(DisplayPageContext);
 
